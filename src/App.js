@@ -18,8 +18,8 @@ function App() {
       <Box
         sx={{
           marginLeft: '240px', // Width of the Drawer
-          height: '100vh',
-          overflowY: 'scroll',
+          minHeight: '100vh',
+          overflowY: 'auto',
           scrollSnapType: 'y mandatory',
           scrollBehavior: 'smooth',
           backgroundColor: 'background.default',
@@ -29,7 +29,7 @@ function App() {
         <Routes>
           {/* Main Content */}
           <Route
-            path="/"
+            path="/LeonardoMatone"
             element={
               <>
                 <WelcomeSection />
