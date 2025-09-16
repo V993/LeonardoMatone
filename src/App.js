@@ -29,7 +29,7 @@ function App() {
         <Routes>
           {/* Main Content */}
           <Route
-            path="/LeonardoMatone"
+            path="/LeonardoMatone/"
             element={
               <>
                 <WelcomeSection />

@@ -1,4 +1,3 @@
-
 // src/components/Navbar.js
 import React, { useState } from 'react';
 import {
@@ -14,6 +13,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 
 const drawerWidth = 240;
 
@@ -21,11 +21,11 @@ function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = [
-    { label: 'Welcome', path: '/' },
-    { label: 'Experience', path: '/#experience' },
-    { label: 'Projects', path: '/#projects' },
-    { label: 'Education', path: '/#education' },
-    { label: 'Blog', path: '/blog' }, // Blog is a separate route
+    { label: 'Welcome', path: '/#welcome', type: 'hash' },
+    { label: 'Experience', path: '/#experience', type: 'hash' },
+    { label: 'Projects', path: '/#projects', type: 'hash' },
+    { label: 'Education', path: '/#education', type: 'hash' },
+    { label: 'Blog', path: '/blog', type: 'route' }, // Blog is a separate route
   ];
 
   const handleDrawerToggle = () => {
@@ -36,16 +36,26 @@ function Navbar() {
     <div>
       <Toolbar>
         <Typography variant="h6" noWrap>
-          Your Name
+          Leonardo Matone
         </Typography>
       </Toolbar>
       <Divider />
       <List>
-        {navLinks.map((item) => (
-          <ListItem button key={item.label} component={Link} to={item.path} onClick={handleDrawerToggle}>
-            <ListItemText primary={item.label} />
-          </ListItem>
-        ))}
+        {navLinks.map((item) => {
+          const Component = item.type === 'hash' ? HashLink : Link;
+          return (
+            <ListItem
+              button
+              key={item.label}
+              component={Component}
+              to={item.path}
+              smooth={item.type === 'hash'} // enables smooth scroll only for HashLinks
+              onClick={handleDrawerToggle}
+            >
+              <ListItemText primary={item.label} />
+            </ListItem>
+          );
+        })}
       </List>
     </div>
   );
