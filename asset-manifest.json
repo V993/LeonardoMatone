@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/LeonardoMatone/static/css/main.a89bccdd.css",
+    "main.js": "/LeonardoMatone/static/js/main.53f55855.js",
+    "static/media/id-picture.jpg": "/LeonardoMatone/static/media/id-picture.5f4271e54e1fbf061d21.jpg",
+    "static/media/tulane.png": "/LeonardoMatone/static/media/tulane.192cf8770d4b2a64d057.png",
+    "index.html": "/LeonardoMatone/index.html",
+    "main.a89bccdd.css.map": "/LeonardoMatone/static/css/main.a89bccdd.css.map",
+    "main.53f55855.js.map": "/LeonardoMatone/static/js/main.53f55855.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a89bccdd.css",
+    "static/js/main.53f55855.js"
+  ]
+}
