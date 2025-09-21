@@ -2,7 +2,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { getProjectById } from '../data/projects';
+import { getProjectById } from '../data';
 
 function ProjectPage() {
   const { id } = useParams();

@@ -1,16 +1,10 @@
 // src/data/projects.js
-export const projects = [
-    {
-      id: 'project-one',
-      title: 'Project One',
-      description: 'Short description',
-      fullDescription: 'Detailed description of Project One.',
-      image: 'project1.png',
-    },
-    // Add more projects
-  ];
-  
+import content from './content.json';
+
+export const projects = content.projects;
+
 export function getProjectById(id) {
   return projects.find((project) => project.id === id);
 }
-  
+
+export default projects;

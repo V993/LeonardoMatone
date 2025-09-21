@@ -1,0 +1,228 @@
+{
+  "navigation": [
+    { "label": "Welcome", "type": "hash", "path": "#welcome" },
+    { "label": "About", "type": "hash", "path": "#about" },
+    { "label": "Education", "type": "hash", "path": "#education" },
+    { "label": "Experience", "type": "hash", "path": "#experience" },
+    { "label": "Projects", "type": "hash", "path": "#projects" },
+    { "label": "Blog", "type": "route", "path": "/blog" }
+  ],
+  "theme": {
+    "primaryColor": "#14532d",
+    "navbarColor": "#166534",
+    "navbarGradient": "linear-gradient(180deg, #bbf7d0 0%, #a7f3d0 45%, #6ee7b7 100%)",
+    "navbarBorderColor": "rgba(34, 197, 94, 0.35)"
+  },
+  "welcome": {
+    "name": "Leonardo Matone",
+    "greeting": "Hello, I'm",
+    "highlightColor": "#14532d",
+    "intro": "",
+    "skills": ["Python", "PyTorch", "AWS Toolkit", "C++", "bash", "SQL", "Slurm"],
+    "roles": ["Senior Software Developer", "Research Assistant", "PhD Candidate", "AI Innovation Fellow"],
+    "affiliations": [
+      { "name": "Healthfirst", "badge": "hf.png" },
+      { "name": "Tulane University", "badge": "tulane.png" }
+    ],
+    "avatar": "id-picture.jpg"
+  },
+  "biography": {
+    "headline": "Applied ML and Engineering Solutions",
+    "summary": [
+      "Leonardo Matone is a PhD student and AI Innovation Fellow in the Computer Science department of Tulane University, currently working under Dr. Nicholas Mattei.",
+      "He works full time at Tulane in applied machine learning, contributing to interdisciplinary research and innovation initiatives. His interests include natural language processing, public policy data science, and political science.",
+      "Outside of applied ML, Leonardo researches computational social choice, focusing on novel probabilistic social choice functions, and he earned dual bachelor's degrees in Computer Science and Political Science from Hunter College as a Thomas Hunter Scholar."
+    ],
+    "highlights": [
+      "Shipped production services handing hundreds of requests per day.",
+      "Published research in probabilistic social choice at leading conferences.",
+      "Community organizer for tech literacy programs in New Orleans."
+    ]
+  },
+  "experience": {
+    "current": [
+      {
+        "title": "AI Innovation Fellowship",
+        "subtitle": "Tulane University",
+        "timeframe": "August 2025 - Present",
+        "bullets": [
+          "Designed experiments to validate research hypotheses",
+          "Co-authored publications in peer-reviewed venues",
+          "Coordinated with faculty and students on grant projects"
+        ]
+      },
+      {
+        "title": "Research Assistant",
+        "subtitle": "Tulane University",
+        "timeframe": "January 2024 - Present",
+        "bullets": [
+          "Designs/implements custom models/modules for niche tasks using PyTorch",
+          "Utilizes Slurm to manage and optimize neural network training on LSU’s HPC clusters",
+          "Contributes to data science research on voting rules, publishing to peer-reviewed journals"
+        ]
+      },
+      {
+        "title": "Senior Backend Developer",
+        "subtitle": "Healthfirst",
+        "timeframe": "June 2022 - August 2025",
+        "bullets": [
+          "Developed RESTful APIs that served thousands of daily requests",
+          "Maintained relational databases and optimized query performance",
+          "Collaborated with cross-functional teams to ship new features"
+        ]
+      }
+    ],
+    "history": [
+      "Software Developer Intern — Company 123",
+      "Teaching Assistant — Hunter College",
+      "Freelance Full-Stack Engineer"
+    ]
+  },
+  "experienceCopy": {
+    "eyebrow": "Growth & Impact",
+    "title": "Experience",
+    "description": "From research labs to production systems, I bridge applied machine learning with resilient backend engineering. These roles highlight how I guide teams, mentor talent, and ship measurable outcomes.",
+    "highlightsLabel": "Recent Highlights",
+    "snapshotLabel": "At a glance",
+    "stats": {
+      "active": {
+        "description": "active leadership & research initiatives"
+      },
+      "years": {
+        "description": "building ML + data platforms end-to-end"
+      },
+      "teams": {
+        "description": "cross-disciplinary teams partnered with"
+      }
+    },
+    "historyLabel": "Previous Chapters"
+  },
+  "education": [
+    {
+      "institution": "Tulane University",
+      "degree": "Masters/PhD in Computer Science",
+      "timeframe": "2024 - Present",
+      "location": "New Orleans, LA",
+      "details": "Graduate research in applied machine learning and computational social choice.",
+      "focusAreas": ["Applied Machine Learning", "Computational Social Choice", "NLP"],
+      "highlights": [
+        "AI Innovation Fellow collaborating with interdisciplinary teams",
+        "Graduate coursework covering advanced ML and data-intensive systems"
+      ]
+    },
+    {
+      "institution": "Hunter College",
+      "degree": "Bachelor's in Computer Science, Bachelor's in Political Science",
+      "timeframe": "2018 - 2022",
+      "location": "New York, NY",
+      "details": "Dual-degree program with honors thesis on algorithmic decision-making.",
+      "focusAreas": ["Algorithms", "Political Science", "Data Science"],
+      "highlights": [
+        "Thomas Hunter Scholar with full academic honors",
+        "Led community tech literacy initiatives across NYC"
+      ]
+    }
+  ],
+  "educationCopy": {
+    "eyebrow": "Foundations & Fellowships",
+    "title": "Education",
+    "description": "Academic programs that anchor my research and engineering practice—spanning graduate AI fellowships to dual-degree undergraduate work across computer science and political science.",
+    "currentProgramLabel": "Current Program",
+    "snapshotLabel": "Academic Snapshot",
+    "stats": {
+      "programs": "degree programs completed or in progress",
+      "span": "years dedicated to advanced computing research",
+      "focus": "interdisciplinary focus areas explored",
+      "community": "notable scholarly & community highlights"
+    }
+  },
+  "about": {
+    "eyebrow": "Introduction",
+    "title": "About Me",
+    "description": "Applied machine learning researcher and engineer blending production experience with academic innovation.",
+    "biographyLabel": "Narrative",
+    "stats": [
+      { "id": "roles", "label": "Leadership & fellowship programs", "value": "4" },
+      { "id": "publications", "label": "Peer-reviewed publications & talks", "value": "6" },
+      { "id": "community", "label": "Community & outreach initiatives", "value": "3" },
+      { "id": "interests", "label": "Research interests", "value": "NLP • Public Policy • Social Choice" }
+    ],
+    "highlightsLabel": "Highlights"
+  },
+  "projectsCopy": {
+    "eyebrow": "Craft & Code",
+    "title": "Projects",
+    "description": "A selection of personal builds and research prototypes. Much of my applied work lives within Tulane collaborations—explore the repos for deep dives into each project.",
+    "summaryLabel": "GitHub Overview",
+    "syncingText": "Syncing GitHub activity…",
+    "errorText": "GitHub summary is unavailable right now. Please check back soon.",
+    "profileLinkLabel": "View GitHub profile (%username%)",
+    "stats": {
+      "stars": "Stars",
+      "repos": "Public Repos",
+      "followers": "Followers",
+      "forks": "Forks",
+      "watchers": "Watchers"
+    },
+    "defaultTag": "GitHub",
+    "repoDescriptionFallback": "Repository description coming soon.",
+    "emptyState": {
+      "loading": "Loading GitHub projects…",
+      "error": "Unable to display GitHub projects right now.",
+      "default": "Repositories will appear here once available."
+    },
+    "updatedLabel": "Updated",
+    "modalLinkLabel": "View on GitHub",
+    "readme": {
+      "loading": "Loading README…",
+      "error": "Unable to load the README right now. You can still open the repository on GitHub to view the documentation.",
+      "empty": "This repository does not currently have a README."
+    }
+  },
+  "projectShowcase": [
+    {
+      "repo": "Representative-Polarity-US-House",
+      "tag": "python"
+    },
+    {
+      "repo": "LegislativeDataAnalytics",
+      "tag": "python"
+    },
+    {
+      "repo": "ASCII-Image-Conversion",
+      "tag": "python"
+    }
+  ],
+  "contact": {
+    "intro": "I’m always open to discussing new collaborations, research, or speaking opportunities.",
+    "channels": [
+      {
+        "label": "Email",
+        "value": "leonardo@example.com",
+        "href": "mailto:leonardo@example.com"
+      },
+      {
+        "label": "LinkedIn",
+        "value": "linkedin.com/in/leonardomatone",
+        "href": "https://www.linkedin.com/in/leonardomatone"
+      },
+      {
+        "label": "GitHub",
+        "value": "github.com/v993",
+        "href": "https://github.com/v993"
+      }
+    ]
+  },
+  "blogPosts": [
+    {
+      "title": "Blog Post One",
+      "snippet": "Snippet of the first blog post...",
+      "link": "/blog/post-one"
+    },
+    {
+      "title": "Blog Post Two",
+      "snippet": "Snippet of the second blog post...",
+      "link": "/blog/post-two"
+    }
+  ]
+}

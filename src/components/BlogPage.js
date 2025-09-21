@@ -1,21 +1,10 @@
 // src/components/BlogPage.js
 import React from 'react';
 import { Box, Typography, Card, CardContent, CardActions, Button, Grid } from '@mui/material';
+import { blogPosts as blogPostsData } from '../data';
 
 function BlogPage() {
-  const blogPosts = [
-    {
-      title: 'Blog Post One',
-      snippet: 'Snippet of the first blog post...',
-      link: '/blog/post-one',
-    },
-    {
-      title: 'Blog Post Two',
-      snippet: 'Snippet of the second blog post...',
-      link: '/blog/post-two',
-    },
-    // Add more blog posts
-  ];
+  const blogPosts = blogPostsData ?? [];
   return (
     <Box sx={{ padding: 3 }}>
       <Typography variant="h4" gutterBottom>
