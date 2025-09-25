@@ -18,7 +18,7 @@ function BiographySection() {
       sx={{
         minHeight: '100vh',
         padding: { xs: 3, md: 6 },
-        scrollSnapAlign: 'start',
+        // scroll snapping disabled site-wide
         backgroundColor: 'transparent',
       }}
     >

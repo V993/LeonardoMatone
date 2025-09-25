@@ -6,45 +6,30 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     mode: 'light',
+    /* Align primary/secondary with provided palette */
     primary: {
-      main: '#14532d',
+      main: '#55868c', // dark-cyan
+      contrastText: '#0b1b1d',
     },
     secondary: {
-      main: '#1d4ed8',
+      main: '#ffc857', // sunglow
+      contrastText: '#2a1b00',
     },
     background: {
-      default: '#f4f5f7',
+      default: '#f7f8fa',
       paper: '#ffffff',
     },
     text: {
       primary: '#1f2937',
       secondary: '#475569',
     },
+    /* Provide a simple section mapping for reference */
     sections: {
-      about: {
-        background: '#0f172a',
-        card: '#1e293b',
-        accent: '#38bdf8',
-        text: '#f8fafc',
-      },
-      education: {
-        background: '#e0f2fe',
-        card: '#f8fbff',
-        accent: '#1d4ed8',
-        text: '#0f172a',
-      },
-      experience: {
-        background: '#dcfce7',
-        card: '#f1fdf4',
-        accent: '#166534',
-        text: '#064e3b',
-      },
-      projects: {
-        background: '#ecfdf5',
-        card: '#f5fdf9',
-        accent: '#0f766e',
-        text: '#0f172a',
-      },
+      welcome: { base: '#b7ff9d', text: '#0b2b10', accent: '#55868c' },
+      about: { base: '#a1683a', text: '#fff8f0', accent: '#ffc857' },
+      education: { base: '#55868c', text: '#0b1b1d', accent: '#b7ff9d' },
+      experience: { base: '#ffc857', text: '#2a1b00', accent: '#a1683a' },
+      projects: { base: '#dab6fc', text: '#2a0b3d', accent: '#55868c' },
     },
   },
   typography: {

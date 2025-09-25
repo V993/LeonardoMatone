@@ -9,18 +9,18 @@ const StyledButton = styled(Button)(({ theme }) => ({
   fontWeight: 600,
   letterSpacing: 0.4,
   background:
-    'linear-gradient(135deg, rgba(34, 197, 94, 0.92) 0%, rgba(16, 185, 129, 0.88) 40%, rgba(45, 212, 191, 0.85) 100%)',
+    'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.95) 0%, rgba(var(--dark-cyan-rgb), 0.85) 40%, rgba(var(--sunglow-rgb), 0.85) 100%)',
   color: theme.palette.common.white,
-  boxShadow: '0 10px 24px rgba(15, 118, 110, 0.2)',
+  boxShadow: '0 10px 24px rgba(85, 134, 140, 0.22)',
   transition: 'transform 160ms ease, box-shadow 200ms ease, filter 180ms ease',
   '&:hover': {
     transform: 'translateY(-1px)',
-    boxShadow: '0 14px 32px rgba(15, 118, 110, 0.28)',
+    boxShadow: '0 14px 32px rgba(85, 134, 140, 0.28)',
     filter: 'brightness(1.05)',
   },
   '&:active': {
     transform: 'translateY(0)',
-    boxShadow: '0 8px 18px rgba(15, 118, 110, 0.24)',
+    boxShadow: '0 8px 18px rgba(85, 134, 140, 0.24)',
   },
 }));
 

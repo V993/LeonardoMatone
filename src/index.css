@@ -1,4 +1,27 @@
 /* src/index.css */
+:root {
+  /* Base palette (HEX) */
+  --light-green: #b7ff9d;
+  --raw-umber: #a1683a;
+  --dark-cyan: #55868c;
+  --mauve: #dab6fc;
+  --sunglow: #ffc857;
+
+  /* RGB triples for alpha usage */
+  --light-green-rgb: 183, 255, 157;
+  --raw-umber-rgb: 161, 104, 58;
+  --dark-cyan-rgb: 85, 134, 140;
+  --mauve-rgb: 218, 182, 252;
+  --sunglow-rgb: 255, 200, 87;
+
+  /* Section mapping */
+  --welcome-rgb: var(--light-green-rgb);
+  --about-rgb: var(--raw-umber-rgb);
+  --education-rgb: var(--dark-cyan-rgb);
+  --experience-rgb: var(--sunglow-rgb);
+  --projects-rgb: var(--mauve-rgb);
+}
+
 body {
   font-family: 'Roboto', sans-serif;
 }

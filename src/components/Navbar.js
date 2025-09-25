@@ -26,12 +26,14 @@ import {
 import idPicture from '../assets/id-picture.jpg';
 import hfBadge from '../assets/hf.png';
 import tulaneBadge from '../assets/tulane.png';
+import hunterBadge from '../assets/hunter.png';
 import { scrollElementIntoView, scrollToTop } from '../utils/scroll';
 
 const assetSources = {
   'id-picture.jpg': idPicture,
   'hf.png': hfBadge,
   'tulane.png': tulaneBadge,
+  'hunter.png': hunterBadge
 };
 
 const channelIcons = {
@@ -83,8 +85,8 @@ function Navbar({ heroCollapsed, activeSection }) {
   );
 
   const avatarSrc = assetSources[welcomeData?.avatar] ?? undefined;
-  const primaryColor = themeData?.primaryColor ?? '#14532d';
-  const navbarBorderColor = themeData?.navbarBorderColor ?? 'rgba(34, 197, 94, 0.25)';
+  const primaryColor = themeData?.primaryColor ?? 'rgb(var(--dark-cyan-rgb))';
+  const navbarBorderColor = themeData?.navbarBorderColor ?? 'rgba(var(--dark-cyan-rgb), 0.25)';
 
   const affiliations = useMemo(
     () =>
@@ -152,23 +154,23 @@ function Navbar({ heroCollapsed, activeSection }) {
               key={item.label}
               onClick={(event) => handleNavClick(event, item)}
               sx={{
-                borderRadius: 999,
-                px: showLeftSidebar ? 2.4 : 2.6,
-                py: 0.8,
+                borderRadius: 2,
+                px: showLeftSidebar ? 1.6 : 1.8,
+                py: 0.55,
                 fontWeight: 700,
                 letterSpacing: 1,
                 textTransform: 'uppercase',
                 width: showLeftSidebar || isSmall ? '100%' : 'auto',
                 justifyContent: 'center',
-                color: isActive ? primaryColor : '#064e3b',
-                backgroundColor: isActive ? 'rgba(34, 197, 94, 0.28)' : 'rgba(22, 101, 52, 0.08)',
-                border: '1px solid rgba(22, 101, 52, 0.24)',
-                boxShadow: isActive ? '0 10px 24px rgba(22, 101, 52, 0.22)' : 'none',
+                color: isActive ? primaryColor : 'rgb(var(--dark-cyan-rgb))',
+                backgroundColor: isActive ? 'rgba(var(--dark-cyan-rgb), 0.22)' : 'rgba(var(--dark-cyan-rgb), 0.08)',
+                border: '1px solid rgba(var(--dark-cyan-rgb), 0.24)',
+                boxShadow: isActive ? '0 10px 24px rgba(85, 134, 140, 0.22)' : 'none',
                 transition: 'all 220ms ease',
                 '&:hover': {
-                  backgroundColor: 'rgba(34, 197, 94, 0.35)',
+                  backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.32)',
                   transform: 'translateY(-1px)',
-                  boxShadow: '0 12px 28px rgba(22, 101, 52, 0.26)',
+                  boxShadow: '0 12px 28px rgba(85, 134, 140, 0.26)',
                 },
               }}
             >
@@ -218,10 +220,10 @@ function Navbar({ heroCollapsed, activeSection }) {
         <Box
           sx={{
             position: 'relative',
-            borderRadius: { xs: '56px', md: '64px' },
+            borderRadius: { xs: 3, md: 4 },
             border: `1px solid ${navbarBorderColor}`,
-            background: 'linear-gradient(180deg, rgba(240, 253, 244, 0.94) 0%, rgba(221, 242, 231, 0.92) 45%, rgba(255, 255, 255, 0.96) 100%)',
-            boxShadow: heroCollapsed ? '0 24px 64px rgba(15, 118, 110, 0.28)' : '0 8px 20px rgba(15, 118, 110, 0.14)',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(var(--dark-cyan-rgb), 0.06) 45%, rgba(255, 255, 255, 0.98) 100%)',
+            boxShadow: heroCollapsed ? '0 24px 64px rgba(85, 134, 140, 0.28)' : '0 8px 20px rgba(85, 134, 140, 0.14)',
             backdropFilter: heroCollapsed ? 'blur(18px)' : 'none',
             transition: 'box-shadow 420ms ease, backdrop-filter 420ms ease',
             overflow: 'hidden',
@@ -242,8 +244,8 @@ function Navbar({ heroCollapsed, activeSection }) {
               pt: showLeftSidebar ? { md: 6 } : { xs: 5, md: 5.6 },
               pb: { xs: 3.8, md: 4 },
               px: showLeftSidebar ? { md: 3.5 } : { xs: 3.25, md: 4 },
-              background: 'linear-gradient(180deg, rgba(22, 101, 52, 0.12) 0%, rgba(34, 197, 94, 0.08) 100%)',
-              borderBottom: '1px solid rgba(22, 101, 52, 0.14)',
+              background: 'linear-gradient(180deg, rgba(var(--dark-cyan-rgb), 0.12) 0%, rgba(var(--dark-cyan-rgb), 0.06) 100%)',
+              borderBottom: '1px solid rgba(var(--dark-cyan-rgb), 0.14)',
             }}
           >
             <Box
@@ -254,9 +256,9 @@ function Navbar({ heroCollapsed, activeSection }) {
                 width: showLeftSidebar ? { md: 176 } : { xs: 156, md: 164 },
                 height: showLeftSidebar ? { md: 176 } : { xs: 156, md: 164 },
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.35) 0%, rgba(22, 101, 52, 0.18) 100%)',
+                background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.35) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
                 border: '2px solid rgba(255, 255, 255, 0.65)',
-                boxShadow: '0 24px 36px rgba(15, 118, 110, 0.28)',
+                boxShadow: '0 24px 36px rgba(85, 134, 140, 0.28)',
               }}
             >
               <Avatar
@@ -283,7 +285,7 @@ function Navbar({ heroCollapsed, activeSection }) {
                     key={affiliation.name}
                     alt={affiliation.name}
                     src={affiliation.src}
-                    sx={{ width: 36, height: 36, boxShadow: '0 8px 16px rgba(22, 101, 52, 0.2)' }}
+                    sx={{ width: 36, height: 36, boxShadow: '0 8px 16px rgba(85, 134, 140, 0.2)' }}
                   />
                 ))}
               </Stack>
@@ -341,14 +343,14 @@ function Navbar({ heroCollapsed, activeSection }) {
                             width: 40,
                             height: 40,
                             borderRadius: '50%',
-                            background: 'linear-gradient(135deg, rgba(22, 101, 52, 0.14) 0%, rgba(34, 197, 94, 0.18) 100%)',
+                            background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.14) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
                             color: 'text.primary',
-                            border: '1px solid rgba(22, 101, 52, 0.22)',
+                            border: '1px solid rgba(var(--dark-cyan-rgb), 0.22)',
                             transition: 'transform 200ms ease, box-shadow 200ms ease',
-                            boxShadow: '0 10px 22px rgba(22, 101, 52, 0.16)',
+                            boxShadow: '0 10px 22px rgba(85, 134, 140, 0.16)',
                             '&:hover': {
                               transform: 'translateY(-3px) scale(1.05)',
-                              boxShadow: '0 16px 28px rgba(22, 101, 52, 0.22)',
+                              boxShadow: '0 16px 28px rgba(85, 134, 140, 0.22)',
                             },
                           }}
                         >
@@ -363,7 +365,7 @@ function Navbar({ heroCollapsed, activeSection }) {
             </Stack>
 
             {primaryNavItems.length > 0 && (
-              <Divider sx={{ borderColor: 'rgba(22, 101, 52, 0.18)' }} />
+              <Divider sx={{ borderColor: 'rgba(var(--dark-cyan-rgb), 0.18)' }} />
             )}
 
             {primaryNavItems.length > 0 && (

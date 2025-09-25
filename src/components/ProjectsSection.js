@@ -40,8 +40,8 @@ const StatPill = ({ icon, label, value }) => {
         gap: 0.75,
         padding: '10px 12px',
         borderRadius: '14px',
-        background: 'rgba(22, 101, 52, 0.08)',
-        border: '1px solid rgba(22, 101, 52, 0.14)',
+        background: 'rgba(var(--dark-cyan-rgb), 0.08)',
+        border: '1px solid rgba(var(--dark-cyan-rgb), 0.14)',
         minHeight: 44,
       }}
     >
@@ -53,8 +53,8 @@ const StatPill = ({ icon, label, value }) => {
           width: 28,
           height: 28,
           borderRadius: '50%',
-          backgroundColor: 'rgba(22, 101, 52, 0.12)',
-          color: '#14532d',
+          backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+          color: 'rgb(var(--dark-cyan-rgb))',
         }}
       >
         {icon}
@@ -87,9 +87,9 @@ const GITHUB_JSON_HEADERS = {
   },
 };
 
-function ProjectsSection() {
-  const themeColor = themeData?.primaryColor ?? '#14532d';
-  const accentColor = themeData?.navbarColor ?? '#166534';
+function ProjectsSection({ navOffset = false }) {
+  const themeColor = themeData?.primaryColor ?? 'rgb(var(--dark-cyan-rgb))';
+  const accentColor = themeData?.navbarColor ?? 'rgb(var(--sunglow-rgb))';
   const copy = projectsCopy ?? {};
   const statsCopy = copy.stats ?? {};
   const emptyCopy = copy.emptyState ?? {};
@@ -381,18 +381,36 @@ function ProjectsSection() {
       sx={{
         minHeight: '100vh',
         position: 'relative',
+        minWidth: '100vw',
         overflow: 'hidden',
         py: { xs: 6, md: 8 },
         px: { xs: 3, md: 6, lg: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
-        scrollSnapAlign: { xs: 'none', md: 'start' },
-        scrollSnapStop: { xs: 'normal', md: 'always' },
-        background: 'linear-gradient(180deg, rgba(236, 253, 245, 0.75) 0%, rgba(209, 250, 229, 0.65) 45%, rgba(255, 255, 255, 0.85) 100%)',
+        // scroll snapping disabled site-wide
+        background: 'none',
+        pl: navOffset
+          ? { md: 'calc(280px + 48px)', lg: 'calc(320px + 64px)' }
+          : undefined,
         '&::before': {
           content: '""',
           position: 'absolute',
-          inset: 0,
-          background: 'radial-gradient(circle at top right, rgba(22, 163, 74, 0.12), transparent 55%)',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '100vw',
+          height: '100%',
+          background:
+            'radial-gradient(circle at top right, rgba(var(--projects-rgb), 0.18), transparent 55%), linear-gradient(180deg, rgba(var(--projects-rgb), 0.82) 0%, rgba(var(--projects-rgb), 0.6) 45%, rgba(255, 255, 255, 0.9) 100%)',
+          pointerEvents: 'none',
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: '24%',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255, 0.9) 100%)',
           pointerEvents: 'none',
         },
       }}
@@ -423,7 +441,7 @@ function ProjectsSection() {
                 alignItems={{ xs: 'flex-start', md: 'flex-start' }}
                 textAlign={{ xs: 'left', md: 'left' }}
               >
-                <Typography variant="overline" sx={{ letterSpacing: 3, color: accentColor }}>
+                <Typography variant="overline" sx={{ letterSpacing: 3, color: 'text.secondary' }}>
                   {copy.eyebrow ?? ''}
                 </Typography>
                 <Typography variant="h2" fontWeight={700}>
@@ -442,9 +460,9 @@ function ProjectsSection() {
                 sx={{
                   p: { xs: 2.5, md: 3 },
                   borderRadius: 3,
-                  border: '1px solid rgba(20, 83, 50, 0.18)',
-                  background: 'linear-gradient(135deg, rgba(240, 253, 244, 0.9) 0%, rgba(209, 250, 229, 0.85) 100%)',
-                  boxShadow: '0 16px 36px rgba(15, 118, 110, 0.18)',
+                  border: '1px solid rgba(var(--dark-cyan-rgb), 0.18)',
+                  background: 'linear-gradient(135deg, rgba(var(--projects-rgb), 0.12) 0%, rgba(255,255,255, 0.9) 100%)',
+                  boxShadow: '0 16px 36px rgba(85, 134, 140, 0.18)',
                   height: '100%',
                 }}
               >
@@ -468,11 +486,11 @@ function ProjectsSection() {
                       </Typography>
                     ) : null}
                     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2.25} alignItems="center">
-                      <Avatar
-                        alt={githubSummary.name || githubSummary.login || githubUsername}
-                        src={githubSummary.avatarUrl ?? undefined}
-                        sx={{ width: 68, height: 68, border: `2px solid ${themeColor}` }}
-                      />
+                  <Avatar
+                    alt={githubSummary.name || githubSummary.login || githubUsername}
+                    src={githubSummary.avatarUrl ?? undefined}
+                    sx={{ width: 68, height: 68, border: `2px solid ${themeColor}` }}
+                  />
                       <Stack spacing={0.75} sx={{ textAlign: { xs: 'left', md: 'left' } }}>
                         <Typography variant="h6" sx={{ fontWeight: 700 }}>
                           {githubSummary.name ?? githubSummary.login ?? githubUsername}
@@ -500,11 +518,11 @@ function ProjectsSection() {
                       </Stack>
                     </Stack>
 
-                    <Stack
-                      direction={{ xs: 'column', sm: 'row' }}
-                      spacing={{ xs: 1.5, sm: 2 }}
-                      sx={{ justifyContent: 'flex-start', textAlign: { xs: 'left', sm: 'left' } }}
-                    >
+                  <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    spacing={{ xs: 1.5, sm: 2 }}
+                    sx={{ justifyContent: 'flex-start', textAlign: { xs: 'left', sm: 'left' } }}
+                  >
                       <StatPill icon={<StarBorderRoundedIcon fontSize="small" />} label={statsCopy.stars ?? ''} value={githubSummary.totalStars ?? '—'} />
                       <StatPill icon={<CallSplitRoundedIcon fontSize="small" />} label={statsCopy.repos ?? ''} value={githubSummary.publicRepos ?? '—'} />
                       <StatPill icon={<VisibilityOutlinedIcon fontSize="small" />} label={statsCopy.followers ?? ''} value={githubSummary.followers ?? '—'} />
@@ -554,7 +572,7 @@ function ProjectsSection() {
                             label={topic}
                             size="small"
                             sx={{
-                              backgroundColor: 'rgba(22, 101, 52, 0.1)',
+                              backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.1)',
                               borderRadius: '999px',
                               fontWeight: 500,
                             }}
@@ -572,7 +590,7 @@ function ProjectsSection() {
                 sx={{
                   p: { xs: 3, md: 4 },
                   borderRadius: 3,
-                  border: '1px dashed rgba(20, 83, 50, 0.3)',
+                  border: '1px dashed rgba(var(--dark-cyan-rgb), 0.3)',
                   textAlign: 'center',
                   color: 'text.secondary',
                 }}
@@ -598,7 +616,7 @@ function ProjectsSection() {
           maxWidth="lg"
           BackdropProps={{
             sx: {
-              backgroundColor: 'rgba(15, 118, 110, 0.25)',
+              backgroundColor: 'rgba(17, 24, 39, 0.55)',
               backdropFilter: 'blur(2px)',
             },
           }}
@@ -608,10 +626,9 @@ function ProjectsSection() {
               height: { xs: '92vh', md: '88vh' },
               borderRadius: 5,
               overflow: 'hidden',
-              boxShadow: '0 32px 72px rgba(15, 118, 110, 0.38)',
-              border: '1px solid rgba(22, 101, 52, 0.22)',
-              background:
-                'linear-gradient(180deg, rgba(236, 253, 245, 0.97) 0%, rgba(209, 250, 229, 0.92) 45%, rgba(255, 255, 255, 0.98) 100%)',
+              boxShadow: '0 32px 72px rgba(17, 24, 39, 0.45)',
+              border: '1px solid rgba(17, 24, 39, 0.16)',
+              background: 'linear-gradient(180deg, #ffffff 0%, #f9fbfc 100%)',
             },
           }}
         >
@@ -625,8 +642,8 @@ function ProjectsSection() {
                   px: { xs: 2.5, md: 4 },
                   py: { xs: 2, md: 3 },
                   gap: 2,
-                  backgroundColor: 'rgba(240, 253, 244, 0.9)',
-                  borderBottom: '1px solid rgba(22, 101, 52, 0.12)',
+                  backgroundColor: 'rgba(17, 24, 39, 0.06)',
+                  borderBottom: '1px solid rgba(17, 24, 39, 0.12)',
                 }}
               >
                 <Stack spacing={1.25} sx={{ pr: 2, maxWidth: 'calc(100% - 48px)' }}>
@@ -700,7 +717,7 @@ function ProjectsSection() {
                           label={topic}
                           size="small"
                           sx={{
-                            backgroundColor: 'rgba(22, 101, 52, 0.1)',
+                            backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.1)',
                             borderRadius: '999px',
                             fontWeight: 500,
                           }}
@@ -754,14 +771,14 @@ function ProjectsSection() {
                       '& ul, & ol': { paddingLeft: 3, marginBottom: 2 },
                       '& li': { marginBottom: 1 },
                       '& pre': {
-                        backgroundColor: 'rgba(15, 118, 110, 0.08)',
+                        backgroundColor: 'rgba(85, 134, 140, 0.08)',
                         borderRadius: 2,
                         padding: 2,
                         overflowX: 'auto',
                         fontSize: '0.9rem',
                       },
                       '& code': {
-                        backgroundColor: 'rgba(15, 118, 110, 0.1)',
+                        backgroundColor: 'rgba(85, 134, 140, 0.1)',
                         borderRadius: 1,
                         padding: '2px 6px',
                         fontSize: '0.88rem',
@@ -773,7 +790,7 @@ function ProjectsSection() {
                         marginBottom: 3,
                       },
                       '& th, & td': {
-                        border: '1px solid rgba(22, 101, 52, 0.2)',
+                        border: '1px solid rgba(85, 134, 140, 0.2)',
                         padding: '8px 12px',
                         textAlign: 'left',
                       },

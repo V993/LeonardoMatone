@@ -36,10 +36,10 @@ const HomeSections = ({ heroCollapsed, onHeroCollapseChange }) => {
           pt: heroCollapsed ? { xs: 80, md: 90 } : 0,
         }}
       >
-        <AboutSection />
-        <EducationSection />
-        <ExperienceSection />
-        <ProjectsSection />
+        <AboutSection navOffset={heroCollapsed} />
+        <EducationSection navOffset={heroCollapsed} />
+        <ExperienceSection navOffset={heroCollapsed} />
+        <ProjectsSection navOffset={heroCollapsed} />
       </Box>
     </>
   );
@@ -213,17 +213,12 @@ function AppContent() {
           minHeight: '100vh',
           height: '100vh',
           overflowY: 'auto',
-          overflowX: 'hidden',
-          scrollSnapType: { xs: 'none', md: 'y proximity' },
+          overflowX: 'visible',
+          // scroll snapping disabled site-wide
           scrollBehavior: 'smooth',
           backgroundColor: 'background.default',
           pt: 0,
-          ml: heroCollapsed
-            ? { xs: 0, md: '280px', lg: '320px' }
-            : 0,
-          width: heroCollapsed
-            ? { xs: '100%', md: 'calc(100% - 280px)', lg: 'calc(100% - 320px)' }
-            : '100%',
+          // Full-width container; sections handle their own left offset when navbar is visible
           pr: 0,
           scrollPaddingTop: { xs: '120px', md: '140px' },
           boxSizing: 'border-box',

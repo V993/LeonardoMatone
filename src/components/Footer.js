@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 
 function Footer() {
   return (
-    <Box sx={{ backgroundColor: '#388E3C', color: '#FFFFFF', py: 2, mt: 4 }}>
+    <Box sx={{ backgroundColor: 'rgb(var(--dark-cyan-rgb))', color: '#FFFFFF', py: 2, mt: 4 }}>
       <Typography variant="body2" align="center">
         &copy; {new Date().getFullYear()} Your Name. All rights reserved.
       </Typography>

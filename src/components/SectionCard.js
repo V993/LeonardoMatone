@@ -1,5 +1,5 @@
 // src/components/SectionCard.js
-import { Typography, CardContent, List, ListItem, ListItemText } from '@mui/material';
+import { Typography, CardContent, List, ListItem, ListItemText, Stack, Box } from '@mui/material';
 import React from 'react';
 import StyledCard from './styled/StyledCard';
 
@@ -11,6 +11,8 @@ const SectionCard = ({
   bullets,
   children,
   variant,
+  leadingIcon,
+  cornerIcon,
   sx,
   onClick,
 }) => {
@@ -21,6 +23,8 @@ const SectionCard = ({
       onClick(event);
     }
   };
+
+  const isProject = variant === 'project';
 
   return (
     <StyledCard
@@ -33,14 +37,28 @@ const SectionCard = ({
       tabIndex={onClick ? 0 : undefined}
       aria-label={onClick ? title : undefined}
     >
+      {cornerIcon && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            zIndex: 2,
+          }}
+        >
+          {cornerIcon}
+        </Box>
+      )}
       <CardContent
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 1.6,
+          gap: 1.4,
           height: '100%',
           position: 'relative',
           zIndex: 1,
+          p: isProject ? 1 : undefined,
+          alignItems: 'flex-start',
         }}
       >
         {eyebrow && (
@@ -56,9 +74,25 @@ const SectionCard = ({
           {eyebrow}
         </Typography>
       )}
-      <Typography variant="h5" sx={{ fontWeight: 700 }}>
-        {title}
-      </Typography>
+      <Stack direction="row" spacing={1} alignItems="center">
+        {leadingIcon && (
+          <Box sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 28,
+            height: 28,
+            borderRadius: 1,
+            backgroundColor: 'rgba(var(--education-rgb), 0.12)',
+            color: 'text.primary'
+          }}>
+            {leadingIcon}
+          </Box>
+        )}
+        <Typography variant="h5" sx={{ fontWeight: 700, overflowWrap: 'anywhere', wordBreak: 'break-word', m: 0 }}>
+          {title}
+        </Typography>
+      </Stack>
       {subtitle && (
         <Typography variant="subtitle1" color="text.secondary">
           {subtitle}

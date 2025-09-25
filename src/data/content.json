@@ -8,21 +8,22 @@
     { "label": "Blog", "type": "route", "path": "/blog" }
   ],
   "theme": {
-    "primaryColor": "#14532d",
-    "navbarColor": "#166534",
-    "navbarGradient": "linear-gradient(180deg, #bbf7d0 0%, #a7f3d0 45%, #6ee7b7 100%)",
-    "navbarBorderColor": "rgba(34, 197, 94, 0.35)"
+    "primaryColor": "#55868c",
+    "navbarColor": "#ffc857",
+    "navbarGradient": "linear-gradient(180deg, #dab6fc 0%, #ffc857 45%, #ffffff 100%)",
+    "navbarBorderColor": "rgba(85, 134, 140, 0.35)"
   },
   "welcome": {
     "name": "Leonardo Matone",
     "greeting": "Hello, I'm",
-    "highlightColor": "#14532d",
+    "highlightColor": "#b7ff9d",
     "intro": "",
     "skills": ["Python", "PyTorch", "AWS Toolkit", "C++", "bash", "SQL", "Slurm"],
-    "roles": ["Senior Software Developer", "Research Assistant", "PhD Candidate", "AI Innovation Fellow"],
+    "roles": ["AI Innovation Fellow", "PhD Candidate", "Senior Software Developer", "Research Assistant"],
     "affiliations": [
       { "name": "Healthfirst", "badge": "hf.png" },
-      { "name": "Tulane University", "badge": "tulane.png" }
+      { "name": "Tulane University", "badge": "tulane.png" },
+      { "name": "Hunter College", "badge": "hunter.png" }
     ],
     "avatar": "id-picture.jpg"
   },
@@ -34,9 +35,9 @@
       "Outside of applied ML, Leonardo researches computational social choice, focusing on novel probabilistic social choice functions, and he earned dual bachelor's degrees in Computer Science and Political Science from Hunter College as a Thomas Hunter Scholar."
     ],
     "highlights": [
-      "Shipped production services handing hundreds of requests per day.",
-      "Published research in probabilistic social choice at leading conferences.",
-      "Community organizer for tech literacy programs in New Orleans."
+      "Supports applied machine learning research at Tulane",
+      "Shipped production services handling hundreds of requests per day.",
+      "Published research in probabilistic social choice at leading conferences."
     ]
   },
   "experience": {
@@ -104,23 +105,48 @@
       "timeframe": "2024 - Present",
       "location": "New Orleans, LA",
       "details": "Graduate research in applied machine learning and computational social choice.",
-      "focusAreas": ["Applied Machine Learning", "Computational Social Choice", "NLP"],
-      "highlights": [
+      "gpa": "",
+      "advisor": "Dr. Nicholas Mattei",
+      "thesis": "TBD",
+      "courses": ["Advanced Machine Learning", "Deep Learning", "Probabilistic Models", "Natural Language Processing", "Data-Intensive Systems"],
+      "distinctions": "AI Innovation Fellow • Graduate GPA: 3.89",
+      "achievements": [
         "AI Innovation Fellow collaborating with interdisciplinary teams",
         "Graduate coursework covering advanced ML and data-intensive systems"
-      ]
+      ],
+      "links": [
+        { "label": "Program Page", "href": "https://sse.tulane.edu/cs" }
+      ],
+      "focusAreas": ["Applied Machine Learning", "Computational Social Choice", "NLP"],
+      "highlights": []
     },
     {
       "institution": "Hunter College",
-      "degree": "Bachelor's in Computer Science, Bachelor's in Political Science",
+      "degrees": [
+        "B.S. Computer Science",
+        "B.A. Political Science"
+      ],
       "timeframe": "2018 - 2022",
       "location": "New York, NY",
       "details": "Dual-degree program with honors thesis on algorithmic decision-making.",
-      "focusAreas": ["Algorithms", "Political Science", "Data Science"],
-      "highlights": [
-        "Thomas Hunter Scholar with full academic honors",
+      "gpa": "",
+      "advisor": "",
+      "thesis": "Algorithmic Decision-Making (Honors Thesis)",
+      "courses": ["Algorithms", "Operating Systems", "Databases", "Data Science", "Computational Social Science"],
+      "honors": [
+        "Magna cum laude",
+        "Thomas Hunter Scholar",
+        "Minor in Mathematics"
+      ],
+      "distinctions": "Magna cum laude • Thomas Hunter Scholar • Minor in Mathematics",
+      "achievements": [
         "Led community tech literacy initiatives across NYC"
-      ]
+      ],
+      "links": [
+        { "label": "Program Page", "href": "https://hunter.cuny.edu/artsci/compsci/" }
+      ],
+      "focusAreas": ["Algorithms", "Political Science", "Data Science"],
+      "highlights": []
     }
   ],
   "educationCopy": {
@@ -132,19 +158,17 @@
     "stats": {
       "programs": "degree programs completed or in progress",
       "span": "years dedicated to advanced computing research",
-      "focus": "interdisciplinary focus areas explored",
       "community": "notable scholarly & community highlights"
     }
   },
   "about": {
     "eyebrow": "Introduction",
     "title": "About Me",
-    "description": "Applied machine learning researcher and engineer blending production experience with academic innovation.",
-    "biographyLabel": "Narrative",
+    "description": "Researcher in applied machine learning blending production experience with academic innovation.",
+    "biographyLabel": "Biography",
     "stats": [
-      { "id": "roles", "label": "Leadership & fellowship programs", "value": "4" },
-      { "id": "publications", "label": "Peer-reviewed publications & talks", "value": "6" },
-      { "id": "community", "label": "Community & outreach initiatives", "value": "3" },
+      { "id": "roles", "label": "Years in industry", "value": "3" },
+      { "id": "publications", "label": "Years in research", "value": "2" },
       { "id": "interests", "label": "Research interests", "value": "NLP • Public Policy • Social Choice" }
     ],
     "highlightsLabel": "Highlights"

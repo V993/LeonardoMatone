@@ -17,7 +17,7 @@ import EmojiObjectsRoundedIcon from '@mui/icons-material/EmojiObjectsRounded';
 import { useTheme } from '@mui/material/styles';
 import { about as aboutCopy, biography } from '../data';
 
-function AboutSection() {
+function AboutSection({ navOffset = false }) {
   const theme = useTheme();
   const about = aboutCopy ?? {};
   const biographyInfo = biography ?? {};
@@ -37,14 +37,43 @@ function AboutSection() {
       id="about"
       sx={{
         position: 'relative',
-        minHeight: '80vh',
+        minHeight: '100vh',
+        minWidth: '100vw',
         px: { xs: 3, md: 6, lg: 8 },
         py: { xs: 6, md: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
-        scrollSnapAlign: { xs: 'none', md: 'start' },
-        scrollSnapStop: { xs: 'normal', md: 'always' },
-        background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.92) 100%)',
+        /* Disable scroll snapping for About section */
+        scrollSnapAlign: 'none',
+        scrollSnapStop: 'normal',
+        background: 'none',
         color: '#f8fafc',
+        overflow: 'hidden',
+        pl: navOffset
+          ? { md: 'calc(280px + 48px)', lg: 'calc(320px + 64px)' }
+          : undefined,
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '100vw',
+          height: '100%',
+          background:
+            'radial-gradient(circle at top left, rgba(var(--about-rgb), 0.18), transparent 55%), linear-gradient(180deg, rgba(var(--about-rgb), 0.86) 0%, rgba(var(--about-rgb), 0.64) 52%, rgba(255, 255, 255, 0.92) 100%)',
+          pointerEvents: 'none',
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: '100vw',
+          height: '24%',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(var(--education-rgb), 0.12) 100%)',
+          pointerEvents: 'none',
+        },
       }}
     >
       <Box
@@ -55,6 +84,10 @@ function AboutSection() {
           display: 'flex',
           flexDirection: 'column',
           gap: { xs: 4, md: 5 },
+          p: { xs: 2.5, md: 3 },
+          borderRadius: 3,
+          backgroundColor: 'rgba(0, 0, 0, 0.32)',
+          border: '1px solid rgba(255,255,255,0.08)'
         }}
       >
         <Grid container spacing={{ xs: 3, md: 4 }} alignItems="stretch">
@@ -94,34 +127,7 @@ function AboutSection() {
                 </Stack>
               )}
 
-              {highlights.length > 0 && about.highlightsLabel ? (
-                <Paper
-                  elevation={0}
-                  sx={{
-                    p: { xs: 2.2, md: 2.6 },
-                    borderRadius: 3,
-                    border: '1px solid rgba(148, 163, 184, 0.3)',
-                    background: 'rgba(30, 41, 59, 0.65)',
-                  }}
-                >
-                  <Stack spacing={1.4}>
-                    <Typography variant="subtitle2" sx={{ letterSpacing: 0.8, color: 'rgba(226, 232, 240, 0.72)' }}>
-                      {about.highlightsLabel}
-                    </Typography>
-                    <List dense sx={{ pl: 2.5, color: 'rgba(226, 232, 240, 0.82)', mb: 0 }}>
-                      {highlights.map((highlight, index) => (
-                        <ListItem
-                          key={index}
-                          disablePadding
-                          sx={{ display: 'list-item', listStyleType: 'disc', py: 0.35 }}
-                        >
-                          <ListItemText primaryTypographyProps={{ variant: 'body2' }} primary={highlight} />
-                        </ListItem>
-                      ))}
-                    </List>
-                  </Stack>
-                </Paper>
-              ) : null}
+              {/* Highlights moved to the right panel to declutter left content */}
             </Stack>
           </Grid>
 
@@ -131,8 +137,8 @@ function AboutSection() {
               sx={{
                 p: { xs: 2.4, md: 2.8 },
                 borderRadius: 3,
-                border: '1px solid rgba(148, 163, 184, 0.25)',
-                background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%)',
+                border: '1px solid rgba(var(--about-rgb), 0.35)',
+                background: 'linear-gradient(135deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.2) 100%)',
               }}
             >
               <Stack spacing={{ xs: 1.75, md: 2 }}>
@@ -152,10 +158,10 @@ function AboutSection() {
                   >
                     {(() => {
                       const IconComponent = STAT_ICON_MAP[tile.id] ?? WorkspacePremiumRoundedIcon;
-                      return <IconComponent sx={{ color: '#0ea5e9' }} />;
+                      return <IconComponent sx={{ color: 'var(--sunglow)' }} />;
                     })()}
                     <Stack spacing={0.35}>
-                      <Typography variant="h6" fontWeight={700} sx={{ color: '#e2e8f0' }}>
+                      <Typography variant="h6" fontWeight={700} sx={{ color: '#fffaf0' }}>
                         {tile.value}
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'rgba(226, 232, 240, 0.75)' }}>
@@ -164,6 +170,31 @@ function AboutSection() {
                     </Stack>
                   </Stack>
                 ))}
+
+                {highlights.length > 0 && (
+                  <Paper
+                    elevation={0}
+                    sx={{
+                      p: { xs: 1.6, md: 1.8 },
+                      borderRadius: 2,
+                      border: '1px dashed rgba(var(--about-rgb), 0.35)',
+                      backgroundColor: 'rgba(0, 0, 0, 0.22)',
+                    }}
+                  >
+                    {about.highlightsLabel ? (
+                      <Typography variant="subtitle2" sx={{ letterSpacing: 0.6, color: 'rgba(226, 232, 240, 0.8)', mb: 1 }}>
+                        {about.highlightsLabel}
+                      </Typography>
+                    ) : null}
+                    <List dense sx={{ pl: 2, color: 'rgba(226, 232, 240, 0.82)', mb: 0 }}>
+                      {highlights.slice(0, 4).map((highlight, index) => (
+                        <ListItem key={index} disablePadding sx={{ display: 'list-item', listStyleType: 'disc', py: 0.25 }}>
+                          <ListItemText primaryTypographyProps={{ variant: 'body2' }} primary={highlight} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Paper>
+                )}
               </Stack>
             </Paper>
           </Grid>

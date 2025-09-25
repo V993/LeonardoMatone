@@ -5,7 +5,7 @@ import StyledCard from './styled/StyledCard';
 import StyledButton from './styled/StyledButton';
 import { contact as contactData } from '../data';
 
-function ContactSection() {
+function ContactSection({ navOffset = false }) {
   if (!contactData) {
     return null;
   }
@@ -16,10 +16,27 @@ function ContactSection() {
     <Box
       id="contact"
       sx={{
-        minHeight: '60vh',
+        minHeight: '100vh',
+        minWidth: '100vw',
         padding: { xs: 3, md: 6 },
-        scrollSnapAlign: 'start',
-        backgroundColor: 'transparent',
+        // scroll snapping disabled site-wide
+        position: 'relative',
+        overflow: 'hidden',
+        background: 'none',
+        pl: navOffset
+          ? { md: 'calc(280px + 48px)', lg: 'calc(320px + 64px)' }
+          : undefined,
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '100vw',
+          height: '100%',
+          pointerEvents: 'none',
+          background: 'radial-gradient(circle at top right, rgba(var(--dark-cyan-rgb), 0.16), transparent 55%), linear-gradient(180deg, rgba(var(--dark-cyan-rgb), 0.08) 0%, rgba(var(--dark-cyan-rgb), 0.06) 60%, rgba(255,255,255,0.96) 100%)',
+        },
       }}
     >
       <Typography variant="h4" gutterBottom align="center">

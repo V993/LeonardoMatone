@@ -19,6 +19,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import idPicture from '../assets/id-picture.jpg';
 import hfBadge from '../assets/hf.png';
 import tulaneBadge from '../assets/tulane.png';
+import hunterBadge from '../assets/hunter.png';
 import {
   welcome as welcomeData,
   contact as contactData,
@@ -31,6 +32,7 @@ const assetSources = {
   'id-picture.jpg': idPicture,
   'hf.png': hfBadge,
   'tulane.png': tulaneBadge,
+  'hunter.png': hunterBadge
 };
 
 const channelIcons = {
@@ -189,7 +191,7 @@ function WelcomeSection({ heroCollapsed, onHeroCollapseChange }) {
   }));
 
   const avatarSrc = assetMap[welcomeData?.avatar] ?? null;
-  const primaryColor = themeData?.primaryColor ?? welcomeData?.highlightColor ?? '#14532d';
+  const primaryColor = themeData?.primaryColor ?? welcomeData?.highlightColor ?? 'rgb(var(--dark-cyan-rgb))';
   const greeting = welcomeData?.greeting ?? 'Hello,';
   const name = welcomeData?.name ?? '';
   const intro = welcomeData?.intro ?? '';
@@ -210,28 +212,70 @@ function WelcomeSection({ heroCollapsed, onHeroCollapseChange }) {
         justifyContent: 'center',
         px: { xs: 3, md: 6 },
         py: heroCollapsed ? 0 : { xs: 4, md: 6 },
-        scrollSnapAlign: 'start',
+        // scroll snapping disabled site-wide
         opacity: heroCollapsed ? 0 : 1,
         pointerEvents: heroCollapsed ? 'none' : 'auto',
         transform: heroCollapsed ? 'translateY(-40px)' : 'none',
         transition:
           'opacity 360ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1), max-height 640ms cubic-bezier(0.22, 1, 0.36, 1), padding 360ms ease',
         overflow: 'hidden',
+        background: 'none',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '100vw',
+          height: '100%',
+          background: 'radial-gradient(circle at top left, rgba(var(--welcome-rgb), 0.18), transparent 55%), linear-gradient(180deg, rgba(var(--welcome-rgb), 0.86) 0%, rgba(var(--welcome-rgb), 0.64) 52%, rgba(255, 255, 255, 0.92) 100%)',
+          pointerEvents: 'none',
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: '24%',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(var(--about-rgb), 0.12) 100%)',
+          pointerEvents: 'none',
+        },
       }}
     >
       <Box
         sx={{
+          position: 'relative',
           borderRadius: { xs: 3, md: 4 },
           background:
-            'linear-gradient(135deg, rgba(240, 253, 244, 0.92) 0%, rgba(209, 250, 229, 0.9) 60%, rgba(255, 255, 255, 0.96) 100%)',
-          border: '1px solid rgba(22, 101, 52, 0.2)',
-          boxShadow: '0 28px 60px rgba(15, 118, 110, 0.18)',
+            'linear-gradient(180deg, rgba(var(--dark-cyan-rgb), 0.10) 0%, rgba(var(--mauve-rgb), 0.08) 60%, rgba(255, 255, 255, 0.98) 100%)',
+          border: '1px solid rgba(var(--dark-cyan-rgb), 0.22)',
+          boxShadow: '0 28px 60px rgba(85, 134, 140, 0.18)',
           p: { xs: 3, md: 4 },
           maxWidth: 1100,
           width: '100%',
           mx: 'auto',
           transition: 'transform 520ms cubic-bezier(0.22, 1, 0.36, 1)',
           transform: heroCollapsed ? 'translateY(-32px) scale(0.94)' : 'none',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            inset: 0,
+            background:
+              'radial-gradient(circle at 30% 30%, rgba(var(--dark-cyan-rgb), 0.22), rgba(var(--dark-cyan-rgb), 0.05) 60%, transparent 75%)',
+            pointerEvents: 'none',
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: '24%',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(var(--about-rgb), 0.14) 100%)',
+            pointerEvents: 'none',
+          },
         }}
       >
         <Grid container spacing={{ xs: 4, md: 6 }} alignItems="center">
@@ -267,18 +311,21 @@ function WelcomeSection({ heroCollapsed, onHeroCollapseChange }) {
                       rel={channel.href?.startsWith('http') ? 'noreferrer' : undefined}
                       aria-label={channel.label}
                       sx={{
-                        color: primaryColor,
+                        color: 'text.primary',
                         display: 'inline-flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        width: 36,
-                        height: 36,
+                        width: 44,
+                        height: 44,
                         borderRadius: '50%',
-                        backgroundColor: 'rgba(22, 101, 52, 0.12)',
-                        transition: 'background-color 160ms ease, transform 160ms ease',
+                        background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.14) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
+                        border: '1px solid rgba(var(--dark-cyan-rgb), 0.22)',
+                        boxShadow: '0 10px 22px rgba(85, 134, 140, 0.16)',
+                        transition: 'transform 200ms ease, box-shadow 200ms ease, filter 180ms ease',
                         '&:hover': {
-                          backgroundColor: 'rgba(22, 163, 74, 0.2)',
-                          transform: 'translateY(-2px)',
+                          transform: 'translateY(-2px) scale(1.05)',
+                          boxShadow: '0 16px 28px rgba(85, 134, 140, 0.22)',
+                          filter: 'brightness(1.05)',
                         },
                       }}
                     >
@@ -325,12 +372,12 @@ function WelcomeSection({ heroCollapsed, onHeroCollapseChange }) {
                   height: { xs: 240, md: 260 },
                   borderRadius: '50%',
                   background:
-                    'radial-gradient(circle at 30% 30%, rgba(22, 101, 52, 0.28), rgba(22, 101, 52, 0.05) 60%, transparent 75%)',
+                    'radial-gradient(circle at 30% 30%, rgba(var(--welcome-rgb), 0.28), rgba(var(--welcome-rgb), 0.05) 60%, transparent 75%)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  boxShadow: '0 18px 44px rgba(15, 118, 110, 0.26)',
-                  border: '1px solid rgba(22, 101, 52, 0.18)',
+                  boxShadow: '0 18px 44px rgba(85, 134, 140, 0.26)',
+                  border: '1px solid rgba(var(--welcome-rgb), 0.18)',
                 }}
               >
                 <Avatar
@@ -374,19 +421,23 @@ function WelcomeSection({ heroCollapsed, onHeroCollapseChange }) {
                 key={item.label}
                 onClick={() => handleNavClick(item)}
                 sx={{
-                  borderRadius: 999,
-                  px: 2.6,
-                  py: 0.85,
+                  borderRadius: 0,
+                  px: 1,
+                  py: 0.25,
+                  minWidth: 'auto',
                   fontWeight: 700,
                   letterSpacing: 1,
                   textTransform: 'uppercase',
-                  backgroundColor: isActive ? 'rgba(34, 197, 94, 0.25)' : 'rgba(34, 197, 94, 0.12)',
-                  color: isActive ? primaryColor : '#064e3b',
-                  border: '1px solid rgba(22, 101, 52, 0.18)',
-                  transition: 'background-color 200ms ease, transform 200ms ease',
+                  background: 'transparent',
+                  color: isActive ? primaryColor : 'rgb(var(--dark-cyan-rgb))',
+                  border: 'none',
+                  boxShadow: 'none',
+                  filter: 'drop-shadow(0 2px 6px rgba(0,0,0,0.15))',
+                  transition: 'transform 160ms ease, filter 160ms ease',
                   '&:hover': {
-                    backgroundColor: 'rgba(34, 197, 94, 0.35)',
+                    background: 'transparent',
                     transform: 'translateY(-1px)',
+                    filter: 'drop-shadow(0 4px 10px rgba(0,0,0,0.18))',
                   },
                 }}
               >
