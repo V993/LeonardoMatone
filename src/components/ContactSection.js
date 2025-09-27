@@ -27,15 +27,7 @@ function ContactSection({ navOffset = false }) {
           ? { md: 'calc(280px + 48px)', lg: 'calc(320px + 64px)' }
           : undefined,
         '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '100vw',
-          height: '100%',
-          pointerEvents: 'none',
-          background: 'radial-gradient(circle at top right, rgba(var(--dark-cyan-rgb), 0.16), transparent 55%), linear-gradient(180deg, rgba(var(--dark-cyan-rgb), 0.08) 0%, rgba(var(--dark-cyan-rgb), 0.06) 60%, rgba(255,255,255,0.96) 100%)',
+          display: 'none',
         },
       }}
     >

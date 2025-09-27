@@ -17,7 +17,9 @@
     "name": "Leonardo Matone",
     "greeting": "Hello, I'm",
     "highlightColor": "#b7ff9d",
-    "intro": "",
+    "tenSeconds": [
+      "I am currently a PhD candidate focusing in computational social choice at Tulane University. I also work full-time as an AI Innovation Fellow at Tulane, bringing applied machine learning solutions to researchers across the university in a variety of interdisciplinary projects. My background is in software development, where I have years of experience shipping reliable Python and AWS services."
+    ],
     "skills": ["Python", "PyTorch", "AWS Toolkit", "C++", "bash", "SQL", "Slurm"],
     "roles": ["AI Innovation Fellow", "PhD Candidate", "Senior Software Developer", "Research Assistant"],
     "affiliations": [
@@ -25,6 +27,17 @@
       { "name": "Tulane University", "badge": "tulane.png" },
       { "name": "Hunter College", "badge": "hunter.png" }
     ],
+    "contactDetails": {
+      "heading": "On Campus",
+      "items": [
+        { "label": "Office", "value": "TBD" },
+        { "label": "Address", "value": "6823 St Charles Ave, New Orleans, LA 70118" }
+      ],
+      "cta": {
+        "label": "Reserve a time",
+        "href": "https://calendar.google.com"
+      }
+    },
     "avatar": "id-picture.jpg"
   },
   "biography": {
@@ -36,7 +49,7 @@
     ],
     "highlights": [
       "Supports applied machine learning research at Tulane",
-      "Shipped production services handling hundreds of requests per day.",
+      "Shipped production services handling hundreds of requests per day as a senior developer.",
       "Published research in probabilistic social choice at leading conferences."
     ]
   },
@@ -82,9 +95,9 @@
   "experienceCopy": {
     "eyebrow": "Growth & Impact",
     "title": "Experience",
-    "description": "From research labs to production systems, I bridge applied machine learning with resilient backend engineering. These roles highlight how I guide teams, mentor talent, and ship measurable outcomes.",
+    "description": "From research labs to production systems, I leverage my expertise in applied machine learning and resilient backend engineering. ",
     "highlightsLabel": "Recent Highlights",
-    "snapshotLabel": "At a glance",
+    "snapshotLabel": "Me in 10 seconds",
     "stats": {
       "active": {
         "description": "active leadership & research initiatives"
@@ -101,66 +114,55 @@
   "education": [
     {
       "institution": "Tulane University",
-      "degree": "Masters/PhD in Computer Science",
+      "degree": "MS/PhD in Computer Science",
       "timeframe": "2024 - Present",
       "location": "New Orleans, LA",
       "details": "Graduate research in applied machine learning and computational social choice.",
-      "gpa": "",
-      "advisor": "Dr. Nicholas Mattei",
-      "thesis": "TBD",
-      "courses": ["Advanced Machine Learning", "Deep Learning", "Probabilistic Models", "Natural Language Processing", "Data-Intensive Systems"],
-      "distinctions": "AI Innovation Fellow • Graduate GPA: 3.89",
-      "achievements": [
+      "highlights": [
         "AI Innovation Fellow collaborating with interdisciplinary teams",
         "Graduate coursework covering advanced ML and data-intensive systems"
       ],
       "links": [
-        { "label": "Program Page", "href": "https://sse.tulane.edu/cs" }
       ],
-      "focusAreas": ["Applied Machine Learning", "Computational Social Choice", "NLP"],
-      "highlights": []
+      "badge": "tulane.png"
     },
     {
       "institution": "Hunter College",
-      "degrees": [
-        "B.S. Computer Science",
-        "B.A. Political Science"
-      ],
       "timeframe": "2018 - 2022",
       "location": "New York, NY",
-      "details": "Dual-degree program with honors thesis on algorithmic decision-making.",
-      "gpa": "",
-      "advisor": "",
-      "thesis": "Algorithmic Decision-Making (Honors Thesis)",
-      "courses": ["Algorithms", "Operating Systems", "Databases", "Data Science", "Computational Social Science"],
-      "honors": [
-        "Magna cum laude",
-        "Thomas Hunter Scholar",
-        "Minor in Mathematics"
+      "details": "Dual-degree Thomas Hunter Scholar exploring the intersection of computer science, policy, and civic technology.",
+      "degrees": [
+        {
+          "title": "B.S. Computer Science",
+          "highlights": [
+            "Magna cum laude",
+            "Thomas Hunter Scholar",
+            "Minor in Mathematics"
+          ],
+          "links": [
+          ]
+        },
+        {
+          "title": "B.A. Political Science",
+          "links": [
+          ]
+        }
       ],
-      "distinctions": "Magna cum laude • Thomas Hunter Scholar • Minor in Mathematics",
-      "achievements": [
-        "Led community tech literacy initiatives across NYC"
+      "badge": "hunter.png"
+    },
+    {
+      "institution": "Hillcrest High School",
+      "degree": "High School Diploma, Humanities",
+      "timeframe": "2014 - 2018",
+      "location": "Queens, NY",
+      "details": "",
+      "highlights": [
+        "Model United Nations Undersecretary General",
+        "Writer for the Hillcrest Highlighter"
       ],
-      "links": [
-        { "label": "Program Page", "href": "https://hunter.cuny.edu/artsci/compsci/" }
-      ],
-      "focusAreas": ["Algorithms", "Political Science", "Data Science"],
-      "highlights": []
+      "links": []
     }
   ],
-  "educationCopy": {
-    "eyebrow": "Foundations & Fellowships",
-    "title": "Education",
-    "description": "Academic programs that anchor my research and engineering practice—spanning graduate AI fellowships to dual-degree undergraduate work across computer science and political science.",
-    "currentProgramLabel": "Current Program",
-    "snapshotLabel": "Academic Snapshot",
-    "stats": {
-      "programs": "degree programs completed or in progress",
-      "span": "years dedicated to advanced computing research",
-      "community": "notable scholarly & community highlights"
-    }
-  },
   "about": {
     "eyebrow": "Introduction",
     "title": "About Me",
@@ -218,7 +220,6 @@
     }
   ],
   "contact": {
-    "intro": "I’m always open to discussing new collaborations, research, or speaking opportunities.",
     "channels": [
       {
         "label": "Email",
@@ -239,14 +240,30 @@
   },
   "blogPosts": [
     {
-      "title": "Blog Post One",
-      "snippet": "Snippet of the first blog post...",
-      "link": "/blog/post-one"
+      "id": "ml-systems-journal",
+      "title": "Using PyTorch on Apple Sillicon",
+      "date": "September 2025",
+      "snippet": "TIL that Torch has *Metal* support. It's insane",
+      "subtitle": "Notes from DeepVoting",
+      "tags": ["Applied ML", "MLOps", "GPU Acceleration"],
+      "noteTheme": "education",
+      "content": [
+        "mps device enables high-performance training on GPU for MacOS devices with Metal programming framework. It introduces a new device to map Machine Learning computational graphs and primitives on highly efficient Metal Performance Shaders Graph framework and tuned kernels provided by Metal Performance Shaders framework respectively. \n The new MPS backend extends the PyTorch ecosystem and provides existing scripts capabilities to setup and run operations on GPU. \n https://docs.pytorch.org/docs/stable/notes/mps.html"
+      ],
+      "callToAction": "If you're curious about some applications I've built utilizing this stack, feel free to contact me!"
     },
     {
-      "title": "Blog Post Two",
-      "snippet": "Snippet of the second blog post...",
-      "link": "/blog/post-two"
+      "id": "vibe-code-study",
+      "title": "Vibe Coding Web as a Backend Developer",
+      "date": "September 2025",
+      "snippet": "Tools like Codex enable crazy cross-stack work for developers with limited experience but good domain knowledge",
+      "subtitle": "Personal Development",
+      "tags": ["REACT", "Prompt Engineering", "Web Dev"],
+      "noteTheme": "projects",
+      "content": [
+        "My expertise is in backend development, with some data science and analysis mixed in. I'm studying and honing my AI/ML toolkit at Tulane, and FE has never been for me. Yet I hope you'll agree that this website is absolutely excellent, despite being built by yours truly. Building this site was not easy; this is mainly because I have next to no real experience with web development outside of some shoddy frontend views of projects I've built in the past. I vibe-coded the hell out of this. It's interesting because I've seen students and colleagues talking and implementing via 'vibe' in the past, and it's such an interesting dilemma to me. Part of me is certainly positive about this new progression in the field, as is Nvidia's CEO, but another part of me sees these new powers being used for evil, or at least, ignorance. Vibe coding does eliminate the hours and even years of domain knowledge needed to build things, but the act of building things still takes hours and hours of work. \nWhile I have used LLM tools in the past, this was my first proper 'vibe-code.' JavaScript eludes me, so I came into this with my programming knowledge, a few general structure ideas, and a dream. Here are my takeaways. \nVibe coding sucks. It's a joke- and while it enabled me to finish this project, I learned a significant amount about REACT in order to wrap it up. I would often spend +2 hours working on a feature only for one wrong prompt to nuke all of my progress, including my json storing all of my data, "
+      ],
+      "callToAction": "If you're curious about some applications I've built utilizing this stack, feel free to contact me!"
     }
   ]
 }

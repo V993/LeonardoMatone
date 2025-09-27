@@ -37,42 +37,25 @@ function AboutSection({ navOffset = false }) {
       id="about"
       sx={{
         position: 'relative',
-        minHeight: '100vh',
         minWidth: '100vw',
+        minHeight: 'auto',
         px: { xs: 3, md: 6, lg: 8 },
         py: { xs: 6, md: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
-        /* Disable scroll snapping for About section */
-        scrollSnapAlign: 'none',
-        scrollSnapStop: 'normal',
         background: 'none',
         color: '#f8fafc',
         overflow: 'hidden',
-        pl: navOffset
-          ? { md: 'calc(280px + 48px)', lg: 'calc(320px + 64px)' }
-          : undefined,
+        pl: {
+          xs: 0,
+          md: navOffset ? 'calc(280px + 48px)' : 0,
+          lg: navOffset ? 'calc(320px + 64px)' : 0,
+        },
+        transition: 'padding-left 620ms cubic-bezier(0.22, 1, 0.36, 1)',
         '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '100vw',
-          height: '100%',
-          background:
-            'radial-gradient(circle at top left, rgba(var(--about-rgb), 0.18), transparent 55%), linear-gradient(180deg, rgba(var(--about-rgb), 0.86) 0%, rgba(var(--about-rgb), 0.64) 52%, rgba(255, 255, 255, 0.92) 100%)',
-          pointerEvents: 'none',
+          display: 'none',
         },
         '&::after': {
-          content: '""',
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          width: '100vw',
-          height: '24%',
-          background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(var(--education-rgb), 0.12) 100%)',
-          pointerEvents: 'none',
+          display: 'none',
         },
       }}
     >

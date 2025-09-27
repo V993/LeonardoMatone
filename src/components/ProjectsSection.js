@@ -26,6 +26,7 @@ import {
   projectsCopy,
 } from '../data';
 import { marked } from 'marked';
+import { sharedChipSx, sharedChipProps } from '../styles/chipStyles';
 
 marked.setOptions({ gfm: true, breaks: true });
 
@@ -379,50 +380,45 @@ function ProjectsSection({ navOffset = false }) {
     <Box
       id="projects"
       sx={{
-        minHeight: '100vh',
         position: 'relative',
         minWidth: '100vw',
+        minHeight: '90vh',
         overflow: 'hidden',
         py: { xs: 6, md: 8 },
         px: { xs: 3, md: 6, lg: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
         // scroll snapping disabled site-wide
         background: 'none',
-        pl: navOffset
-          ? { md: 'calc(280px + 48px)', lg: 'calc(320px + 64px)' }
-          : undefined,
+        pl: {
+          xs: 0,
+          md: navOffset ? 'calc(280px + 48px)' : 0,
+          lg: navOffset ? 'calc(320px + 64px)' : 0,
+        },
+        transition: 'padding-left 620ms cubic-bezier(0.22, 1, 0.36, 1)',
+        '& > *': {
+          position: 'relative',
+          zIndex: 1,
+        },
         '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '100vw',
-          height: '100%',
-          background:
-            'radial-gradient(circle at top right, rgba(var(--projects-rgb), 0.18), transparent 55%), linear-gradient(180deg, rgba(var(--projects-rgb), 0.82) 0%, rgba(var(--projects-rgb), 0.6) 45%, rgba(255, 255, 255, 0.9) 100%)',
-          pointerEvents: 'none',
+          display: 'none',
         },
         '&::after': {
-          content: '""',
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: '24%',
-          background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255, 0.9) 100%)',
-          pointerEvents: 'none',
+          display: 'none',
         },
       }}
     >
       <Box
         sx={{
           position: 'relative',
-          maxWidth: 1280,
+          maxWidth: 1200,
           mx: 'auto',
           display: 'flex',
           flexDirection: 'column',
           gap: { xs: 4, md: 6 },
+          '& > *': {
+            position: 'relative',
+            zIndex: 1,
+          },
         }}
       >
         <Grid container spacing={{ xs: 3, md: 4 }} alignItems="stretch">
@@ -570,12 +566,8 @@ function ProjectsSection({ navOffset = false }) {
                           <Chip
                             key={topic}
                             label={topic}
-                            size="small"
-                            sx={{
-                              backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.1)',
-                              borderRadius: '999px',
-                              fontWeight: 500,
-                            }}
+                            {...sharedChipProps}
+                            sx={{ ...sharedChipSx }}
                           />
                         ))}
                       </Box>
@@ -715,12 +707,8 @@ function ProjectsSection({ navOffset = false }) {
                         <Chip
                           key={topic}
                           label={topic}
-                          size="small"
-                          sx={{
-                            backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.1)',
-                            borderRadius: '999px',
-                            fontWeight: 500,
-                          }}
+                          {...sharedChipProps}
+                          sx={{ ...sharedChipSx }}
                         />
                       ))}
                     </Box>

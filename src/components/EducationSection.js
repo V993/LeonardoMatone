@@ -222,9 +222,12 @@ function EducationSection({ navOffset = false }) {
                         </Typography>
                         {Array.isArray(program.degrees) && program.degrees.length > 0 ? (
                           <Stack direction="row" spacing={0.6} flexWrap="wrap">
-                            {program.degrees.map((deg, i) => (
-                              <Chip key={i} label={deg} size="small" sx={{ fontWeight: 600 }} />
-                            ))}
+                            {program.degrees.map((deg, i) => {
+                              const label = typeof deg === 'string' ? deg : deg?.title;
+                              return label ? (
+                                <Chip key={`${label}-${i}`} label={label} size="small" sx={{ fontWeight: 600 }} />
+                              ) : null;
+                            })}
                           </Stack>
                         ) : (
                           program.degree ? <Chip label={program.degree} size="small" sx={{ fontWeight: 600 }} /> : null

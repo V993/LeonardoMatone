@@ -4,18 +4,19 @@ import {
   Avatar,
   Box,
   Button,
-  Divider,
   Link as MuiLink,
   Stack,
   Tooltip,
   Typography,
   useMediaQuery,
   useTheme,
+  IconButton,
 } from '@mui/material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkIcon from '@mui/icons-material/Link';
+import CloseIcon from '@mui/icons-material/Close';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   navigation,
@@ -44,12 +45,13 @@ const channelIcons = {
 
 const SECTION_ORDER = ['about', 'education', 'experience', 'projects'];
 
-function Navbar({ heroCollapsed, activeSection }) {
+function Navbar({ heroCollapsed, activeSection, isMobileNavOpen = false, onMobileNavClose }) {
   const location = useLocation();
   const navigate = useNavigate();
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down('md'));
   const showLeftSidebar = heroCollapsed && !isSmall;
+  const shouldShowMobileNav = isSmall && isMobileNavOpen;
 
   const navLinks = useMemo(() => {
     const sorted = (navigation ?? [])
@@ -84,18 +86,20 @@ function Navbar({ heroCollapsed, activeSection }) {
     [navLinks]
   );
 
+  const routeNavItems = useMemo(
+    () => navLinks.filter((item) => !item.sectionId),
+    [navLinks]
+  );
+
   const avatarSrc = assetSources[welcomeData?.avatar] ?? undefined;
-  const primaryColor = themeData?.primaryColor ?? 'rgb(var(--dark-cyan-rgb))';
   const navbarBorderColor = themeData?.navbarBorderColor ?? 'rgba(var(--dark-cyan-rgb), 0.25)';
 
-  const affiliations = useMemo(
-    () =>
-      (welcomeData?.affiliations ?? []).map((affiliation) => ({
-        ...affiliation,
-        src: assetSources[affiliation.badge] ?? undefined,
-      })),
-    []
-  );
+  const isVisible = heroCollapsed || shouldShowMobileNav;
+  const handleMobileClose = () => {
+    if (typeof onMobileNavClose === 'function') {
+      onMobileNavClose();
+    }
+  };
 
   const handleNavClick = (event, item) => {
     if (item.sectionId) {
@@ -103,6 +107,9 @@ function Navbar({ heroCollapsed, activeSection }) {
 
       if (location.pathname !== '/') {
         navigate('/', { state: { scrollToSection: item.sectionId } });
+        if (shouldShowMobileNav) {
+          handleMobileClose();
+        }
         return;
       }
 
@@ -111,11 +118,17 @@ function Navbar({ heroCollapsed, activeSection }) {
         scrollToTop();
       }
 
+      if (shouldShowMobileNav) {
+        handleMobileClose();
+      }
       return;
     }
 
     if (typeof item.to === 'string' && location.pathname !== item.to) {
         navigate(item.to);
+        if (shouldShowMobileNav) {
+          handleMobileClose();
+        }
     }
   };
 
@@ -150,32 +163,33 @@ function Navbar({ heroCollapsed, activeSection }) {
           const isActive = isItemActive(item);
 
           return (
-            <Button
-              key={item.label}
-              onClick={(event) => handleNavClick(event, item)}
-              sx={{
+              <Button
+                key={item.label}
+                onClick={(event) => handleNavClick(event, item)}
+                sx={{
                 borderRadius: 2,
                 px: showLeftSidebar ? 1.6 : 1.8,
                 py: 0.55,
-                fontWeight: 700,
-                letterSpacing: 1,
-                textTransform: 'uppercase',
-                width: showLeftSidebar || isSmall ? '100%' : 'auto',
-                justifyContent: 'center',
-                color: isActive ? primaryColor : 'rgb(var(--dark-cyan-rgb))',
-                backgroundColor: isActive ? 'rgba(var(--dark-cyan-rgb), 0.22)' : 'rgba(var(--dark-cyan-rgb), 0.08)',
-                border: '1px solid rgba(var(--dark-cyan-rgb), 0.24)',
-                boxShadow: isActive ? '0 10px 24px rgba(85, 134, 140, 0.22)' : 'none',
-                transition: 'all 220ms ease',
-                '&:hover': {
-                  backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.32)',
-                  transform: 'translateY(-1px)',
-                  boxShadow: '0 12px 28px rgba(85, 134, 140, 0.26)',
-                },
-              }}
-            >
-              {item.label}
-            </Button>
+                  fontWeight: 700,
+                  letterSpacing: 1,
+                  textTransform: 'uppercase',
+                  width: showLeftSidebar || isSmall ? '100%' : 'auto',
+                  justifyContent: 'center',
+                color: isActive ? '#000000' : '#000000',
+                backgroundColor: isActive ? 'rgba(0,0,0,0.06)' : 'rgba(0,0,0,0.03)',
+                border: '1px solid rgba(0,0,0,0.08)',
+                boxShadow: isActive ? '0 8px 18px rgba(0,0,0,0.18)' : 'none',
+                transform: isActive ? 'translateY(-1px)' : 'none',
+                transition: 'transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease',
+                  '&:hover': {
+                  backgroundColor: 'rgba(0,0,0,0.08)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 12px 26px rgba(0,0,0,0.22)',
+                  },
+                }}
+              >
+                {item.label}
+              </Button>
           );
         })}
       </Stack>
@@ -187,32 +201,41 @@ function Navbar({ heroCollapsed, activeSection }) {
   return (
     <Box
       component="header"
+      id="navbarbox"
       sx={{
         position: 'fixed',
         top: 0,
         left: 0,
         width: showLeftSidebar ? { md: 280, lg: 320 } : '100%',
         maxWidth: showLeftSidebar ? { md: 280, lg: 320 } : '100%',
-        height: showLeftSidebar ? '100vh' : 'auto',
-        zIndex: (muiTheme) => muiTheme.zIndex.appBar + 2,
+        height: '100vh',
+        zIndex: (muiTheme) => muiTheme.zIndex.appBar + 25,
         display: 'flex',
-        justifyContent: showLeftSidebar ? 'flex-start' : 'center',
-        alignItems: showLeftSidebar ? 'stretch' : 'flex-start',
-        pointerEvents: heroCollapsed ? 'auto' : 'none',
-        transition: 'width 320ms ease, max-width 320ms ease',
+        justifyContent: 'center',
+        alignItems: 'center',
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateX(0)' : 'translateX(-110%)',
+        pointerEvents: isVisible ? 'auto' : 'none',
+        backgroundColor: shouldShowMobileNav ? 'rgba(17, 24, 39, 0.35)' : 'transparent',
+        transition: 'opacity 520ms ease, transform 680ms cubic-bezier(0.22, 1, 0.36, 1), backdrop-filter 240ms ease',
       }}
+      data-state="hidden" data-phase="out"
+      role={shouldShowMobileNav ? 'dialog' : undefined}
+      aria-modal={shouldShowMobileNav ? 'true' : undefined}
     >
       <Box
+        id="navbar-box"
         sx={{
           width: '100%',
           maxWidth: showLeftSidebar ? '100%' : 1240,
           px: showLeftSidebar ? { md: 2, lg: 2.5 } : { xs: 2, md: 3.5 },
-          pt: showLeftSidebar ? { md: 3 } : { xs: 1, md: 1.5 },
-          pb: showLeftSidebar ? { md: 3 } : { xs: 1.25, md: 1.75 },
-          transition: 'opacity 420ms ease, transform 420ms ease',
-          opacity: heroCollapsed ? 1 : 0,
-          transform: heroCollapsed ? 'translateY(0)' : 'translateY(-28px)',
-          height: showLeftSidebar ? '100%' : 'auto',
+          pt: showLeftSidebar ? { md: 3 } : { xs: 4, md: 2 },
+          pb: showLeftSidebar ? { md: 3 } : { xs: 2, md: 2 },
+          // transition: 'opacity 480ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1)',
+          opacity: 1,
+          
+          transform: 'translateY(0)',
+          height: 'auto',
           display: 'flex',
           alignItems: 'stretch',
         }}
@@ -222,39 +245,83 @@ function Navbar({ heroCollapsed, activeSection }) {
             position: 'relative',
             borderRadius: { xs: 3, md: 4 },
             border: `1px solid ${navbarBorderColor}`,
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(var(--dark-cyan-rgb), 0.06) 45%, rgba(255, 255, 255, 0.98) 100%)',
-            boxShadow: heroCollapsed ? '0 24px 64px rgba(85, 134, 140, 0.28)' : '0 8px 20px rgba(85, 134, 140, 0.14)',
-            backdropFilter: heroCollapsed ? 'blur(18px)' : 'none',
-            transition: 'box-shadow 420ms ease, backdrop-filter 420ms ease',
+            background:
+              'linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.08) 80%)',
+            boxShadow: '0 24px 64px rgba(85, 134, 140, 0.28)',
+            backdropFilter: heroCollapsed || shouldShowMobileNav ? 'blur(8px)' : 'blur(0px)',
+            // transition: 'box-shadow 420ms ease, backdrop-filter 420ms ease',
             overflow: 'hidden',
             width: '100%',
-            height: showLeftSidebar ? '100%' : 'auto',
+            height: 'auto',
             display: 'flex',
             flexDirection: 'column',
           }}
         >
-          <Box
-            sx={{
-              position: 'relative',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-              gap: 3.1,
-              pt: showLeftSidebar ? { md: 6 } : { xs: 5, md: 5.6 },
-              pb: { xs: 3.8, md: 4 },
-              px: showLeftSidebar ? { md: 3.5 } : { xs: 3.25, md: 4 },
-              background: 'linear-gradient(180deg, rgba(var(--dark-cyan-rgb), 0.12) 0%, rgba(var(--dark-cyan-rgb), 0.06) 100%)',
-              borderBottom: '1px solid rgba(var(--dark-cyan-rgb), 0.14)',
-            }}
-          >
+          {shouldShowMobileNav && (
+            <IconButton
+              onClick={handleMobileClose}
+              sx={{
+                position: 'absolute',
+                top: 12,
+                right: 12,
+                color: '#1f2937',
+                zIndex: 5,
+              }}
+              aria-label="Close navigation"
+            >
+              <CloseIcon />
+            </IconButton>
+          )}
             <Box
               sx={{
+                position: 'relative',
                 display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+                gap: { xs: 1.2, md: 1.8 },
+                pt: showLeftSidebar ? { md: 3.2 } : { xs: 2.4, md: 3 },
+                pb: { xs: 1.8, md: 2.4 },
+                px: showLeftSidebar ? { md: 2.6 } : { xs: 2.6, md: 3.2 },
+                background:
+                  'linear-gradient(180deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.18) 64%, rgba(255,255,255,0.06) 100%)',
+                borderBottom: '1px solid rgba(var(--dark-cyan-rgb), 0.14)',
+              }}
+            >
+            <Typography
+              variant="h2"
+              sx={{
+                fontWeight: 800,
+                textTransform: 'none',
+                fontSize: { xs: '2.8rem', md: '3.2rem' },
+                lineHeight: 1.05,
+                color: '#1f2937',
+                textAlign: 'center',
+              }}
+            >
+              {welcomeData?.name ?? ''}
+            </Typography>
+
+            {welcomeData?.roles && welcomeData.roles.length > 0 && (
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  fontWeight: 600,
+                  color: '#1f2937',
+                  textAlign: 'center',
+                }}
+              >
+                {welcomeData.roles[0]}
+              </Typography>
+            )}
+
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'flex' },
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: showLeftSidebar ? { md: 176 } : { xs: 156, md: 164 },
-                height: showLeftSidebar ? { md: 176 } : { xs: 156, md: 164 },
+                width: showLeftSidebar ? { md: 148 } : { xs: 140, md: 148 },
+                height: showLeftSidebar ? { md: 148 } : { xs: 140, md: 148 },
                 borderRadius: '50%',
                 background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.35) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
                 border: '2px solid rgba(255, 255, 255, 0.65)',
@@ -265,65 +332,21 @@ function Navbar({ heroCollapsed, activeSection }) {
                 alt={welcomeData?.name ?? 'Profile'}
                 src={avatarSrc}
                 sx={{
-                  width: showLeftSidebar ? { md: 150 } : { xs: 140, md: 144 },
-                  height: showLeftSidebar ? { md: 150 } : { xs: 140, md: 144 },
-                  border: '4px solid rgba(255, 255, 255, 0.8)',
+                  width: showLeftSidebar ? { md: 132 } : { xs: 126, md: 132 },
+                  height: showLeftSidebar ? { md: 132 } : { xs: 126, md: 132 },
+                  border: '3px solid rgba(255, 255, 255, 0.8)',
                 }}
               />
             </Box>
 
-            {affiliations.length > 0 && (
-              <Stack
-                direction="row"
-                spacing={1}
-                flexWrap="wrap"
-                justifyContent="center"
-                rowGap={0.9}
-              >
-                {affiliations.map((affiliation) => (
-                  <Avatar
-                    key={affiliation.name}
-                    alt={affiliation.name}
-                    src={affiliation.src}
-                    sx={{ width: 36, height: 36, boxShadow: '0 8px 16px rgba(85, 134, 140, 0.2)' }}
-                  />
-                ))}
-              </Stack>
-            )}
-          </Box>
-
-          <Stack
-            spacing={showLeftSidebar ? 3.2 : 2.9}
-            sx={{
-              flex: showLeftSidebar ? 1 : 'initial',
-              px: showLeftSidebar ? { md: 2.9 } : { xs: 2.6, md: 3.6 },
-              py: { xs: 2.7, md: 3.1 },
-            }}
-          >
-            <Stack
-              spacing={showLeftSidebar ? 1.8 : 1.6}
-              alignItems={showLeftSidebar || isSmall ? 'center' : 'flex-start'}
-              textAlign={showLeftSidebar || isSmall ? 'center' : 'left'}
-              sx={{ width: '100%' }}
-            >
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, letterSpacing: 2.4, textTransform: 'uppercase' }}>
-                {welcomeData?.name ?? ''}
-              </Typography>
-
-              {welcomeData?.roles && welcomeData.roles.length > 0 && (
-                <Typography variant="body2" color="text.secondary">
-                  {welcomeData.roles[0]}
-                </Typography>
-              )}
-
-              {contactChannels.length > 0 && (
+            {contactChannels.length > 0 && (
+              <Stack spacing={0.4} alignItems="center" sx={{ width: '100%' }}>
                 <Stack
                   direction="row"
-                  justifyContent="center"
-                  alignItems="center"
+                  spacing={0.6}
                   flexWrap="wrap"
-                  columnGap={1.15}
-                  rowGap={0.85}
+                  justifyContent="center"
+                  rowGap={0.5}
                 >
                   {contactChannels.map((channel) => {
                     const iconKey = channel.label ? channel.label.toLowerCase() : '';
@@ -336,6 +359,9 @@ function Navbar({ heroCollapsed, activeSection }) {
                           target={channel.href?.startsWith('http') ? '_blank' : undefined}
                           rel={channel.href?.startsWith('http') ? 'noreferrer' : undefined}
                           aria-label={channel.label}
+                          onClick={() => {
+                            handleMobileClose();
+                          }}
                           sx={{
                             display: 'inline-flex',
                             alignItems: 'center',
@@ -344,7 +370,7 @@ function Navbar({ heroCollapsed, activeSection }) {
                             height: 40,
                             borderRadius: '50%',
                             background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.14) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
-                            color: 'text.primary',
+                            color: '#1f2937',
                             border: '1px solid rgba(var(--dark-cyan-rgb), 0.22)',
                             transition: 'transform 200ms ease, box-shadow 200ms ease',
                             boxShadow: '0 10px 22px rgba(85, 134, 140, 0.16)',
@@ -360,20 +386,50 @@ function Navbar({ heroCollapsed, activeSection }) {
                     );
                   })}
                 </Stack>
-              )}
-
-            </Stack>
-
-            {primaryNavItems.length > 0 && (
-              <Divider sx={{ borderColor: 'rgba(var(--dark-cyan-rgb), 0.18)' }} />
+              </Stack>
             )}
+          </Box>
 
+          <Stack
+            spacing={showLeftSidebar ? 1.6 : 1.2}
+            sx={{
+              flex: showLeftSidebar ? 1 : 'initial',
+              px: showLeftSidebar ? { md: 2.9 } : { xs: 2.6, md: 3.6 },
+              py: { xs: 2.7, md: 3.1 },
+            }}
+          >
             {primaryNavItems.length > 0 && (
-              <Stack spacing={1.25}>
-                <Typography variant="overline" sx={{ letterSpacing: 2, color: 'text.secondary', textAlign: showLeftSidebar || isSmall ? 'center' : 'left' }}>
+              <Stack spacing={1.4}>
+                <Typography
+                  variant="overline"
+                  sx={{
+                    letterSpacing: 3,
+                    fontWeight: 700,
+                    fontSize: { xs: '0.9rem', md: '1rem' },
+                    color: '#1f2937',
+                    textAlign: showLeftSidebar || isSmall ? 'center' : 'left',
+                  }}
+                >
                   Sections
                 </Typography>
                 {renderNavButtons(primaryNavItems)}
+              </Stack>
+            )}
+            {routeNavItems.length > 0 && (
+              <Stack spacing={1.4}>
+                <Typography
+                  variant="overline"
+                  sx={{
+                    letterSpacing: 3,
+                    fontWeight: 700,
+                    fontSize: { xs: '0.9rem', md: '1rem' },
+                    color: '#1f2937',
+                    textAlign: showLeftSidebar || isSmall ? 'center' : 'left',
+                  }}
+                >
+                  Pages
+                </Typography>
+                {renderNavButtons(routeNavItems)}
               </Stack>
             )}
           </Stack>
