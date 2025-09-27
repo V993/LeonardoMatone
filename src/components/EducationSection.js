@@ -1,277 +1,361 @@
 // src/components/EducationSection.js
+import React from 'react';
 import {
+  Avatar,
   Box,
   Chip,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
+  Link as MuiLink,
   Stack,
   Typography,
-  Button,
-  Link as MuiLink,
-  Avatar,
 } from '@mui/material';
-import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
-import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
-import WorkspacePremiumRoundedIcon from '@mui/icons-material/WorkspacePremiumRounded';
-import Diversity3RoundedIcon from '@mui/icons-material/Diversity3Rounded';
-import { education as educationData, educationCopy } from '../data';
+import { education as educationData } from '../data';
 import tulaneBadge from '../assets/tulane.png';
 import hunterBadge from '../assets/hunter.png';
+import { sharedChipProps, sharedChipSx } from '../styles/chipStyles';
 
-const extractYears = (text) => {
-  if (typeof text !== 'string') {
-    return [];
+const badgeMap = {
+  'Tulane University': tulaneBadge,
+  'Hunter College': hunterBadge,
+};
+
+const formatEntries = (item) => {
+  if (Array.isArray(item.degrees) && item.degrees.length > 0) {
+    return item.degrees.map((degree) => ({
+      title: degree.title ?? '',
+      focusAreas: Array.isArray(degree.focusAreas) ? degree.focusAreas : [],
+      highlights: Array.isArray(degree.highlights) ? degree.highlights : [],
+      links: Array.isArray(degree.links) ? degree.links : [],
+    }));
   }
-  const matches = text.match(/(19|20)\d{2}/g);
-  return matches ? matches.map(Number) : [];
+
+  const focusAreas = Array.isArray(item.focusAreas) ? item.focusAreas : [];
+  const highlights = Array.isArray(item.highlights)
+    ? item.highlights
+    : Array.isArray(item.achievements)
+      ? item.achievements
+      : [];
+  const links = Array.isArray(item.links) ? item.links : [];
+
+  return [
+    {
+      title: item.degree ?? '',
+      focusAreas,
+      highlights,
+      links,
+    },
+  ];
+};
+
+const DegreePanel = ({ timeframe, degrees }) => (
+  <Stack
+    spacing={1.8}
+    sx={{
+      borderRadius: 3,
+      border: '1px solid rgba(var(--education-rgb), 0.14)',
+      backgroundColor: 'rgba(255,255,255,0.82)',
+      p: { xs: 1.6, md: 1.9 },
+      backdropFilter: 'blur(4px)',
+    }}
+  >
+    <Stack spacing={0.6}>
+      <Typography variant="overline" sx={{ letterSpacing: 3, fontWeight: 600, color: 'rgba(30,64,175,0.72)' }}>
+        Academic Track
+      </Typography>
+      {timeframe ? (
+        <Typography variant="body2" color="rgba(15, 23, 42, 0.72)">
+          {timeframe}
+        </Typography>
+      ) : null}
+    </Stack>
+
+    <Stack spacing={1.4}>
+      {degrees.map((degree) => (
+        <Stack
+          key={degree.title}
+          spacing={1.1}
+          sx={{
+            borderRadius: 3,
+            border: '1px solid rgba(15, 23, 42, 0.08)',
+            backgroundColor: 'rgba(255,255,255,0.68)',
+            p: { xs: 1.6, md: 1.9 },
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 700 }}>
+            {degree.title}
+          </Typography>
+          {degree.focusAreas.length > 0 && (
+            <Stack direction="row" spacing={0.6} flexWrap="wrap" rowGap={0.6}>
+              {degree.focusAreas.slice(0, 5).map((focus) => (
+                <Chip
+                  key={focus}
+                  label={focus}
+                  {...sharedChipProps}
+                  sx={{ ...sharedChipSx, fontSize: '0.72rem', px: 1 }}
+                />
+              ))}
+            </Stack>
+          )}
+        </Stack>
+      ))}
+    </Stack>
+  </Stack>
+);
+
+const InstitutionPanel = ({ item, degrees }) => {
+  const badgeSrc = badgeMap[item.institution] ?? undefined;
+  const combinedHighlights = degrees.flatMap((degree) => degree.highlights);
+  const combinedLinks = degrees.flatMap((degree) => degree.links);
+  const personalNote = (() => {
+    if (typeof item.details === 'string' && item.details.trim().length > 0) {
+      return item.details.trim();
+    }
+
+    const fallbacks = degrees
+      .map((degree) => degree.note || degree.description || degree.summary)
+      .filter((entry) => typeof entry === 'string' && entry.trim().length > 0);
+
+    return fallbacks.length > 0 ? fallbacks[0] : null;
+  })();
+  const hasHighlights = combinedHighlights.length > 0;
+  const hasNote = Boolean(personalNote);
+
+  return (
+    <Stack
+      spacing={1.8}
+      sx={{
+        borderRadius: 3,
+        border: '1px solid rgba(var(--experience-rgb), 0.16)',
+        backgroundColor: 'rgba(255,255,255,0.74)',
+        p: { xs: 1.6, md: 1.9 },
+        backdropFilter: 'blur(4px)',
+      }}
+    >
+      <Stack direction="row" spacing={1.3} alignItems="center">
+        <Avatar
+          alt={item.institution}
+          src={badgeSrc}
+          sx={{
+            width: 40,
+            height: 40,
+            bgcolor: 'rgba(var(--education-rgb), 0.2)',
+            color: '#1f2937',
+            fontWeight: 700,
+          }}
+        >
+          {(!badgeSrc && item.institution) ? item.institution[0] : null}
+        </Avatar>
+        <Stack spacing={0.2}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            {item.institution}
+          </Typography>
+          {item.location ? (
+            <Typography variant="body2" color="text.secondary">
+              {item.location}
+            </Typography>
+          ) : null}
+        </Stack>
+      </Stack>
+
+      {(hasNote || hasHighlights) ? (
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              md: hasNote && hasHighlights ? 'minmax(0, 1fr) minmax(0, 1fr)' : '1fr',
+            },
+            columnGap: { md: 2.6 },
+            rowGap: { xs: 1.6, md: 2 },
+          }}
+        >
+          {hasNote ? (
+            <Box
+              sx={{
+                borderRadius: 2,
+                border: '1px solid rgba(15, 23, 42, 0.08)',
+                backgroundColor: 'rgba(255,255,255,0.9)',
+                p: { xs: 1.4, md: 1.6 },
+                boxShadow: '0 6px 20px -14px rgba(15, 23, 42, 0.25)',
+              }}
+            >
+              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.6, color: 'rgba(15, 23, 42, 0.85)' }}>
+                Personal Note
+              </Typography>
+              <Typography variant="body1" sx={{ color: 'rgba(15, 23, 42, 0.82)', lineHeight: 1.7 }}>
+                {personalNote}
+              </Typography>
+            </Box>
+          ) : null}
+
+          {hasHighlights ? (
+            <Box
+              component="ul"
+              sx={{
+                m: 0,
+                p: 0,
+                listStyle: 'none',
+                display: 'grid',
+                rowGap: 0.75,
+              }}
+            >
+              <Typography
+                component="li"
+                variant="subtitle2"
+                sx={{ fontWeight: 700, color: 'rgba(15, 23, 42, 0.85)', mb: 0.1 }}
+              >
+                Highlights
+              </Typography>
+              {combinedHighlights.map((highlight, idx) => (
+                <Typography
+                  key={idx}
+                  component="li"
+                  variant="body2"
+                  sx={{
+                    position: 'relative',
+                    pl: 2.1,
+                    color: 'rgba(15, 23, 42, 0.8)',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      left: 0,
+                      top: '0.55rem',
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: 'rgba(var(--education-rgb), 0.68)',
+                      boxShadow: '0 0 10px rgba(var(--education-rgb), 0.3)',
+                    },
+                  }}
+                >
+                  {highlight}
+                </Typography>
+              ))}
+            </Box>
+          ) : null}
+        </Box>
+      ) : null}
+
+      {combinedLinks.length > 0 && (
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          {combinedLinks.map((link, idx) => (
+            <MuiLink
+              key={`${link.href}-${idx}`}
+              href={link.href}
+              target="_blank"
+              rel="noreferrer"
+              sx={{ fontWeight: 600, color: 'rgba(37, 99, 235, 0.9)' }}
+            >
+              {link.label}
+            </MuiLink>
+          ))}
+        </Stack>
+      )}
+    </Stack>
+  );
 };
 
 function EducationSection({ navOffset = false }) {
-  const programs = Array.isArray(educationData) ? educationData : [];
-  const copy = educationCopy ?? {};
-  const statsCopy = copy.stats ?? {};
-
-  const assetMap = {
-    'Tulane University': tulaneBadge,
-    'Hunter College': hunterBadge
-  };
-
-  const focusAreas = Array.from(
-    new Set(
-      programs.flatMap((program) =>
-        Array.isArray(program.focusAreas) ? program.focusAreas : []
-      )
-    )
-  );
-
-  const allYears = programs
-    .map((program) => program.timeframe)
-    .filter(Boolean)
-    .flatMap(extractYears);
-  const earliestYear = allYears.length > 0 ? Math.min(...allYears) : null;
-  const latestYear = allYears.length > 0 ? Math.max(...allYears) : null;
-  const spanYears = earliestYear && latestYear ? Math.max(0, latestYear - earliestYear + 1) : null;
-
-  const totalHighlights = programs.reduce(
-    (total, program) => total + ((program.highlights ?? []).length),
-    0
-  );
-
-  const statTiles = [
-    {
-      id: 'programs',
-      icon: <SchoolRoundedIcon sx={{ color: 'rgb(var(--education-rgb))' }} />,
-      value: programs.length,
-      label: statsCopy.programs,
-    },
-    {
-      id: 'span',
-      icon: <AccessTimeRoundedIcon sx={{ color: 'rgb(var(--education-rgb))' }} />,
-      value: spanYears,
-      label: statsCopy.span,
-    },
-    {
-      id: 'focus',
-      icon: <WorkspacePremiumRoundedIcon sx={{ color: 'rgb(var(--education-rgb))' }} />,
-      value: focusAreas.length,
-      label: statsCopy.focus,
-    },
-    {
-      id: 'community',
-      icon: <Diversity3RoundedIcon sx={{ color: 'rgb(var(--education-rgb))' }} />,
-      value: totalHighlights,
-      label: statsCopy.community,
-    },
-  ].filter((tile) => tile.value && tile.label);
+  const timeline = Array.isArray(educationData) ? educationData : [];
 
   return (
     <Box
       id="education"
       sx={{
         position: 'relative',
-        minHeight: '100vh',
         minWidth: '100vw',
-        px: { xs: 3, md: 6, lg: 8 },
-        py: { xs: 6, md: 8 },
-        mt: 0,
+        minHeight: 'auto',
+        paddingBottom: '10vh',
+        // px: { xs: 3, md: 6, lg: 8 },
+        // py: { xs: 6, md: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
-        // scroll snapping disabled site-wide
         background: 'none',
         overflow: 'hidden',
-        pl: navOffset
-          ? { md: 'calc(280px + 48px)', lg: 'calc(320px + 64px)' }
-          : undefined,
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '100vw',
-          height: '100%',
-          background:
-            'radial-gradient(circle at top right, rgba(var(--education-rgb), 0.18), transparent 55%), linear-gradient(180deg, rgba(var(--education-rgb), 0.86) 0%, rgba(var(--education-rgb), 0.64) 52%, rgba(255, 255, 255, 0.92) 100%)',
-          pointerEvents: 'none',
+        pl: {
+          xs: 0,
+          md: navOffset ? 'calc(280px + 48px)' : 0,
+          lg: navOffset ? 'calc(320px + 64px)' : 0,
         },
-        '&::after': {
-          content: '""',
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: '24%',
-          background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(var(--experience-rgb), 0.12) 100%)',
-          pointerEvents: 'none',
-        },
+        transition: 'padding-left 620ms cubic-bezier(0.22, 1, 0.36, 1)',
       }}
     >
-      <Box
-        sx={{
-          position: 'relative',
-          maxWidth: 1200,
-          mx: 'auto',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: { xs: 4, md: 6 },
-        }}
-      >
-        <Grid container spacing={{ xs: 3, md: 4 }} alignItems="stretch">
+    <Box
+      sx={{
+        position: 'relative',
+        maxWidth: 980,
+        mx: 'auto',
+        width: '100%',
+      }}
+    >
+        <Box
+          sx={{
+            position: 'relative',
+            mt: { xs: 3, md: 4 },
+            display: 'grid',
+            rowGap: { xs: 2.4, md: 3.2 },
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              display: { xs: 'none', md: 'block' },
+              left: '50%',
+              top: 0,
+              bottom: 0,
+              width: '4px',
+              height: '120%',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              boxShadow: '0 0 22px rgba(255, 255, 255, 0.48)',
+              transform: 'translateX(-2px)',
+            },
+          }}
+        >
+          {timeline.map((item, index) => {
+            const entries = formatEntries(item);
 
-          {/* Side column: Header + Quick Facts in boxed panel */}
-          <Grid item xs={12} md={4}>
-            <Paper
-              elevation={0}
-              sx={{
-                p: { xs: 2.4, md: 2.8 },
-                borderRadius: 3,
-                border: '1px solid rgba(var(--education-rgb), 0.22)',
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(var(--education-rgb), 0.08) 100%)',
-                boxShadow: '0 18px 38px rgba(85, 134, 140, 0.12)'
-              }}
-            >
-              <Stack spacing={{ xs: 2.2, md: 2.6 }} alignItems={{ xs: 'flex-start', md: 'flex-start' }}>
-                <Stack spacing={1}>
-                  {copy.eyebrow ? (
-                    <Typography variant="overline" sx={{ letterSpacing: 3, color: 'rgba(30, 64, 175, 0.76)' }}>
-                      {copy.eyebrow}
-                    </Typography>
-                  ) : null}
-                  {copy.title ? (
-                    <Typography variant="h3" fontWeight={700}>
-                      {copy.title}
-                    </Typography>
-                  ) : null}
-                  {copy.description ? (
-                    <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 420 }}>
-                      {copy.description}
-                    </Typography>
-                  ) : null}
-                </Stack>
+            return (
+              <Box
+                key={`${item.institution}-${item.timeframe}-${index}`}
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: {
+                    xs: '1fr',
+                    md: 'minmax(0, 1fr) 40px minmax(0, 1fr)',
+                  },
+                  columnGap: { md: 2.6 },
+                  rowGap: { xs: 1.6, md: 0 },
+                  alignItems: 'stretch',
+                }}
+              >
+                <Box sx={{ order: { xs: 2, md: 1 } }}>
+                  <DegreePanel timeframe={item.timeframe} degrees={entries} />
+                </Box>
 
-                {statTiles.length > 0 && (
-                  <Stack spacing={1.25}>
-                    {statTiles.map((tile) => (
-                      <Stack key={tile.id} direction="row" spacing={1.2} alignItems="center" sx={{
-                        border: '1px solid rgba(var(--education-rgb), 0.22)',
-                        borderRadius: 2,
-                        px: 1.5,
-                        py: 1.2,
-                        backgroundColor: 'rgba(219, 234, 254, 0.78)'
-                      }}>
-                        {tile.icon}
-                        <Stack spacing={0.25}>
-                          <Typography variant="h6" fontWeight={700}>{tile.value}</Typography>
-                          <Typography variant="body2" color="text.secondary">{tile.label}</Typography>
-                        </Stack>
-                      </Stack>
-                    ))}
-                  </Stack>
-                )}
-              </Stack>
-            </Paper>
-          </Grid>
-          {/* Main column: Universities */}
-          <Grid item xs={12} md={8}>
-            <Stack spacing={{ xs: 2.4, md: 3 }}>
-              {programs.map((program, index) => (
-                <Paper
-                  key={`${program.institution}-${index}`}
-                  elevation={0}
+                <Box
                   sx={{
-                    p: { xs: 2.3, md: 2.8 },
-                    borderRadius: 3,
-                    border: '1px solid rgba(var(--education-rgb), 0.22)',
-                    background: 'linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(var(--education-rgb), 0.08) 100%)',
+                    order: { xs: 1, md: 2 },
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    py: { xs: 0.4, md: 0 },
                   }}
                 >
-                  <Stack spacing={1.1}>
-                    <Stack direction="row" alignItems="center" spacing={1.25}>
-                      <Avatar
-                        alt={program.institution}
-                        src={program.badge ? assetMap[program.badge] : assetMap[program.institution]}
-                        sx={{ width: 36, height: 36, bgcolor: 'rgba(var(--education-rgb), 0.2)', color: 'text.primary' }}
-                      >
-                        {(!assetMap[program.badge] && !assetMap[program.institution]) && (program.institution?.[0] || 'U')}
-                      </Avatar>
-                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 0.4, sm: 1.2 }} alignItems={{ xs: 'flex-start', sm: 'center' }}>
-                        <Typography variant="h4" sx={{ fontWeight: 800 }}>
-                          {program.institution}
-                        </Typography>
-                        {Array.isArray(program.degrees) && program.degrees.length > 0 ? (
-                          <Stack direction="row" spacing={0.6} flexWrap="wrap">
-                            {program.degrees.map((deg, i) => {
-                              const label = typeof deg === 'string' ? deg : deg?.title;
-                              return label ? (
-                                <Chip key={`${label}-${i}`} label={label} size="small" sx={{ fontWeight: 600 }} />
-                              ) : null;
-                            })}
-                          </Stack>
-                        ) : (
-                          program.degree ? <Chip label={program.degree} size="small" sx={{ fontWeight: 600 }} /> : null
-                        )}
-                      </Stack>
-                    </Stack>
-                    <Typography variant="body2" color="text.secondary">
-                      {program.timeframe}
-                      {program.location ? ` • ${program.location}` : ''}
-                    </Typography>
-                    {/* Condensed details: show only small key chips and limited coursework */}
-                    <Stack direction="row" spacing={1} flexWrap="wrap">
-                      {program.advisor && <Chip label={`Advisor: ${program.advisor}`} size="small" />}
-                    </Stack>
+                  <Box
+                    sx={{
+                      width: 16,
+                      height: 16,
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                      border: '3px solid rgba(var(--education-rgb), 0.35)',
+                      boxShadow: '0 0 18px rgba(255, 255, 255, 0.52)',
+                    }}
+                  />
+                </Box>
 
-                    {Array.isArray(program.courses) && program.courses.length > 0 && (
-                      <Stack spacing={0.5}>
-                        <Typography variant="subtitle2">Selected Coursework</Typography>
-                        <Stack direction="row" flexWrap="wrap" gap={0.6}>
-                          {program.courses.slice(0, 4).map((course) => (
-                            <Chip key={course} label={course} size="small" />
-                          ))}
-                        </Stack>
-                      </Stack>
-                    )}
-
-                    {(program.distinctions || program.gpa || (Array.isArray(program.honors) && program.honors.length > 0)) && (
-                      <Typography variant="body2" color="text.secondary">
-                        {program.distinctions
-                          ? program.distinctions
-                          : [
-                              program.gpa ? `GPA: ${program.gpa}` : null,
-                              ...((program.honors || []))
-                            ]
-                              .filter(Boolean)
-                              .join(' • ')}
-                      </Typography>
-                    )}
-                  </Stack>
-                </Paper>
-              ))}
-            </Stack>
-          </Grid>
-        </Grid>
+                <Box sx={{ order: { xs: 3, md: 3 } }}>
+                  <InstitutionPanel item={item} degrees={entries} />
+                </Box>
+              </Box>
+            );
+          })}
+        </Box>
       </Box>
     </Box>
   );
