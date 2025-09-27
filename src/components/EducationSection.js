@@ -156,83 +156,24 @@ const InstitutionPanel = ({ item, degrees }) => {
         </Stack>
       </Stack>
 
-      {(hasNote || hasHighlights) ? (
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: {
-              xs: '1fr',
-              md: hasNote && hasHighlights ? 'minmax(0, 1fr) minmax(0, 1fr)' : '1fr',
-            },
-            columnGap: { md: 2.6 },
-            rowGap: { xs: 1.6, md: 2 },
-          }}
-        >
-          {hasNote ? (
-            <Box
-              sx={{
-                borderRadius: 2,
-                border: '1px solid rgba(15, 23, 42, 0.08)',
-                backgroundColor: 'rgba(255,255,255,0.9)',
-                p: { xs: 1.4, md: 1.6 },
-                boxShadow: '0 6px 20px -14px rgba(15, 23, 42, 0.25)',
-              }}
-            >
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.6, color: 'rgba(15, 23, 42, 0.85)' }}>
-                Personal Note
-              </Typography>
-              <Typography variant="body1" sx={{ color: 'rgba(15, 23, 42, 0.82)', lineHeight: 1.7 }}>
-                {personalNote}
-              </Typography>
-            </Box>
-          ) : null}
+      {hasNote ? (
+        <Typography variant="body1" sx={{ color: 'rgba(15, 23, 42, 0.82)', lineHeight: 1.7 }}>
+          {personalNote}
+        </Typography>
+      ) : null}
 
-          {hasHighlights ? (
-            <Box
-              component="ul"
-              sx={{
-                m: 0,
-                p: 0,
-                listStyle: 'none',
-                display: 'grid',
-                rowGap: 0.75,
-              }}
-            >
-              <Typography
-                component="li"
-                variant="subtitle2"
-                sx={{ fontWeight: 700, color: 'rgba(15, 23, 42, 0.85)', mb: 0.1 }}
-              >
-                Highlights
-              </Typography>
-              {combinedHighlights.map((highlight, idx) => (
-                <Typography
-                  key={idx}
-                  component="li"
-                  variant="body2"
-                  sx={{
-                    position: 'relative',
-                    pl: 2.1,
-                    color: 'rgba(15, 23, 42, 0.8)',
-                    '&::before': {
-                      content: '""',
-                      position: 'absolute',
-                      left: 0,
-                      top: '0.55rem',
-                      width: 8,
-                      height: 8,
-                      borderRadius: '50%',
-                      background: 'rgba(var(--education-rgb), 0.68)',
-                      boxShadow: '0 0 10px rgba(var(--education-rgb), 0.3)',
-                    },
-                  }}
-                >
-                  {highlight}
-                </Typography>
-              ))}
-            </Box>
-          ) : null}
-        </Box>
+      {hasHighlights ? (
+        <Stack
+          component="ul"
+          spacing={0.55}
+          sx={{ listStyle: 'disc', pl: 2.1, color: 'rgba(15, 23, 42, 0.82)', m: 0 }}
+        >
+          {combinedHighlights.map((highlight, idx) => (
+            <Typography key={idx} component="li" variant="body2">
+              {highlight}
+            </Typography>
+          ))}
+        </Stack>
       ) : null}
 
       {combinedLinks.length > 0 && (
@@ -264,9 +205,8 @@ function EducationSection({ navOffset = false }) {
         position: 'relative',
         minWidth: '100vw',
         minHeight: 'auto',
-        paddingBottom: '10vh',
-        // px: { xs: 3, md: 6, lg: 8 },
-        // py: { xs: 6, md: 8 },
+        paddingBottom: '5vh',
+        px: { xs: 3, md: 6, lg: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
         background: 'none',
         overflow: 'hidden',
@@ -292,18 +232,32 @@ function EducationSection({ navOffset = false }) {
             mt: { xs: 3, md: 4 },
             display: 'grid',
             rowGap: { xs: 2.4, md: 3.2 },
+            overflow: 'visible',
             '&::before': {
               content: '""',
               position: 'absolute',
               display: { xs: 'none', md: 'block' },
               left: '50%',
               top: 0,
-              bottom: 0,
+              bottom: -56,
               width: '4px',
-              height: '120%',
+              height: 'calc(100% + 56px)',
               backgroundColor: 'rgba(255, 255, 255, 0.95)',
               boxShadow: '0 0 22px rgba(255, 255, 255, 0.48)',
               transform: 'translateX(-2px)',
+            },
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              display: { xs: 'none', md: 'block' },
+              left: 'calc(50% - 8px)',
+              bottom: -72,
+              width: 0,
+              height: 0,
+              borderLeft: '8px solid transparent',
+              borderRight: '8px solid transparent',
+              borderTop: '14px solid rgba(255, 255, 255, 0.95)',
+              boxShadow: '0 0 16px rgba(255, 255, 255, 0.4)',
             },
           }}
         >

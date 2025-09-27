@@ -16,6 +16,9 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkIcon from '@mui/icons-material/Link';
+import PhoneEnabledRoundedIcon from '@mui/icons-material/PhoneEnabledRounded';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import idPicture from '../assets/id-picture.jpg';
 import hfBadge from '../assets/hf.png';
 import tulaneBadge from '../assets/tulane.png';
@@ -39,6 +42,13 @@ const channelIcons = {
   github: <GitHubIcon fontSize="small" />,
 };
 
+const contactDetailIcons = {
+  email: <EmailOutlinedIcon fontSize="small" />,
+  phone: <PhoneEnabledRoundedIcon fontSize="small" />,
+  resume: <FileDownloadOutlinedIcon fontSize="small" />,
+  location: <PlaceOutlinedIcon fontSize="small" />,
+};
+
 function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSection = null }) {
   const assetMap = useMemo(() => assetSources, []);
 
@@ -56,12 +66,152 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
   }));
   const contactDetails = welcomeData?.contactDetails ?? {};
   const contactItems = Array.isArray(contactDetails?.items) ? contactDetails.items : [];
-  const contactHeading = contactDetails?.heading ?? 'On Campus';
   const contactCta = contactDetails?.cta ?? null;
+  const campusContactItems = contactItems.filter((item) => (item?.category ?? 'campus') === 'campus');
+  const supplementalContactItems = contactItems.filter((item) => (item?.category ?? 'campus') !== 'campus' && item?.type !== 'resume');
+  const contactLinkItems = [...campusContactItems, ...supplementalContactItems];
+  const resumeContactItem = contactItems.find((item) => item?.type === 'resume');
 
   const avatarSrc = assetMap[welcomeData?.avatar] ?? null;
   const contactChannels = contactData?.channels ?? [];
   const shouldFlyLeft = heroCollapsed || Boolean(activeSection);
+
+  const resolveContactHref = (item) => {
+    if (!item) {
+      return undefined;
+    }
+
+    if (item.href) {
+      return item.href;
+    }
+
+    if (item.type === 'email' && item.value) {
+      return `mailto:${item.value}`;
+    }
+
+    if (item.type === 'phone' && item.value) {
+      const digits = String(item.value).replace(/[^\d+]/g, '');
+      return `tel:${digits}`;
+    }
+
+    if (item.type === 'resume') {
+      return '/resume.pdf';
+    }
+
+    if (item.type === 'location' && item.value) {
+      return `https://maps.google.com/?q=${encodeURIComponent(item.value)}`;
+    }
+
+    return undefined;
+  };
+
+  const renderContactLink = (item) => {
+    const href = resolveContactHref(item);
+    const isExternal = href ? href.startsWith('http') : false;
+    const content = (
+      <Stack direction="row" spacing={1.1} alignItems="center">
+        <Box
+          sx={{
+            width: 38,
+            height: 38,
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+            border: '1px solid rgba(var(--dark-cyan-rgb), 0.24)',
+            color: '#0f172a',
+          }}
+        >
+          {contactDetailIcons[item?.type] ?? <LinkIcon fontSize="small" />}
+        </Box>
+        <Box>
+          {item?.label ? (
+            <Typography
+              variant="caption"
+              sx={{ textTransform: 'uppercase', letterSpacing: 1.2, fontWeight: 600, color: 'rgba(15, 23, 42, 0.56)' }}
+            >
+              {item.label}
+            </Typography>
+          ) : null}
+          <Typography variant="body1" sx={{ fontWeight: 700, color: '#0f172a' }}>
+            {item?.value ?? ''}
+          </Typography>
+        </Box>
+      </Stack>
+    );
+
+    if (!href) {
+      return (
+        <Box key={(item?.label ?? '') + (item?.value ?? '')} sx={{ pr: 0.4 }}>
+          {content}
+        </Box>
+      );
+    }
+
+    return (
+      <MuiLink
+        key={(item?.label ?? '') + (item?.value ?? '')}
+        href={href}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noreferrer' : undefined}
+        underline="none"
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          px: 0.3,
+          py: 0.4,
+          borderRadius: 2,
+          transition: 'transform 200ms ease, background-color 200ms ease, box-shadow 200ms ease',
+          '&:hover': {
+            transform: 'translateY(-1px)',
+            backgroundColor: 'rgba(15, 23, 42, 0.05)',
+            boxShadow: '0 10px 20px rgba(15, 23, 42, 0.14)',
+          },
+        }}
+      >
+        {content}
+      </MuiLink>
+    );
+  };
+
+  const renderResumeButton = (item) => {
+    const href = resolveContactHref(item);
+    if (!href) {
+      return null;
+    }
+
+    const isExternal = href.startsWith('http');
+    return (
+      <Button
+        key={(item?.label ?? '') + (item?.value ?? '')}
+        component="a"
+        href={href}
+        download={item?.download ?? !isExternal}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noreferrer' : undefined}
+        startIcon={contactDetailIcons.resume}
+        sx={{
+          alignSelf: 'flex-start',
+          backgroundColor: '#1f2937',
+          color: '#f8fafc',
+          fontWeight: 700,
+          textTransform: 'none',
+          px: 2.6,
+          py: 1,
+          borderRadius: 2.4,
+          boxShadow: '0 12px 24px rgba(15, 23, 42, 0.22)',
+          '&:hover': {
+            backgroundColor: '#111827',
+            boxShadow: '0 16px 30px rgba(15, 23, 42, 0.28)',
+          },
+        }}
+      >
+        {item?.value ?? 'Download Resume'}
+      </Button>
+    );
+  };
 
   return (
     <Box
@@ -246,74 +396,72 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
             <Paper
               elevation={0}
               sx={{
-                p: { xs: 2.2, md: 2.6 },
-                borderRadius: 3,
-                backgroundColor: 'rgba(255, 255, 255, 0.78)',
-                border: '1px solid rgba(15, 23, 42, 0.08)',
+                p: { xs: 1.9, md: 2.3 },
+                borderRadius: 2.6,
+                backgroundColor: 'rgba(255, 255, 255, 0.82)',
+                border: '1px solid rgba(15, 23, 42, 0.12)',
               }}
             >
               <Stack spacing={1.6}>
-                <Typography
-                  variant="overline"
-                  sx={{ letterSpacing: 3, fontWeight: 600, color: 'rgba(15, 23, 42, 0.72)' }}
-                >
-                  {contactHeading}
-                </Typography>
-
-                <Stack spacing={1.1}>
-                  {contactItems.map((item) => (
-                    <Stack key={item.label ?? item.value} spacing={0.2}>
-                      {item.label ? (
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            textTransform: 'uppercase',
-                            letterSpacing: 1.4,
-                            color: 'rgba(15, 23, 42, 0.58)',
-                            fontWeight: 600,
-                          }}
-                        >
-                          {item.label}
-                        </Typography>
-                      ) : null}
-                      <Typography variant="body1" sx={{ fontWeight: 600, color: '#0f172a' }}>
-                        {item.value}
-                      </Typography>
-                    </Stack>
-                  ))}
-                </Stack>
-
-                {contactCta?.href ? (
-                  <Button
-                    component="a"
-                    href={contactCta.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    variant="contained"
-                    size="medium"
+                {contactLinkItems.length > 0 ? (
+                  <Box
                     sx={{
-                      alignSelf: 'flex-start',
-                      bgcolor: '#1f2937',
-                      color: '#f8fafc',
-                      fontWeight: 700,
-                      textTransform: 'none',
-                      letterSpacing: 0.6,
-                      px: 2.8,
-                      py: 1,
-                      borderRadius: 999,
-                      boxShadow: '0 12px 22px rgba(15, 23, 42, 0.24)',
-                      '&:hover': {
-                        bgcolor: '#111827',
-                        boxShadow: '0 16px 30px rgba(15, 23, 42, 0.28)',
+                      display: 'grid',
+                      gap: { xs: 1, md: 1.2 },
+                      gridTemplateColumns: {
+                        xs: '1fr',
+                        sm: 'repeat(2, minmax(0, 1fr))',
                       },
                     }}
                   >
-                    {contactCta.label ?? 'View calendar'}
-                  </Button>
+                    {contactLinkItems.map((item) => renderContactLink(item))}
+                  </Box>
                 ) : null}
               </Stack>
             </Paper>
           )}
+
+          {(resumeContactItem || contactCta?.href) ? (
+            <Stack
+              spacing={1}
+              direction={{ xs: 'column', sm: 'row' }}
+              alignItems={{ xs: 'stretch', sm: 'center' }}
+              justifyContent="flex-start"
+              sx={{
+                gap: { xs: 1, sm: 1.4 },
+                mt: 1,
+              }}
+            >
+              {resumeContactItem ? renderResumeButton(resumeContactItem) : null}
+              {contactCta?.href ? (
+                <Button
+                  component="a"
+                  href={contactCta.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  variant="outlined"
+                  size="medium"
+                  sx={{
+                    textTransform: 'none',
+                    fontWeight: 700,
+                    letterSpacing: 0.6,
+                    borderRadius: 2.1,
+                    borderColor: 'rgba(15, 23, 42, 0.32)',
+                    color: '#0f172a',
+                    px: 2.6,
+                    py: 0.88,
+                    minWidth: { xs: '100%', sm: 'auto' },
+                    '&:hover': {
+                      borderColor: '#0f172a',
+                      backgroundColor: 'rgba(15, 23, 42, 0.08)',
+                    },
+                  }}
+                >
+                  {contactCta.label ?? 'Reserve a time'}
+                </Button>
+              ) : null}
+            </Stack>
+          ) : null}
 
         </Stack>
         

@@ -30,8 +30,41 @@
     "contactDetails": {
       "heading": "On Campus",
       "items": [
-        { "label": "Office", "value": "TBD" },
-        { "label": "Address", "value": "6823 St Charles Ave, New Orleans, LA 70118" }
+        {
+          "label": "Office",
+          "value": "TBD",
+          "type": "location",
+          "href": "https://maps.google.com/?q=Tulane+University",
+          "category": "campus"
+        },
+        {
+          "label": "Address",
+          "value": "6823 St Charles Ave, New Orleans, LA 70118",
+          "type": "location",
+          "href": "https://maps.google.com/?q=6823+St+Charles+Ave+New+Orleans+LA+70118",
+          "category": "campus"
+        },
+        {
+          "label": "Tulane Email",
+          "value": "lmatone@tulane.edu",
+          "type": "email",
+          "href": "mailto:lmatone@tulane.edu",
+          "category": "campus"
+        },
+        {
+          "label": "Office Phone",
+          "value": "(504) 865-5785",
+          "type": "phone",
+          "href": "tel:+15048655785",
+          "category": "campus"
+        },
+        {
+          "label": "Download Resume",
+          "value": "Resume",
+          "type": "resume",
+          "href": "/resume.pdf",
+          "category": "connect"
+        }
       ],
       "cta": {
         "label": "Reserve a time",

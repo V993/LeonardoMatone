@@ -22,8 +22,8 @@ import hfBadge from '../assets/hf.png';
 
 const MAX_STACK_DEPTH = 2;
 const MAX_OFFSET_X = 50;
-const CARD_HEIGHT_MD = 360;
-const CARD_HEIGHT_SM = 320;
+const CARD_HEIGHT_MD = 400;
+const CARD_HEIGHT_SM = 350;
 const RIGHT_GUTTER = 24;
 
 function ExperienceSection({ navOffset = false }) {
@@ -207,8 +207,8 @@ function ExperienceSection({ navOffset = false }) {
         spacing={1.4}
         sx={{
           height: '100%',
-          pt: isActive && hasNav ? 5 : 0,
-          pb: isActive && hasNav ? 4.5 : 0,
+          pt: isActive && hasNav ? 2.4 : 0.8,
+          pb: hasNav ? 3.6 : 1.4,
           transition: 'padding 160ms ease',
         }}
       >
@@ -234,16 +234,10 @@ function ExperienceSection({ navOffset = false }) {
         </Stack>
 
         {hasDetails ? (
-          <Box
+          <Stack
+            spacing={1.2}
             aria-hidden={!isActive}
             sx={{
-              display: 'grid',
-              gridTemplateColumns: {
-                xs: '1fr',
-                md: summary && bullets.length > 0 ? 'minmax(0, 1fr) minmax(0, 1fr)' : '1fr',
-              },
-              columnGap: { md: 2.4 },
-              rowGap: { xs: 1.6, md: 1.8 },
               mt: 1.6,
               flexGrow: 1,
               opacity: isActive ? 1 : 0,
@@ -253,22 +247,9 @@ function ExperienceSection({ navOffset = false }) {
             }}
           >
             {summary ? (
-              <Box
-                sx={{
-                  borderRadius: 2,
-                  border: '1px solid rgba(15,23,42,0.08)',
-                  backgroundColor: 'rgba(255,255,255,0.88)',
-                  boxShadow: '0 12px 24px -18px rgba(15,23,42,0.26)',
-                  p: { xs: 1.4, md: 1.6 },
-                }}
-              >
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.6, color: 'rgba(15, 23, 42, 0.9)' }}>
-                  What I Focus On
-                </Typography>
-                <Typography variant="body1" sx={{ color: 'rgba(15, 23, 42, 0.82)', lineHeight: 1.65 }}>
-                  {summary}
-                </Typography>
-              </Box>
+              <Typography variant="body1" sx={{ color: 'rgba(15, 23, 42, 0.84)', lineHeight: 1.6 }}>
+                {summary}
+              </Typography>
             ) : null}
 
             {bullets.length > 0 ? (
@@ -317,7 +298,7 @@ function ExperienceSection({ navOffset = false }) {
                 ))}
               </Box>
             ) : null}
-          </Box>
+          </Stack>
         ) : (
           <Box sx={{ flexGrow: 1, mt: 1.6 }} />
         )}
@@ -346,7 +327,7 @@ function ExperienceSection({ navOffset = false }) {
         position: 'relative',
         minWidth: '100vw',
         px: { xs: 3, md: 6, lg: 8 },
-        py: { xs: 6, md: 8 },
+        py: { xs: 3, md: 4 },
         scrollMarginTop: { xs: 96, md: 128 },
         background: 'none',
         overflow: 'hidden',
@@ -370,7 +351,7 @@ function ExperienceSection({ navOffset = false }) {
       >
         <Grid container spacing={{ xs: 6, md: 8 }} alignItems="stretch">
           {/* Left content, main experience title/content */}
-          <Grid item xs={12} md={5} lg={6}>
+          <Grid item xs={12} md={4} lg={5}>
             <Stack spacing={{ xs: 2.8, md: 3.2 }} alignItems={{ xs: 'flex-start', md: 'flex-start' }}>
               <Stack spacing={1.2}>
                 {overview.eyebrow ? (
@@ -461,13 +442,13 @@ function ExperienceSection({ navOffset = false }) {
             item
             xs={12}
             md={7}
-            lg={6}
+            lg={7}
             sx={{
               position: 'relative',
               maxWidth: 1200,
-              minHeight: '120vh',
+              minHeight: '80vh',
               mx: 'auto',
-              justifyContent: 'flex-end',
+              justifyContent: 'center',
               display: 'flex',
               flexDirection: 'column',
               gap: { xs: 4, md: 6 },
@@ -497,7 +478,7 @@ function ExperienceSection({ navOffset = false }) {
                   const depth = relativeIndex;
                   const isActive = relativeIndex === 0;
                   const offsetX = normalizedOffsetX;
-                  const offsetY = -108;
+                  const offsetY = -116;
                   const translateX = offsetX * depth;
                   const translateY = offsetY * depth;
                   const cardBackground = isActive
@@ -506,9 +487,9 @@ function ExperienceSection({ navOffset = false }) {
                   const cardBorder = isActive
                     ? '1px solid rgba(var(--experience-rgb), 0.56)'
                     : '1px solid rgba(var(--experience-rgb), 0.32)';
-                  const cardShadow = isActive
-                    ? '0 34px 68px -38px rgba(15,23,42,0.55), 0 22px 48px -28px rgba(15,23,42,0.35)'
-                    : '0 28px 52px -42px rgba(15,23,42,0.35), 0 18px 34px -28px rgba(15,23,42,0.25)';
+                  // const cardShadow = isActive
+                  //   ? '0 34px 68px -38px rgba(15,23,42,0.55), 0 22px 48px -28px rgba(15,23,42,0.35)'
+                  //   : '0 28px 52px -42px rgba(15,23,42,0.35), 0 18px 34px -28px rgba(15,23,42,0.25)';
                   const cardOverlayBorder = isActive ? 'rgba(255,255,255,0.38)' : 'rgba(255,255,255,0.28)';
                   const accentGlow = isActive ? 'rgba(var(--experience-rgb), 0.58)' : 'rgba(var(--experience-rgb), 0.36)';
                   const inactiveOpacity = isActive ? 1 : 0.92;
@@ -548,7 +529,7 @@ function ExperienceSection({ navOffset = false }) {
                         opacity: inactiveOpacity,
                         background: cardBackground,
                         border: cardBorder,
-                        boxShadow: cardShadow,
+                        // boxShadow: cardShadow,
                         backdropFilter: 'blur(14px) saturate(160%)',
                         height: cardBaseHeight,
                         display: 'flex',
@@ -577,7 +558,7 @@ function ExperienceSection({ navOffset = false }) {
                         },
                         '&:hover': totalJobs > 1
                           ? {
-                              boxShadow: '0 40px 78px -40px rgba(15,23,42,0.58)',
+                              boxShadow: '100px 0 100px -100px rgba(15,23,42,0.58)',
                               opacity: 1,
                             }
                           : undefined,
