@@ -1,11 +1,35 @@
 {
   "navigation": [
-    { "label": "Welcome", "type": "hash", "path": "#welcome" },
-    { "label": "About", "type": "hash", "path": "#about" },
-    { "label": "Education", "type": "hash", "path": "#education" },
-    { "label": "Experience", "type": "hash", "path": "#experience" },
-    { "label": "Projects", "type": "hash", "path": "#projects" },
-    { "label": "Blog", "type": "route", "path": "/blog" }
+    {
+      "label": "Welcome",
+      "type": "hash",
+      "path": "#welcome"
+    },
+    {
+      "label": "About",
+      "type": "hash",
+      "path": "#about"
+    },
+    {
+      "label": "Education",
+      "type": "hash",
+      "path": "#education"
+    },
+    {
+      "label": "Experience",
+      "type": "hash",
+      "path": "#experience"
+    },
+    {
+      "label": "Projects",
+      "type": "hash",
+      "path": "#projects"
+    },
+    {
+      "label": "Blog",
+      "type": "route",
+      "path": "/blog"
+    }
   ],
   "theme": {
     "primaryColor": "#55868c",
@@ -18,14 +42,38 @@
     "greeting": "Hello, I'm",
     "highlightColor": "#b7ff9d",
     "tenSeconds": [
-      "I am currently a PhD candidate focusing in computational social choice at Tulane University. I also work full-time as an AI Innovation Fellow at Tulane, bringing applied machine learning solutions to researchers across the university in a variety of interdisciplinary projects. My background is in software development, where I have years of experience shipping reliable Python and AWS services."
+      "I am a current PhD candidate focusing in computational social choice at Tulane University. I also work full-time as an AI Innovation Fellow at Tulane, bringing applied machine learning solutions to researchers across the university through a variety of interdisciplinary projects. My background is in software development, where I have years of experience shipping reliable Python and AWS services."
     ],
-    "skills": ["Python", "PyTorch", "AWS Toolkit", "C++", "bash", "SQL", "Slurm"],
-    "roles": ["AI Innovation Fellow", "PhD Candidate", "Senior Software Developer", "Research Assistant"],
-    "affiliations": [
-      { "name": "Healthfirst", "badge": "hf.png" },
-      { "name": "Tulane University", "badge": "tulane.png" },
-      { "name": "Hunter College", "badge": "hunter.png" }
+  "skills": [
+    "Python",
+    "PyTorch",
+    "AWS Toolkit",
+    "C++",
+    "bash",
+    "SQL",
+    "Slurm"
+  ],
+  "roles": [
+    "AI Innovation Fellow",
+    "PhD Candidate",
+    "Senior Software Developer",
+    "Research Assistant"
+  ],
+  "currentlyWorkingOn": "Juggling a few projects through the Innovation Institute at Tulane, and wrapping up my coursework (t-minus 2 courses to go).",
+  "funFact": "I have been working for two years to perfect my chicken and andouille gumbo recipe; still learning, still cooking, still a northerner without a gumbo spoon.",
+  "affiliations": [
+    {
+      "name": "Healthfirst",
+      "badge": "hf.png"
+    },
+      {
+        "name": "Tulane University",
+        "badge": "tulane.png"
+      },
+      {
+        "name": "Hunter College",
+        "badge": "hunter.png"
+      }
     ],
     "contactDetails": {
       "heading": "On Campus",
@@ -39,9 +87,9 @@
         },
         {
           "label": "Address",
-          "value": "6823 St Charles Ave, New Orleans, LA 70118",
+          "value": "Stanley Thomas Hall, New Orleans, LA 70118",
           "type": "location",
-          "href": "https://maps.google.com/?q=6823+St+Charles+Ave+New+Orleans+LA+70118",
+          "href": "https://www.google.com/maps/place/Department+of+Computer+Science/@29.9364825,-90.1217565,18.59z/data=!4m15!1m8!3m7!1s0x8620a510802a656f:0xcf46e0bd900dd65b!2s6823+St+Charles+Ave,+New+Orleans,+LA+70118!3b1!8m2!3d29.940752!4d-90.1202541!16s%2Fg%2F11c3q20fhx!3m5!1s0x8620a50537e5a571:0xef3bbc8a0568d23!8m2!3d29.9370193!4d-90.1216107!16s%2Fg%2F12hkhthmw?entry=ttu&g_ep=EgoyMDI1MTAwMS4wIKXMDSoASAFQAw%3D%3D",
           "category": "campus"
         },
         {
@@ -62,16 +110,16 @@
           "label": "Download Resume",
           "value": "Resume",
           "type": "resume",
-          "href": "/resume.pdf",
+          "href": "/Leonardo_Matone_Resume.pdf",
           "category": "connect"
         }
       ],
       "cta": {
         "label": "Reserve a time",
-        "href": "https://calendar.google.com"
+        "href": "https://calendar.app.google/2VHD1sYD27pkuyvY9"
       }
     },
-    "avatar": "id-picture.jpg"
+    "avatar": "iceland.jpeg"
   },
   "biography": {
     "headline": "Applied ML and Engineering Solutions",
@@ -81,9 +129,9 @@
       "Outside of applied ML, Leonardo researches computational social choice, focusing on novel probabilistic social choice functions, and he earned dual bachelor's degrees in Computer Science and Political Science from Hunter College as a Thomas Hunter Scholar."
     ],
     "highlights": [
-      "Supports applied machine learning research at Tulane",
+      "Supports applied machine learning research at Tulane.",
       "Shipped production services handling hundreds of requests per day as a senior developer.",
-      "Published research in probabilistic social choice at leading conferences."
+      "Contributes to research in probabilistic social choice."
     ]
   },
   "experience": {
@@ -92,6 +140,13 @@
         "title": "AI Innovation Fellowship",
         "subtitle": "Tulane University",
         "timeframe": "August 2025 - Present",
+        "summary": "Partner with campus researchers to prototype applied ML solutions, then productionize successful experiments for university-wide impact.",
+        "skills": [
+          "Applied ML",
+          "MLOps",
+          "Python",
+          "Research Strategy"
+        ],
         "bullets": [
           "Designed experiments to validate research hypotheses",
           "Co-authored publications in peer-reviewed venues",
@@ -102,9 +157,16 @@
         "title": "Research Assistant",
         "subtitle": "Tulane University",
         "timeframe": "January 2024 - Present",
+        "summary": "Advance computational social choice research by designing reproducible experiments, modeling novel voting systems, and preparing peer-reviewed manuscripts.",
+        "skills": [
+          "PyTorch",
+          "Data Science",
+          "Slurm",
+          "Scientific Writing"
+        ],
         "bullets": [
           "Designs/implements custom models/modules for niche tasks using PyTorch",
-          "Utilizes Slurm to manage and optimize neural network training on LSU’s HPC clusters",
+          "Utilizes Slurm to manage and optimize neural network training on LSU\u2019s HPC clusters",
           "Contributes to data science research on voting rules, publishing to peer-reviewed journals"
         ]
       },
@@ -112,6 +174,13 @@
         "title": "Senior Backend Developer",
         "subtitle": "Healthfirst",
         "timeframe": "June 2022 - August 2025",
+        "summary": "Led high-impact backend initiatives that powered member-facing health experiences, balancing reliability, performance, and rapid delivery.",
+        "skills": [
+          "Python",
+          "AWS",
+          "PostgreSQL",
+          "Microservices"
+        ],
         "bullets": [
           "Developed RESTful APIs that served thousands of daily requests",
           "Maintained relational databases and optimized query performance",
@@ -120,9 +189,9 @@
       }
     ],
     "history": [
-      "Software Developer Intern — Company 123",
-      "Teaching Assistant — Hunter College",
-      "Freelance Full-Stack Engineer"
+      "Software Developer Intern \u2014 Healthfirst",
+      "Teaching Assistant \u2014 Hunter College",
+      "Crewmember \u2014 Chipotle"
     ]
   },
   "experienceCopy": {
@@ -131,18 +200,22 @@
     "description": "From research labs to production systems, I leverage my expertise in applied machine learning and resilient backend engineering. ",
     "highlightsLabel": "Recent Highlights",
     "snapshotLabel": "Me in 10 seconds",
+    "technicalHighlights": [
+      "Leads end-to-end ML experiments from data prep to deployment.",
+      "Scales research prototypes into real contributions.",
+      "Built and maintained backend infrastructure."
+    ],
     "stats": {
       "active": {
-        "description": "active leadership & research initiatives"
+        "description": "In addition to my part-time PhD workload"
       },
       "years": {
-        "description": "building ML + data platforms end-to-end"
+        "description": "Building ML + data platforms end-to-end"
       },
       "teams": {
-        "description": "cross-disciplinary teams partnered with"
+        "description": "Applied ML projects in non-CS fields"
       }
-    },
-    "historyLabel": "Previous Chapters"
+    }
   },
   "education": [
     {
@@ -153,10 +226,9 @@
       "details": "Graduate research in applied machine learning and computational social choice.",
       "highlights": [
         "AI Innovation Fellow collaborating with interdisciplinary teams",
-        "Graduate coursework covering advanced ML and data-intensive systems"
+        "Graduate coursework covering advanced ML/AI"
       ],
-      "links": [
-      ],
+      "links": [],
       "badge": "tulane.png"
     },
     {
@@ -166,19 +238,17 @@
       "details": "Dual-degree Thomas Hunter Scholar exploring the intersection of computer science, policy, and civic technology.",
       "degrees": [
         {
-          "title": "B.S. Computer Science",
+          "title": "B.A. Computer Science",
           "highlights": [
             "Magna cum laude",
             "Thomas Hunter Scholar",
             "Minor in Mathematics"
           ],
-          "links": [
-          ]
+          "links": []
         },
         {
           "title": "B.A. Political Science",
-          "links": [
-          ]
+          "links": []
         }
       ],
       "badge": "hunter.png"
@@ -202,18 +272,30 @@
     "description": "Researcher in applied machine learning blending production experience with academic innovation.",
     "biographyLabel": "Biography",
     "stats": [
-      { "id": "roles", "label": "Years in industry", "value": "3" },
-      { "id": "publications", "label": "Years in research", "value": "2" },
-      { "id": "interests", "label": "Research interests", "value": "NLP • Public Policy • Social Choice" }
+      {
+        "id": "roles",
+        "label": "Years in industry",
+        "value": "3"
+      },
+      {
+        "id": "publications",
+        "label": "Years in research",
+        "value": "2"
+      },
+      {
+        "id": "interests",
+        "label": "Research interests",
+        "value": "NLP \u2022 Public Policy \u2022 Social Choice"
+      }
     ],
     "highlightsLabel": "Highlights"
   },
   "projectsCopy": {
     "eyebrow": "Craft & Code",
     "title": "Projects",
-    "description": "A selection of personal builds and research prototypes. Much of my applied work lives within Tulane collaborations—explore the repos for deep dives into each project.",
+    "description": "A selection of personal builds. These projects are demonstrative of some of my main areas of interest: politics, and fun bash scripting. Explore the repos for deep dives into each project.",
     "summaryLabel": "GitHub Overview",
-    "syncingText": "Syncing GitHub activity…",
+    "syncingText": "Syncing GitHub activity\u2026",
     "errorText": "GitHub summary is unavailable right now. Please check back soon.",
     "profileLinkLabel": "View GitHub profile (%username%)",
     "stats": {
@@ -226,14 +308,14 @@
     "defaultTag": "GitHub",
     "repoDescriptionFallback": "Repository description coming soon.",
     "emptyState": {
-      "loading": "Loading GitHub projects…",
+      "loading": "Loading GitHub projects\u2026",
       "error": "Unable to display GitHub projects right now.",
       "default": "Repositories will appear here once available."
     },
     "updatedLabel": "Updated",
     "modalLinkLabel": "View on GitHub",
     "readme": {
-      "loading": "Loading README…",
+      "loading": "Loading README\u2026",
       "error": "Unable to load the README right now. You can still open the repository on GitHub to view the documentation.",
       "empty": "This repository does not currently have a README."
     }
@@ -261,8 +343,8 @@
       },
       {
         "label": "LinkedIn",
-        "value": "linkedin.com/in/leonardomatone",
-        "href": "https://www.linkedin.com/in/leonardomatone"
+        "value": "linkedin.com/in/leonardo-matone",
+        "href": "https://www.linkedin.com/in/leonardo-matone"
       },
       {
         "label": "GitHub",
@@ -278,7 +360,11 @@
       "date": "September 2025",
       "snippet": "TIL that Torch has *Metal* support. It's insane",
       "subtitle": "Notes from DeepVoting",
-      "tags": ["Applied ML", "MLOps", "GPU Acceleration"],
+      "tags": [
+        "Applied ML",
+        "MLOps",
+        "GPU Acceleration"
+      ],
       "noteTheme": "education",
       "content": [
         "mps device enables high-performance training on GPU for MacOS devices with Metal programming framework. It introduces a new device to map Machine Learning computational graphs and primitives on highly efficient Metal Performance Shaders Graph framework and tuned kernels provided by Metal Performance Shaders framework respectively. \n The new MPS backend extends the PyTorch ecosystem and provides existing scripts capabilities to setup and run operations on GPU. \n https://docs.pytorch.org/docs/stable/notes/mps.html"
@@ -291,7 +377,11 @@
       "date": "September 2025",
       "snippet": "Tools like Codex enable crazy cross-stack work for developers with limited experience but good domain knowledge",
       "subtitle": "Personal Development",
-      "tags": ["REACT", "Prompt Engineering", "Web Dev"],
+      "tags": [
+        "REACT",
+        "Prompt Engineering",
+        "Web Dev"
+      ],
       "noteTheme": "projects",
       "content": [
         "My expertise is in backend development, with some data science and analysis mixed in. I'm studying and honing my AI/ML toolkit at Tulane, and FE has never been for me. Yet I hope you'll agree that this website is absolutely excellent, despite being built by yours truly. Building this site was not easy; this is mainly because I have next to no real experience with web development outside of some shoddy frontend views of projects I've built in the past. I vibe-coded the hell out of this. It's interesting because I've seen students and colleagues talking and implementing via 'vibe' in the past, and it's such an interesting dilemma to me. Part of me is certainly positive about this new progression in the field, as is Nvidia's CEO, but another part of me sees these new powers being used for evil, or at least, ignorance. Vibe coding does eliminate the hours and even years of domain knowledge needed to build things, but the act of building things still takes hours and hours of work. \nWhile I have used LLM tools in the past, this was my first proper 'vibe-code.' JavaScript eludes me, so I came into this with my programming knowledge, a few general structure ideas, and a dream. Here are my takeaways. \nVibe coding sucks. It's a joke- and while it enabled me to finish this project, I learned a significant amount about REACT in order to wrap it up. I would often spend +2 hours working on a feature only for one wrong prompt to nuke all of my progress, including my json storing all of my data, "

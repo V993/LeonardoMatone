@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Avatar,
   Box,
+  Chip,
   Divider,
   Grid,
   IconButton,
@@ -19,11 +20,10 @@ import Groups2RoundedIcon from '@mui/icons-material/Groups2Rounded';
 import { experience as experienceData, experienceCopy } from '../data';
 import tulaneBadge from '../assets/tulane.png';
 import hfBadge from '../assets/hf.png';
+import { sharedChipProps, sharedChipSx } from '../styles/chipStyles';
 
 const MAX_STACK_DEPTH = 2;
 const MAX_OFFSET_X = 50;
-const CARD_HEIGHT_MD = 400;
-const CARD_HEIGHT_SM = 350;
 const RIGHT_GUTTER = 24;
 
 function ExperienceSection({ navOffset = false }) {
@@ -42,7 +42,6 @@ function ExperienceSection({ navOffset = false }) {
   const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   const [activeJobIndex, setActiveJobIndex] = useState(0);
-  const cardBaseHeight = isMdUp ? CARD_HEIGHT_MD : CARD_HEIGHT_SM;
 
   const rolodexContainerRef = useRef(null);
   const [availableRightSpace, setAvailableRightSpace] = useState(MAX_OFFSET_X * MAX_STACK_DEPTH);
@@ -139,14 +138,14 @@ function ExperienceSection({ navOffset = false }) {
         {
           key: 'active',
           label: 'Active Roles',
-          value: activeRoles,
+          value: 2,
           description: activeDescription,
           icon: WorkspacePremiumRoundedIcon,
         },
         computedYears
           ? {
               key: 'years',
-              label: 'Years Spanning',
+              label: 'Years',
               value: computedYears,
               description: yearsDescription,
               icon: AccessTimeRoundedIcon,
@@ -154,8 +153,8 @@ function ExperienceSection({ navOffset = false }) {
           : null,
         {
           key: 'teams',
-          label: 'Teams Partnered',
-          value: activeRoles + archivedRoles,
+          label: 'Interdisciplinary Collaborations',
+          value: 2,
           description: teamsDescription,
           icon: Groups2RoundedIcon,
         },
@@ -164,15 +163,11 @@ function ExperienceSection({ navOffset = false }) {
   );
 
   const technicalHighlights = useMemo(() => {
-    if (Array.isArray(overview?.technicalHighlights) && overview.technicalHighlights.length > 0) {
+    if (Array.isArray(overview?.technicalHighlights) && overview?.technicalHighlights.length > 0) {
       return overview.technicalHighlights.slice(0, 3);
     }
 
-    return [
-      'Lead end-to-end ML experiments from data prep to deployment.',
-      'Scale research prototypes into production services across teams.',
-      'Champion collaborative workflows between engineers and scientists.',
-    ];
+    return [];
   }, [overview?.technicalHighlights]);
 
   const totalJobs = currentJobs.length;
@@ -199,6 +194,7 @@ function ExperienceSection({ navOffset = false }) {
   const renderJobCardBody = (job, isActive, hasNav) => {
     const badgeSrc = getBadgeForJob(job);
     const bullets = Array.isArray(job?.bullets) ? job.bullets : [];
+    const skillTags = Array.isArray(job?.skills) ? job.skills.filter(Boolean) : [];
     const summary = typeof job?.summary === 'string' && job.summary.trim().length > 0 ? job.summary.trim() : '';
     const hasDetails = summary || bullets.length > 0;
 
@@ -208,7 +204,7 @@ function ExperienceSection({ navOffset = false }) {
         sx={{
           height: '100%',
           pt: isActive && hasNav ? 2.4 : 0.8,
-          pb: hasNav ? 3.6 : 1.4,
+          pb: hasNav ? 1.6 : 1.0,
           transition: 'padding 160ms ease',
         }}
       >
@@ -247,7 +243,7 @@ function ExperienceSection({ navOffset = false }) {
             }}
           >
             {summary ? (
-              <Typography variant="body1" sx={{ color: 'rgba(15, 23, 42, 0.84)', lineHeight: 1.6 }}>
+              <Typography variant="body2" sx={{ fontWeight: 350, color: 'rgba(15, 23, 42, 0.9)', lineHeight: 1.6 }}>
                 {summary}
               </Typography>
             ) : null}
@@ -275,11 +271,12 @@ function ExperienceSection({ navOffset = false }) {
                     key={idx}
                     component="li"
                     variant="body2"
-                    color="text.secondary"
                     sx={{
                       position: 'relative',
                       paddingLeft: '1.45rem',
                       lineHeight: 1.62,
+                      fontWeight: 350,
+                      color: '#0f172a',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -302,6 +299,89 @@ function ExperienceSection({ navOffset = false }) {
         ) : (
           <Box sx={{ flexGrow: 1, mt: 1.6 }} />
         )}
+
+        {(skillTags.length > 0 || (isActive && hasNav)) ? (
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={{ xs: 1, sm: 1.4 }}
+            justifyContent="space-between"
+            alignItems={{ xs: 'flex-start', sm: 'center' }}
+            sx={{ mt: 'auto', pt: 0.6 }}
+          >
+            {skillTags.length > 0 ? (
+              <Stack
+                direction="row"
+                spacing={0.6}
+                flexWrap="wrap"
+                rowGap={0.6}
+                sx={{ flex: 1 }}
+              >
+                {skillTags.map((skill) => (
+                  <Chip
+                    key={skill}
+                    label={skill}
+                    {...sharedChipProps}
+                    sx={{
+                      ...sharedChipSx,
+                      fontSize: '0.7rem',
+                      px: 1.1,
+                    }}
+                  />
+                ))}
+              </Stack>
+            ) : (
+              <Box sx={{ flex: 1 }} />
+            )}
+
+            {isActive && hasNav ? (
+              <Stack
+                direction="row"
+                spacing={1}
+                alignItems="center"
+                sx={{
+                  border: '1px solid #0f172a',
+                  borderRadius: 999,
+                  px: 1.2,
+                  py: 0.35,
+                  backgroundColor: '#fff',
+                  boxShadow: '0 14px 24px -20px rgba(15,23,42,0.35)',
+                }}
+              >
+                <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
+                  {safeActiveIndex + 1} / {totalJobs}
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleAdvance('prev');
+                  }}
+                  aria-label="Show previous role"
+                  sx={{
+                    border: '1px solid #0f172a',
+                    bgcolor: '#fff',
+                  }}
+                >
+                  <ArrowBackIosNewRoundedIcon fontSize="small" />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleAdvance('next');
+                  }}
+                  aria-label="Show next role"
+                  sx={{
+                    border: '1px solid #0f172a',
+                    bgcolor: '#fff',
+                  }}
+                >
+                  <ArrowForwardIosRoundedIcon fontSize="small" />
+                </IconButton>
+              </Stack>
+            ) : null}
+          </Stack>
+        ) : null}
       </Stack>
     );
   };
@@ -325,16 +405,16 @@ function ExperienceSection({ navOffset = false }) {
       id="experience"
       sx={{
         position: 'relative',
-        minWidth: '100vw',
-        px: { xs: 3, md: 6, lg: 8 },
+        width: '100%',
+        pr: { xs: 2.4, md: 6, lg: 8 },
         py: { xs: 3, md: 4 },
         scrollMarginTop: { xs: 96, md: 128 },
         background: 'none',
         overflow: 'hidden',
         pl: {
-          xs: 0,
-          md: navOffset ? 'calc(280px + 48px)' : 0,
-          lg: navOffset ? 'calc(320px + 64px)' : 0,
+          xs: 2.4,
+          md: 6,
+          lg: navOffset ? 'calc(320px + 64px)' : 8,
         },
         transition: 'padding-left 620ms cubic-bezier(0.22, 1, 0.36, 1)',
       }}
@@ -446,7 +526,7 @@ function ExperienceSection({ navOffset = false }) {
             sx={{
               position: 'relative',
               maxWidth: 1200,
-              minHeight: '80vh',
+              minHeight: '75vh',
               mx: 'auto',
               justifyContent: 'center',
               display: 'flex',
@@ -463,7 +543,7 @@ function ExperienceSection({ navOffset = false }) {
                 ref={rolodexContainerRef}
                 sx={{
                   position: 'relative',
-                  minHeight: 480,
+                  minHeight: 460,
                   pt: 2,
                   pb: 14,
                   overflow: 'visible',
@@ -531,11 +611,12 @@ function ExperienceSection({ navOffset = false }) {
                         border: cardBorder,
                         // boxShadow: cardShadow,
                         backdropFilter: 'blur(14px) saturate(160%)',
-                        height: cardBaseHeight,
                         display: 'flex',
                         flexDirection: 'column',
                         borderRadius: 3,
-                        padding: { xs: 2.4, md: 2.8 },
+                        px: { xs: 2.4, md: 2.8 },
+                        pt: { xs: 1.2, md: 1.6 },
+                        pb: { xs: 0.2, md: 0.5 },
                         '&::before': {
                           content: '""',
                           position: 'absolute',
@@ -565,57 +646,6 @@ function ExperienceSection({ navOffset = false }) {
                         cursor: totalJobs > 1 ? 'pointer' : 'default',
                       }}
                     >
-                      {isActive && totalJobs > 1 ? (
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          alignItems="center"
-                          sx={{
-                            position: 'absolute',
-                            bottom: 20,
-                            right: 24,
-                            border: '1px solid #0f172a',
-                            borderRadius: 999,
-                            px: 1.4,
-                            py: 0.5,
-                            backgroundColor: '#fff',
-                            boxShadow: '0 18px 28px -22px rgba(15,23,42,0.35)',
-                          }}
-                        >
-                          <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
-                            {safeActiveIndex + 1} / {totalJobs}
-                          </Typography>
-                          <IconButton
-                            size="small"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              handleAdvance('prev');
-                            }}
-                            aria-label="Show previous role"
-                            sx={{
-                              border: '1px solid #0f172a',
-                              bgcolor: '#fff',
-                            }}
-                          >
-                            <ArrowBackIosNewRoundedIcon fontSize="small" />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              handleAdvance('next');
-                            }}
-                            aria-label="Show next role"
-                            sx={{
-                              border: '1px solid #0f172a',
-                              bgcolor: '#fff',
-                            }}
-                          >
-                            <ArrowForwardIosRoundedIcon fontSize="small" />
-                          </IconButton>
-                        </Stack>
-                      ) : null}
-
                       {renderJobCardBody(job, isActive, totalJobs > 1)}
                     </Box>
                   );

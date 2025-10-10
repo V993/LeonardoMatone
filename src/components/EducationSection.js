@@ -4,9 +4,12 @@ import {
   Avatar,
   Box,
   Chip,
+  Divider,
   Link as MuiLink,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { education as educationData } from '../data';
 import tulaneBadge from '../assets/tulane.png';
@@ -195,7 +198,98 @@ const InstitutionPanel = ({ item, degrees }) => {
   );
 };
 
+const MobileEducationCard = ({ item, timeframe, degrees }) => {
+  const badgeSrc = badgeMap[item.institution] ?? undefined;
+  const combinedHighlights = degrees.flatMap((degree) => degree.highlights);
+
+  return (
+    <Stack
+      spacing={1.6}
+      sx={{
+        borderRadius: 3,
+        border: '1px solid rgba(var(--education-rgb), 0.22)',
+        backgroundColor: 'rgba(255,255,255,0.92)',
+        p: 1.8,
+      }}
+    >
+      <Stack direction="row" spacing={1.2} alignItems="center">
+        <Avatar
+          alt={item.institution}
+          src={badgeSrc}
+          sx={{
+            width: 44,
+            height: 44,
+            bgcolor: 'rgba(var(--education-rgb), 0.2)',
+            color: '#1f2937',
+            fontWeight: 700,
+          }}
+        >
+          {!badgeSrc && item.institution ? item.institution[0] : null}
+        </Avatar>
+        <Stack spacing={0.2}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            {item.institution}
+          </Typography>
+          {timeframe ? (
+            <Typography variant="body2" color="rgba(15, 23, 42, 0.72)">
+              {timeframe}
+            </Typography>
+          ) : null}
+          {item.location ? (
+            <Typography variant="body2" color="text.secondary">
+              {item.location}
+            </Typography>
+          ) : null}
+        </Stack>
+      </Stack>
+
+      <Stack spacing={1.4}>
+        {degrees.map((degree) => (
+          <Stack
+            key={degree.title}
+            spacing={1}
+            sx={{
+              borderRadius: 3,
+              border: '1px solid rgba(15, 23, 42, 0.08)',
+              backgroundColor: 'rgba(255,255,255,0.86)',
+              p: 1.4,
+            }}
+          >
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+              {degree.title}
+            </Typography>
+            {degree.focusAreas.length > 0 && (
+              <Stack direction="row" spacing={0.6} flexWrap="wrap" rowGap={0.6}>
+                {degree.focusAreas.slice(0, 5).map((focus) => (
+                  <Chip
+                    key={focus}
+                    label={focus}
+                    {...sharedChipProps}
+                    sx={{ ...sharedChipSx, fontSize: '0.7rem', px: 1 }}
+                  />
+                ))}
+              </Stack>
+            )}
+          </Stack>
+        ))}
+      </Stack>
+
+      {combinedHighlights.length > 0 ? (
+        <Stack spacing={0.6}>
+          {combinedHighlights.map((highlight, idx) => (
+            <Typography key={idx} variant="body2" sx={{ color: 'rgba(15, 23, 42, 0.8)' }}>
+              • {highlight}
+            </Typography>
+          ))}
+        </Stack>
+      ) : null}
+    </Stack>
+  );
+};
+
 function EducationSection({ navOffset = false }) {
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
   const timeline = Array.isArray(educationData) ? educationData : [];
 
   return (
@@ -203,17 +297,17 @@ function EducationSection({ navOffset = false }) {
       id="education"
       sx={{
         position: 'relative',
-        minWidth: '100vw',
+        width: '100%',
         minHeight: 'auto',
         paddingBottom: '5vh',
-        px: { xs: 3, md: 6, lg: 8 },
+        pr: { xs: 2.4, md: 6, lg: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
         background: 'none',
         overflow: 'hidden',
         pl: {
-          xs: 0,
-          md: navOffset ? 'calc(280px + 48px)' : 0,
-          lg: navOffset ? 'calc(320px + 64px)' : 0,
+          xs: 2.4,
+          md: 6,
+          lg: navOffset ? 'calc(320px + 64px)' : 8,
         },
         transition: 'padding-left 620ms cubic-bezier(0.22, 1, 0.36, 1)',
       }}
@@ -221,95 +315,152 @@ function EducationSection({ navOffset = false }) {
     <Box
       sx={{
         position: 'relative',
-        maxWidth: 980,
+        maxWidth: 1200,
         mx: 'auto',
         width: '100%',
       }}
     >
-        <Box
-          sx={{
-            position: 'relative',
-            mt: { xs: 3, md: 4 },
-            display: 'grid',
-            rowGap: { xs: 2.4, md: 3.2 },
-            overflow: 'visible',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              display: { xs: 'none', md: 'block' },
-              left: '50%',
-              top: 0,
-              bottom: -56,
-              width: '4px',
-              height: 'calc(100% + 56px)',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              boxShadow: '0 0 22px rgba(255, 255, 255, 0.48)',
-              transform: 'translateX(-2px)',
+        <Stack spacing={1.2} sx={{ mb: { xs: 3, md: 4 } }}>
+          <Typography
+            variant="overline"
+            sx={{ letterSpacing: 3, fontWeight: 700, color: 'rgba(148, 163, 184, 0.85)' }}
+          >
+            Academic Journey
+          </Typography>
+          <Typography variant="h2" fontWeight={700} sx={{ color: '#fffaf0' }}>
+            Education
+          </Typography>
+        </Stack>
+        <Stack
+          spacing={{ xs: 2.6, md: 3.4 }}
+          sx={(theme) => ({
+           	position: 'relative',
+           	mt: { xs: 3, md: 4 },
+           	[theme.breakpoints.up('md')]: {
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 12,
+                bottom: 12,
+                left: '50%',
+                width: 4,
+                transform: 'translateX(-2px)',
+                backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                boxShadow: '0 0 20px rgba(255, 255, 255, 0.42)',
+                zIndex: 1,
+              },
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                bottom: -12,
+                left: '50%',
+                width: 28,
+                height: 24,
+                transform: 'translateX(-50%)',
+                backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                clipPath: 'polygon(50% 100%, 0 0, 100% 0)',
+                boxShadow: '0 12px 24px rgba(255, 255, 255, 0.28)',
+                border: '1px solid rgba(255, 255, 255, 0.35)',
+                zIndex: 1,
+              },
             },
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              display: { xs: 'none', md: 'block' },
-              left: 'calc(50% - 8px)',
-              bottom: -72,
-              width: 0,
-              height: 0,
-              borderLeft: '8px solid transparent',
-              borderRight: '8px solid transparent',
-              borderTop: '14px solid rgba(255, 255, 255, 0.95)',
-              boxShadow: '0 0 16px rgba(255, 255, 255, 0.4)',
-            },
-          }}
+          })}
         >
           {timeline.map((item, index) => {
             const entries = formatEntries(item);
 
+            if (!isMdUp) {
+              return (
+                <React.Fragment key={`${item.institution}-${item.timeframe}-${index}`}>
+                  <MobileEducationCard item={item} timeframe={item.timeframe} degrees={entries} />
+                  {index < timeline.length - 1 ? (
+                    <Divider
+                      sx={{
+                        alignSelf: 'stretch',
+                        borderColor: 'rgba(255,255,255,0.35)',
+                        borderStyle: 'dashed',
+                      }}
+                    />
+                  ) : null}
+                </React.Fragment>
+              );
+            }
+
             return (
-              <Box
-                key={`${item.institution}-${item.timeframe}-${index}`}
-                sx={{
-                  display: 'grid',
-                  gridTemplateColumns: {
-                    xs: '1fr',
-                    md: 'minmax(0, 1fr) 40px minmax(0, 1fr)',
-                  },
-                  columnGap: { md: 2.6 },
-                  rowGap: { xs: 1.6, md: 0 },
-                  alignItems: 'stretch',
-                }}
-              >
-                <Box sx={{ order: { xs: 2, md: 1 } }}>
+              <React.Fragment key={`${item.institution}-${item.timeframe}-${index}`}>
+                <Box
+                  sx={{
+                    position: 'relative',
+                    display: 'grid',
+                    gridTemplateColumns: {
+                      xs: '1fr',
+                      md: 'minmax(0, 1fr) 40px minmax(0, 1fr)',
+                    },
+                    columnGap: { md: 2.6 },
+                    rowGap: { xs: 1.6, md: 0 },
+                    alignItems: 'stretch',
+                  }}
+                >
+                <Box sx={{ order: { xs: 1, md: 1 }, position: 'relative', zIndex: 2 }}>
                   <DegreePanel timeframe={item.timeframe} degrees={entries} />
                 </Box>
 
                 <Box
                   sx={{
-                    order: { xs: 1, md: 2 },
-                    display: 'flex',
+                    order: { xs: 3, md: 2 },
+                    display: { xs: 'none', md: 'flex' },
                     justifyContent: 'center',
                     alignItems: 'center',
-                    py: { xs: 0.4, md: 0 },
+                    py: { md: 0 },
                   }}
                 >
-                  <Box
-                    sx={{
-                      width: 16,
-                      height: 16,
+                <Box
+                  sx={{
+                    width: 16,
+                    height: 16,
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                    border: '3px solid rgba(var(--education-rgb), 0.35)',
+                    boxShadow: '0 0 18px rgba(255, 255, 255, 0.52)',
+                    position: 'relative',
+                    zIndex: 2,
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      inset: -10,
                       borderRadius: '50%',
-                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                      border: '3px solid rgba(var(--education-rgb), 0.35)',
-                      boxShadow: '0 0 18px rgba(255, 255, 255, 0.52)',
+                      border: '1px dashed rgba(134, 239, 172, 0.45)',
+                    },
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      inset: -4,
+                      borderRadius: '50%',
+                      background: 'radial-gradient(circle, rgba(134, 239, 172, 0.28) 0%, rgba(134, 239, 172, 0) 70%)',
+                      zIndex: -1,
+                    },
+                  }}
+                />
+              </Box>
+
+                  <Box sx={{ order: { xs: 2, md: 3 }, position: 'relative', zIndex: 2 }}>
+                    <InstitutionPanel item={item} degrees={entries} />
+                  </Box>
+                </Box>
+                {index < timeline.length - 1 ? (
+                  <Divider
+                    sx={{
+                      alignSelf: 'stretch',
+                      borderColor: 'rgba(255,255,255,0.25)',
+                      borderStyle: 'dashed',
+                      display: { xs: 'block', md: 'none' },
                     }}
                   />
-                </Box>
-
-                <Box sx={{ order: { xs: 3, md: 3 } }}>
-                  <InstitutionPanel item={item} degrees={entries} />
-                </Box>
-              </Box>
+                ) : null}
+              </React.Fragment>
             );
           })}
-        </Box>
+        </Stack>
       </Box>
     </Box>
   );

@@ -105,8 +105,8 @@ function BlogPage() {
         position: 'relative',
         minHeight: '100vh',
         py: { xs: 10, md: 12 },
-        px: { xs: 2.5, md: 5 },
-        pl: { md: 'calc(280px + 48px)', lg: 'calc(320px + 64px)' },
+        px: { xs: 2.4, md: 5 },
+        pl: { lg: 'calc(320px + 64px)' },
         background:
           'radial-gradient(circle at 20% 20%, rgba(255, 231, 184, 0.35) 0%, rgba(255, 231, 184, 0) 36%), radial-gradient(circle at 80% 10%, rgba(188, 236, 255, 0.4) 0%, rgba(188, 236, 255, 0) 32%), linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 244, 240, 0.92) 100%)',
         overflowX: 'hidden',

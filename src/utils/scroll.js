@@ -6,6 +6,20 @@ export const getScrollContainer = () => {
   return document.getElementById('main-content');
 };
 
+const isScrollableContainer = (container) => {
+  if (!container) {
+    return false;
+  }
+
+  if (container.scrollHeight - container.clientHeight > 1) {
+    return true;
+  }
+
+  const style = typeof window !== 'undefined' ? window.getComputedStyle(container) : null;
+  const overflowY = style?.overflowY ?? style?.overflow ?? '';
+  return /auto|scroll/i.test(overflowY) && container.scrollHeight > container.clientHeight;
+};
+
 const getScrollPaddingTop = (container) => {
   if (!container || typeof window === 'undefined') {
     return 0;
@@ -28,7 +42,7 @@ export const scrollToTop = (behavior = 'smooth') => {
 
   const container = getScrollContainer();
 
-  if (container) {
+  if (isScrollableContainer(container)) {
     container.scrollTo({ top: 0, behavior });
     return true;
   }
@@ -48,7 +62,7 @@ export const scrollElementIntoView = (element, { behavior = 'smooth' } = {}) => 
 
   const container = getScrollContainer();
 
-  if (container) {
+  if (isScrollableContainer(container)) {
     const containerRect = container.getBoundingClientRect();
     const elementRect = element.getBoundingClientRect();
     const scrollPaddingTop = getScrollPaddingTop(container);

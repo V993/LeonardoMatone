@@ -246,6 +246,11 @@ function ProjectsSection({ navOffset = false }) {
           0
         );
 
+        const totalForks = repoData.reduce(
+          (acc, repo) => acc + (typeof repo.forks_count === 'number' ? repo.forks_count : 0),
+          0
+        );
+
         const languageUsage = repoData.reduce((acc, repo) => {
           if (repo.language) {
             const language = repo.language;
@@ -271,6 +276,7 @@ function ProjectsSection({ navOffset = false }) {
           followers: userData?.followers,
           publicRepos: userData?.public_repos,
           totalStars,
+          totalForks,
           topLanguages,
           profileUrl: userData?.html_url,
           mostRecentRepo: mostRecentRepo?.name,
@@ -381,18 +387,18 @@ function ProjectsSection({ navOffset = false }) {
       id="projects"
       sx={{
         position: 'relative',
-        minWidth: '100vw',
+        width: '100%',
         minHeight: '90vh',
         overflow: 'hidden',
         py: { xs: 6, md: 8 },
-        px: { xs: 3, md: 6, lg: 8 },
+        pr: { xs: 2.4, md: 6, lg: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
         // scroll snapping disabled site-wide
         background: 'none',
         pl: {
-          xs: 0,
-          md: navOffset ? 'calc(280px + 48px)' : 0,
-          lg: navOffset ? 'calc(320px + 64px)' : 0,
+          xs: 2.4,
+          md: 6,
+          lg: navOffset ? 'calc(320px + 64px)' : 8,
         },
         transition: 'padding-left 620ms cubic-bezier(0.22, 1, 0.36, 1)',
         '& > *': {
@@ -452,14 +458,15 @@ function ProjectsSection({ navOffset = false }) {
 
           {githubUsername && (
             <Grid item xs={12} md={5}>
-              <Box
+              <Stack
+                spacing={2.4}
                 sx={{
-                  p: { xs: 2.5, md: 3 },
-                  borderRadius: 3,
-                  border: '1px solid rgba(var(--dark-cyan-rgb), 0.18)',
-                  background: 'linear-gradient(135deg, rgba(var(--projects-rgb), 0.12) 0%, rgba(255,255,255, 0.9) 100%)',
-                  boxShadow: '0 16px 36px rgba(85, 134, 140, 0.18)',
                   height: '100%',
+                  p: { xs: 2.2, sm: 2.6, md: 2.8 },
+                  borderRadius: 3.5,
+                  border: '1px solid rgba(var(--dark-cyan-rgb), 0.18)',
+                  background: 'linear-gradient(135deg, rgba(var(--projects-rgb), 0.12) 0%, rgba(255,255,255,0.94) 100%)',
+                  boxShadow: '0 20px 44px rgba(85, 134, 140, 0.18)',
                 }}
               >
                 {isLoadingGithub && copy.syncingText && (
@@ -475,7 +482,7 @@ function ProjectsSection({ navOffset = false }) {
                 )}
 
                 {!isLoadingGithub && !githubError && githubSummary && (
-                  <Stack spacing={2.25} sx={{ height: '100%', justifyContent: 'space-between' }}>
+                  <Stack spacing={2.4} sx={{ flexGrow: 1 }}>
                     {summaryHeading ? (
                       <Typography variant="subtitle2" color="text.secondary" sx={{ letterSpacing: 0.8 }}>
                         {summaryHeading}
@@ -514,18 +521,42 @@ function ProjectsSection({ navOffset = false }) {
                       </Stack>
                     </Stack>
 
-                  <Stack
-                    direction={{ xs: 'column', sm: 'row' }}
-                    spacing={{ xs: 1.5, sm: 2 }}
-                    sx={{ justifyContent: 'flex-start', textAlign: { xs: 'left', sm: 'left' } }}
-                  >
-                      <StatPill icon={<StarBorderRoundedIcon fontSize="small" />} label={statsCopy.stars ?? ''} value={githubSummary.totalStars ?? '—'} />
-                      <StatPill icon={<CallSplitRoundedIcon fontSize="small" />} label={statsCopy.repos ?? ''} value={githubSummary.publicRepos ?? '—'} />
-                      <StatPill icon={<VisibilityOutlinedIcon fontSize="small" />} label={statsCopy.followers ?? ''} value={githubSummary.followers ?? '—'} />
+                    <Stack
+                      direction={{ xs: 'column', sm: 'row' }}
+                      spacing={{ xs: 1.5, sm: 2 }}
+                      sx={{
+                        justifyContent: 'flex-start',
+                        textAlign: { xs: 'left', sm: 'left' },
+                        flexWrap: { sm: 'wrap' },
+                        rowGap: { sm: 1.5 },
+                      }}
+                    >
+                      <StatPill
+                        icon={<StarBorderRoundedIcon fontSize="small" />}
+                        label={statsCopy.stars ?? ''}
+                        value={githubSummary.totalStars ?? '—'}
+                      />
+                      <StatPill
+                        icon={<CallSplitRoundedIcon fontSize="small" />}
+                        label={statsCopy.repos ?? ''}
+                        value={githubSummary.publicRepos ?? '—'}
+                      />
+                      <StatPill
+                        icon={<CallSplitRoundedIcon fontSize="small" />}
+                        label={statsCopy.forks ?? ''}
+                        value={githubSummary.totalForks ?? '—'}
+                      />
+                      <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <StatPill
+                          icon={<VisibilityOutlinedIcon fontSize="small" />}
+                          label={statsCopy.followers ?? ''}
+                          value={githubSummary.followers ?? '—'}
+                        />
+                      </Box>
                     </Stack>
                   </Stack>
                 )}
-              </Box>
+              </Stack>
             </Grid>
           )}
         </Grid>

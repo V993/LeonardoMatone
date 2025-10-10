@@ -14,11 +14,9 @@ import WorkspacePremiumRoundedIcon from '@mui/icons-material/WorkspacePremiumRou
 import MenuBookRoundedIcon from '@mui/icons-material/MenuBookRounded';
 import VolunteerActivismRoundedIcon from '@mui/icons-material/VolunteerActivismRounded';
 import EmojiObjectsRoundedIcon from '@mui/icons-material/EmojiObjectsRounded';
-import { useTheme } from '@mui/material/styles';
 import { about as aboutCopy, biography } from '../data';
 
 function AboutSection({ navOffset = false }) {
-  const theme = useTheme();
   const about = aboutCopy ?? {};
   const biographyInfo = biography ?? {};
   const summaryParagraphs = Array.isArray(biographyInfo.summary) ? biographyInfo.summary : [];
@@ -37,18 +35,18 @@ function AboutSection({ navOffset = false }) {
       id="about"
       sx={{
         position: 'relative',
-        minWidth: '100vw',
+        width: '100%',
         minHeight: 'auto',
-        px: { xs: 3, md: 6, lg: 8 },
+        pr: { xs: 2.4, md: 6, lg: 8 },
         py: { xs: 6, md: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
         background: 'none',
         color: '#f8fafc',
         overflow: 'hidden',
         pl: {
-          xs: 0,
-          md: navOffset ? 'calc(280px + 48px)' : 0,
-          lg: navOffset ? 'calc(320px + 64px)' : 0,
+          xs: 2.4,
+          md: 6,
+          lg: navOffset ? 'calc(320px + 64px)' : 8,
         },
         transition: 'padding-left 620ms cubic-bezier(0.22, 1, 0.36, 1)',
         '&::before': {

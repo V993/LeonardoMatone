@@ -1,5 +1,5 @@
 // src/components/WelcomeSection.js
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -11,6 +11,8 @@ import {
   Stack,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -20,6 +22,7 @@ import PhoneEnabledRoundedIcon from '@mui/icons-material/PhoneEnabledRounded';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import idPicture from '../assets/id-picture.jpg';
+import icelandPicture from '../assets/iceland.jpeg';
 import hfBadge from '../assets/hf.png';
 import tulaneBadge from '../assets/tulane.png';
 import hunterBadge from '../assets/hunter.png';
@@ -34,6 +37,7 @@ const assetSources = {
   'hf.png': hfBadge,
   'tulane.png': tulaneBadge,
   'hunter.png': hunterBadge,
+  'iceland.jpeg': icelandPicture
 };
 
 const channelIcons = {
@@ -49,21 +53,53 @@ const contactDetailIcons = {
   location: <PlaceOutlinedIcon fontSize="small" />,
 };
 
+// Shared styling tokens used throughout the welcome layout.
+const desktopAvatarFrameSize = 212;
+const desktopAvatarSize = 188;
+const snapshotHeadingSx = {
+  letterSpacing: 3,
+  fontWeight: 700,
+  color: '#1f2937',
+  textAlign: 'left',
+  textTransform: 'uppercase',
+  fontSize: { xs: '0.8rem', md: '0.86rem' },
+};
+
+// Gives each snapshot card a consistent heading treatment.
+function SnapshotSection({ title, children }) {
+  return (
+    <Stack spacing={{ xs: 1, md: 1.1 }} sx={{ width: '100%' }} alignItems="flex-start">
+      <Typography variant="overline" sx={{ ...snapshotHeadingSx, width: '100%' }}>
+        {title}
+      </Typography>
+      {children}
+    </Stack>
+  );
+}
+
 function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSection = null }) {
+  const theme = useTheme();
+  const isCompact = useMediaQuery(theme.breakpoints.down('lg'));
+  // Resolve badge/avatar filenames into usable URLs once.
   const assetMap = useMemo(() => assetSources, []);
 
+  // Pull core welcome details (text, roles, snapshot content).
   const greeting = welcomeData?.greeting ?? 'Hello,';
   const name = welcomeData?.name ?? '';
   const intro = welcomeData?.intro ?? '';
   const tenSeconds = Array.isArray(welcomeData?.tenSeconds) ? welcomeData.tenSeconds : [];
   const roles = Array.isArray(welcomeData?.roles) ? welcomeData.roles : [];
   const primaryRole = roles.length > 0 ? roles[0] : null;
-  const supportingRoles = roles.slice(1);
+  const roleChips = roles.filter(Boolean);
   const skills = Array.isArray(welcomeData?.skills) ? welcomeData.skills : [];
+  const currentlyWorkingOn = welcomeData?.currentlyWorkingOn ?? null;
+  const funFact = welcomeData?.funFact ?? null;
   const affiliations = (welcomeData?.affiliations ?? []).map((affiliation) => ({
     ...affiliation,
     src: assetMap[affiliation.badge] ?? null,
   }));
+  const hasCardSections = Boolean(currentlyWorkingOn || funFact || skills.length > 0);
+  // Contact meta drives the sidebar links / buttons.
   const contactDetails = welcomeData?.contactDetails ?? {};
   const contactItems = Array.isArray(contactDetails?.items) ? contactDetails.items : [];
   const contactCta = contactDetails?.cta ?? null;
@@ -75,14 +111,37 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
   const avatarSrc = assetMap[welcomeData?.avatar] ?? null;
   const contactChannels = contactData?.channels ?? [];
   const shouldFlyLeft = heroCollapsed || Boolean(activeSection);
+  const showCollapsedAvatar = !isCompact && shouldFlyLeft && avatarSrc;
+  // Snapshot toggle state controls swapping core skills vs fun fact.
+  const hasSkills = skills.length > 0;
+  const hasFunFact = Boolean(funFact);
+  const canToggleFunFact = hasSkills && hasFunFact;
+  const [showFunFact, setShowFunFact] = useState(() => (!hasSkills && hasFunFact));
+  const isFunFactActive = canToggleFunFact ? showFunFact : hasFunFact;
+  const snapshotTitle = isFunFactActive ? 'Secret Fun Fact:' : 'Core Skills:';
 
+  // Clicking/keyboard toggles between the two snapshot modes when available.
+  const handleAvatarToggle = () => {
+    if (!canToggleFunFact) {
+      return;
+    }
+    setShowFunFact((prev) => !prev);
+  };
+
+  const handleAvatarKeyDown = (event) => {
+    if (!canToggleFunFact) {
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setShowFunFact((prev) => !prev);
+    }
+  };
+
+  // Maps contact metadata to final hrefs for buttons/links.
   const resolveContactHref = (item) => {
     if (!item) {
       return undefined;
-    }
-
-    if (item.href) {
-      return item.href;
     }
 
     if (item.type === 'email' && item.value) {
@@ -95,7 +154,11 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
     }
 
     if (item.type === 'resume') {
-      return '/resume.pdf';
+      return item.href ?? '/Leonardo_Matone_Resume.pdf';
+    }
+
+    if (item.href) {
+      return item.href;
     }
 
     if (item.type === 'location' && item.value) {
@@ -105,6 +168,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
     return undefined;
   };
 
+  // Renders a contact pill with icon and text, optionally linkable.
   const renderContactLink = (item) => {
     const href = resolveContactHref(item);
     const isExternal = href ? href.startsWith('http') : false;
@@ -176,6 +240,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
     );
   };
 
+  // Special-case resume so we can show a branded button when present.
   const renderResumeButton = (item) => {
     const href = resolveContactHref(item);
     if (!href) {
@@ -193,18 +258,21 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
         rel={isExternal ? 'noreferrer' : undefined}
         startIcon={contactDetailIcons.resume}
         sx={{
-          alignSelf: 'flex-start',
+          alignSelf: { xs: 'stretch', sm: 'flex-start' },
           backgroundColor: '#1f2937',
           color: '#f8fafc',
           fontWeight: 700,
           textTransform: 'none',
-          px: 2.6,
-          py: 1,
+          px: { xs: 2.6, sm: 2.4 },
+          py: { xs: 1, sm: 0.8 },
           borderRadius: 2.4,
           boxShadow: '0 12px 24px rgba(15, 23, 42, 0.22)',
+          minWidth: { xs: '100%', sm: 200 },
+          maxWidth: { xs: '100%', sm: 200 },
+          fontSize: { sm: '0.95rem' },
           '&:hover': {
             backgroundColor: '#111827',
-            boxShadow: '0 16px 30px rgba(15, 23, 42, 0.28)',
+            boxShadow: '0 16px 26px rgba(15, 23, 42, 0.24)',
           },
         }}
       >
@@ -213,18 +281,288 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
     );
   };
 
+  // Mobile layout short-circuits with a condensed single-column presentation.
+  if (isCompact) {
+    return (
+      <Box
+        id="welcome"
+        sx={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: '100%',
+          px: { xs: 2.4, sm: 3.4 },
+          pt: { xs: 8, sm: 9 },
+          pb: { xs: 6, sm: 7 },
+          scrollMarginTop: 96,
+          backgroundColor: 'transparent',
+          color: '#0f172a',
+          boxSizing: 'border-box',
+        }}
+      >
+        <Stack spacing={4.2} sx={{ maxWidth: 960, mx: 'auto' }}>
+          {/* Mobile hero summary */}
+          <Stack direction="row" spacing={2.2} alignItems="center">
+            <Stack spacing={primaryRole ? 0.9 : 0.6}>
+              <Typography
+                variant="overline"
+                sx={{ letterSpacing: 3, color: 'rgba(15, 23, 42, 0.6)', fontWeight: 600 }}
+              >
+                {greeting}
+              </Typography>
+              <Typography
+                variant="h1"
+                component="h1"
+                sx={{
+                  fontWeight: 900,
+                  fontSize: 'clamp(2.6rem, 6vw, 3.6rem)',
+                  lineHeight: 1.5,
+                  transition: 'font-size 220ms ease',
+                }}
+              >
+                {name}
+              </Typography>
+            </Stack>
+
+            {avatarSrc ? (
+              <Avatar
+                alt={name}
+                src={avatarSrc}
+                sx={{
+                  width: 'clamp(78px, 20vw, 144px)',
+                  height: 'clamp(78px, 20vw, 144px)',
+                  border: '3px solid rgba(15, 23, 42, 0.12)',
+                  boxShadow: '0 12px 26px rgba(15, 23, 42, 0.16)',
+                  transition: 'width 220ms ease, height 220ms ease',
+                }}
+              />
+            ) : null}
+          </Stack>
+
+          {contactChannels.length > 0 ? (
+            <Stack direction="row" spacing={0.6} flexWrap="wrap" rowGap={0.75}>
+              {contactChannels.map((channel) => {
+                const iconKey = channel.label ? channel.label.toLowerCase() : '';
+                const key = channel.label ?? channel.href;
+
+                return (
+                  <Tooltip key={key} title={channel.label ?? ''} placement="top" arrow>
+                    <MuiLink
+                      href={channel.href}
+                      target={channel.href?.startsWith('http') ? '_blank' : undefined}
+                      rel={channel.href?.startsWith('http') ? 'noreferrer' : undefined}
+                      aria-label={channel.label}
+                      sx={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: 40,
+                        height: 40,
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.14) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
+                        color: '#1f2937',
+                        border: '1px solid rgba(var(--dark-cyan-rgb), 0.22)',
+                        transition: 'transform 200ms ease, box-shadow 200ms ease',
+                        boxShadow: '0 10px 22px rgba(85, 134, 140, 0.16)',
+                        '&:hover': {
+                          transform: 'translateY(-3px) scale(1.05)',
+                          boxShadow: '0 16px 28px rgba(85, 134, 140, 0.22)',
+                        },
+                      }}
+                    >
+                      {channelIcons[iconKey] ?? <LinkIcon fontSize="small" />}
+                    </MuiLink>
+                  </Tooltip>
+                );
+              })}
+            </Stack>
+          ) : null}
+
+          {intro ? (
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: { xs: '1.08rem', sm: '1.12rem' },
+                lineHeight: 1.7,
+                color: 'rgba(15, 23, 42, 0.82)',
+              }}
+            >
+              {intro}
+            </Typography>
+          ) : null}
+
+          {roleChips.length > 0 ? (
+            <Stack direction="row" spacing={1} flexWrap="wrap" rowGap={0.6}>
+              {roleChips.map((role) => (
+                <Chip
+                  key={role}
+                  label={role}
+                  size="small"
+                  sx={{
+                    backgroundColor: 'rgba(15, 23, 42, 0.08)',
+                    color: '#0f172a',
+                    fontWeight: 600,
+                    letterSpacing: 0.4,
+                  }}
+                />
+              ))}
+            </Stack>
+          ) : null}
+
+          {tenSeconds.length > 0 ? (
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 2.4, sm: 2.8 },
+                borderRadius: 3,
+                backgroundColor: 'rgba(255, 255, 255, 0.92)',
+                border: '1px solid rgba(15, 23, 42, 0.08)',
+                boxShadow: '0 12px 32px rgba(15, 23, 42, 0.12)',
+              }}
+            >
+              <Stack spacing={1.4}>
+                <Typography
+                  variant="overline"
+                  sx={{ letterSpacing: 3, fontWeight: 600, color: 'rgba(15, 23, 42, 0.7)' }}
+                >
+                  Me in 10 seconds
+                </Typography>
+                <Stack spacing={1.2}>
+                  {tenSeconds.map((paragraph, index) => (
+                    <Typography
+                      key={index}
+                      variant="body1"
+                      sx={{
+                        fontSize: { xs: '1.05rem', sm: '1.1rem' },
+                        lineHeight: 1.7,
+                        color: 'rgba(15, 23, 42, 0.82)',
+                      }}
+                    >
+                      {paragraph}
+                    </Typography>
+                  ))}
+                </Stack>
+              </Stack>
+            </Paper>
+          ) : null}
+
+          {skills.length > 0 ? (
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 2.2, sm: 2.6 },
+                borderRadius: 3,
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                border: '1px solid rgba(15, 23, 42, 0.08)',
+              }}
+            >
+              <Stack spacing={1.0}>
+                <Typography
+                  variant="overline"
+                  sx={{
+                    letterSpacing: 3,
+                    fontWeight: 700,
+                    color: '#1f2937',
+                    textAlign: 'left',
+                  }}
+                >
+                  Core Skills
+                </Typography>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                  {skills.map((skill) => (
+                    <Chip
+                      key={skill}
+                      label={skill}
+                      {...sharedChipProps}
+                      sx={{
+                        ...sharedChipSx,
+                        color: '#1f2937',
+                        borderColor: 'rgba(31,41,55,0.22)',
+                      }}
+                    />
+                  ))}
+                </Box>
+              </Stack>
+            </Paper>
+          ) : null}
+
+          {contactLinkItems.length > 0 ? (
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 2.2, sm: 2.6 },
+                borderRadius: 3,
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                border: '1px solid rgba(15, 23, 42, 0.08)',
+              }}
+            >
+              <Stack spacing={1.2}>
+                {contactLinkItems.map((item) => renderContactLink(item))}
+              </Stack>
+            </Paper>
+          ) : null}
+
+          {(resumeContactItem || contactCta?.href) ? (
+            <Stack
+              spacing={1}
+              direction={{ xs: 'column', sm: 'row' }}
+              alignItems={{ xs: 'stretch', sm: 'center' }}
+              justifyContent="flex-start"
+              sx={{
+                gap: { xs: 1, sm: 1.4 },
+                mt: 0.5,
+              }}
+            >
+              {resumeContactItem ? renderResumeButton(resumeContactItem) : null}
+              {contactCta?.href ? (
+                <Button
+                  component="a"
+                  href={contactCta.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  variant="outlined"
+                  size="medium"
+                  sx={{
+                    alignSelf: { xs: 'stretch', sm: 'flex-start' },
+                    textTransform: 'none',
+                    fontWeight: 700,
+                    letterSpacing: 0.6,
+                    borderRadius: 2.1,
+                    borderColor: 'rgba(15, 23, 42, 0.32)',
+                    color: '#0f172a',
+                  px: { xs: 2.6, sm: 2.2 },
+                  py: { xs: 0.88, sm: 0.72 },
+                  minWidth: { xs: '100%', sm: 200 },
+                  maxWidth: { xs: '100%', sm: 200 },
+                  fontSize: { sm: '0.95rem' },
+                    '&:hover': {
+                      borderColor: '#0f172a',
+                      backgroundColor: 'rgba(15, 23, 42, 0.08)',
+                    },
+                  }}
+                >
+                  {contactCta.label ?? 'Reserve a time'}
+                </Button>
+              ) : null}
+            </Stack>
+          ) : null}
+        </Stack>
+      </Box>
+    );
+  }
+
+  // Desktop layout shows the hero narrative alongside the avatar column.
   return (
     <Box
       id="welcome"
       sx={{
         position: 'relative',
-        width: '100vw',
-        minWidth: '100vw',
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
         height: '100vh',
         minHeight: '100vh',
         paddingRight: { xs: 3, md: 6, lg: 8 },
-        paddingLeft: {lg: 20 },
-        // py: { xs: 4, md: 5 },
+        paddingLeft: { lg: 20 },
         scrollMarginTop: { xs: 96, md: 128 },
         backgroundColor: 'transparent',
         color: '#0f172a',
@@ -270,32 +608,35 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
               {greeting}
             </Typography>
 
-            <Stack 
-              direction="row" 
-              spacing={4}
-              flexWrap="wrap"
-              justifyContent="left"
-              rowGap={0.5}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                alignItems: { xs: 'flex-start', md: 'center' },
+                gap: { xs: 1.8, md: 2.4 },
+                flexWrap: 'wrap',
+              }}
             >
               <Typography
-                variant="h2"
+                variant="h1"
                 component="h1"
                 sx={{
-                  fontWeight: 800,
-                  fontSize: { xs: '2.9rem', md: '3.4rem', lg: '3.8rem' },
+                  fontWeight: 1000,
+                  fontSize: { xs: '3.4rem', md: '3.9rem', lg: '4.3rem' },
                   lineHeight: 1.08,
+                  textAlign: 'left',
+                  minWidth: 0,
                 }}
               >
                 {name}
               </Typography>
-              {/* About Me  */}
+
               <Stack
                 direction="row"
                 spacing={0.6}
-                flexWrap="wrap"
-                justifyContent="center"
                 alignItems="center"
                 rowGap={0.5}
+                flexWrap="wrap"
               >
                 {contactChannels.map((channel) => {
                   const iconKey = channel.label ? channel.label.toLowerCase() : '';
@@ -332,25 +673,52 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                   );
                 })}
               </Stack>
-            </Stack>
-            {intro ? (
-              <Typography
-                variant="body1"
-                sx={{
-                  maxWidth: 720,
-                  fontSize: { xs: '1.06rem', md: '1.12rem' },
-                  lineHeight: 1.7,
-                  color: 'rgba(15, 23, 42, 0.82)',
-                }}
-              >
-                {intro}
-              </Typography>
-            ) : null}
+
+              {showCollapsedAvatar ? (
+                <Box
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 118,
+                    height: 118,
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.35) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
+                    border: '2px solid rgba(255, 255, 255, 0.68)',
+                    boxShadow: '0 24px 36px rgba(85, 134, 140, 0.28)',
+                    ml: { md: 2 },
+                  }}
+                >
+                  <Avatar
+                    alt={name || 'Profile'}
+                    src={avatarSrc ?? undefined}
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      border: '4px solid rgba(255, 255, 255, 0.82)',
+                    }}
+                  />
+                </Box>
+              ) : null}
+            </Box>
+          {intro ? (
+            <Typography
+              variant="body1"
+              sx={{
+                maxWidth: 720,
+                fontSize: { xs: '1.06rem', md: '1.12rem' },
+                lineHeight: 1.7,
+                color: 'rgba(15, 23, 42, 0.82)',
+              }}
+            >
+              {intro}
+            </Typography>
+          ) : null}
           </Stack>
 
-          {supportingRoles.length > 0 && (
+          {roleChips.length > 0 && (
             <Stack direction="row" spacing={1} flexWrap="wrap" rowGap={0.6}>
-              {supportingRoles.map((role) => (
+              {roleChips.map((role) => (
                 <Chip
                   key={role}
                   label={role}
@@ -365,7 +733,6 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
               ))}
             </Stack>
           )}
-
           {tenSeconds.length > 0 && (
             <Stack spacing={1.4}>
               <Typography
@@ -442,15 +809,18 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                   variant="outlined"
                   size="medium"
                   sx={{
+                    alignSelf: { xs: 'stretch', sm: 'flex-start' },
                     textTransform: 'none',
                     fontWeight: 700,
                     letterSpacing: 0.6,
                     borderRadius: 2.1,
                     borderColor: 'rgba(15, 23, 42, 0.32)',
                     color: '#0f172a',
-                    px: 2.6,
-                    py: 0.88,
-                    minWidth: { xs: '100%', sm: 'auto' },
+                    px: { xs: 2.6, sm: 2.2 },
+                    py: { xs: 0.88, sm: 0.72 },
+                    minWidth: { xs: '100%', sm: 200 },
+                    maxWidth: { xs: '100%', sm: 200 },
+                    fontSize: { sm: '0.95rem' },
                     '&:hover': {
                       borderColor: '#0f172a',
                       backgroundColor: 'rgba(15, 23, 42, 0.08)',
@@ -463,18 +833,18 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
             </Stack>
           ) : null}
 
-        </Stack>
-        
-        {/* Avatar box */}
+          </Stack>
+
+        {/* Snapshot column: avatar, rotating snapshot content, contact links */}
         <Box
           sx={(theme) => ({
-            flex: { xs: 'none', md: 1 },
+            flex: { xs: 'none', md: '0 0 312px' },
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: 0,
             ml: { md: 'auto' },
-            maxWidth: { md: 280 },
+            maxWidth: { md: 312 },
             transition: 'transform 680ms cubic-bezier(0.22, 1, 0.36, 1), opacity 360ms ease',
             transform: 'translateX(0)',
             opacity: 1,
@@ -485,195 +855,295 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
             },
           })}
         >
-          <Paper
-            elevation={0}
+          <Box
+            onClick={handleAvatarToggle}
+            onKeyDown={handleAvatarKeyDown}
+            role={canToggleFunFact ? 'button' : undefined}
+            tabIndex={canToggleFunFact ? 0 : undefined}
+            aria-pressed={canToggleFunFact ? isFunFactActive : undefined}
+            aria-label={canToggleFunFact ? 'Toggle fun fact view' : undefined}
             sx={{
-              borderRadius: 5,
-              px: { xs: 2.4, sm: 2.8, md: 3.4 },
-              py: { xs: 2.6, sm: 3, md: 4 },
-              background:
-                'linear-gradient(170deg, rgba(var(--dark-cyan-rgb), 0.18) 0%, rgba(255,255,255,0.96) 68%)',
+              borderRadius: { xs: 3, md: 4 },
               border: '1px solid rgba(var(--dark-cyan-rgb), 0.24)',
-              boxShadow: '0 24px 52px rgba(85, 134, 140, 0.18)',
+              background: 'linear-gradient(180deg, rgba(163, 194, 180, 0.92) 0%, rgba(255, 255, 255, 0.96) 100%)',
+              boxShadow: '0 24px 64px rgba(85, 134, 140, 0.28)',
+              backdropFilter: 'blur(14px)',
+              WebkitBackdropFilter: 'blur(14px)',
               overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
-              width: { xs: '100%', sm: 'min(340px, 100%)', md: 320 },
-              maxWidth: { xs: '100%', md: 320 },
+              width: { xs: '100%', sm: 'min(320px, 100%)', md: 312 },
+              minWidth: { xs: 'auto', md: 312 },
+              maxWidth: { xs: '100%', md: 312 },
               mr: { md: 0 },
               ml: { md: 'auto' },
-              minWidth: 0,
-              height: 'auto',
-              overflowY: 'auto',
+              minHeight: 'auto',
+              maxHeight: 'none',
+              overflowY: 'visible',
               mt: { xs: 3, md: 2 },
+              px: { xs: 2.4, sm: 2.8, md: 3.2 },
+              py: { xs: 2.6, sm: 3, md: 3.6 },
+              transition: 'transform 280ms ease, box-shadow 280ms ease',
+              willChange: 'transform, box-shadow',
+              cursor: canToggleFunFact ? 'pointer' : 'default',
+              outline: 'none',
+              textAlign: 'left',
+              font: 'inherit',
+              '&:hover': {
+                transform: 'translateY(-10px)',
+                boxShadow: '0 32px 72px rgba(85, 134, 140, 0.36)',
+              },
+              ...(canToggleFunFact
+                ? {
+                    '&:hover .avatar-ring': {
+                      transform: 'translateY(-6px)',
+                      boxShadow: '0 36px 64px rgba(85, 134, 140, 0.36)',
+                    },
+                  }
+                : {}),
+              '&:focus-visible': {
+                outline: '3px solid rgba(var(--dark-cyan-rgb), 0.38)',
+                outlineOffset: 6,
+              },
             }}
           >
             <Stack
               id="avatar-block"
-              // spacing={{ xs: 2.6, md: 3.2 }}
-              alignItems="center"
-              sx={{ width: '100%', justifyContent: 'flex-start', flexGrow: 1, minHeight: 0 }}
+              spacing={{ xs: 2.4, md: 2.6 }}
+              divider={
+                hasCardSections ? (
+                  <Divider
+                    flexItem
+                    sx={{
+                      borderColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+                      alignSelf: 'stretch',
+                      my: { xs: 1.8, md: 2 },
+                    }}
+                  />
+                ) : null
+              }
+              sx={{ width: '100%', flexGrow: 1, minHeight: 0 }}
             >
-              <Box
-                sx={{
-                  position: 'relative',
-                  width: { xs: 'min(176px, 52vw)', sm: 'min(188px, 48vw)', md: 164 },
-                  height: { xs: 'min(176px, 52vw)', sm: 'min(188px, 48vw)', md: 164 },
-                  borderRadius: '50%',
-                  background:
-                    'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.35) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '2px solid rgba(255, 255, 255, 0.65)',
-                  boxShadow: '0 24px 36px rgba(85, 134, 140, 0.28)',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    inset: 12,
-                    borderRadius: '50%',
-                    border: '1px dashed rgba(var(--dark-cyan-rgb), 0.24)',
-                    pointerEvents: 'none',
-                  },
-                }}
-              >
-                <Avatar
-                  alt={name || 'Profile'}
-                  src={avatarSrc ?? undefined}
+              <Box sx={{ width: '100%' }}>
+                {/* Avatar portrait with hover ring and primary role */}
+                <Box
                   sx={{
-                    width: { xs: 'calc(100% - 28px)', md: 140 },
-                    height: { xs: 'calc(100% - 28px)', md: 140 },
-                    border: '4px solid rgba(255, 255, 255, 0.8)',
-                  }}
-                />
-              </Box>
-              <br></br>
-
-              {affiliations.length > 0 && (
-                <Stack spacing={{ xs: 1.2, md: 1.4 }} sx={{ width: '100%' }}>
-                  <Stack direction="row" spacing={1.25} justifyContent="center" flexWrap="wrap">
-                    {affiliations.map((affiliation) => (
-                      <Avatar
-                        key={affiliation.name}
-                        alt={affiliation.name}
-                        src={affiliation.src ?? undefined}
-                        sx={{ width: 44, height: 44 }}
-                      />
-                    ))}
-                  </Stack>
-                </Stack>
-              )}
-
-              {primaryRole ? (
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: 900,
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: { xs: 1.8, md: 2.4 },
                     textAlign: 'center',
-                    color: '#1f2937',
-                    textShadow: '0 12px 26px rgba(0,0,0,0.16)',
-                    mt: { xs: 1.6, md: 1.8 },
-                    paddingBottom: { xs: 1.2, md: 1.4 }
                   }}
                 >
-                  {primaryRole}
-                </Typography>
-              ) : null}
-              <Divider flexItem sx={{ borderColor: 'rgba(var(--dark-cyan-rgb), 0.18)' }} />
-
-              {skills.length > 0 && (
-                <Stack spacing={{ xs: 1.6, md: 1.8 }} sx={{ width: '100%' }}>
-                  <Typography
-                    variant="overline"
+                  <Box
+                    className="avatar-ring"
                     sx={{
-                      letterSpacing: 3,
-                      color: '#1f2937',
-                      fontWeight: 700,
-                      textAlign: 'center',
-                      fontSize: { xs: '0.9rem', md: '1rem' },
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: { xs: 'min(212px, 56vw)', sm: 'min(220px, 46vw)', md: desktopAvatarFrameSize },
+                      height: { xs: 'min(212px, 56vw)', sm: 'min(220px, 46vw)', md: desktopAvatarFrameSize },
+                      borderRadius: '50%',
+                      background:
+                        'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.38) 0%, rgba(var(--dark-cyan-rgb), 0.16) 100%)',
+                      border: '2px solid rgba(255, 255, 255, 0.65)',
+                      boxShadow: '0 28px 44px rgba(85, 134, 140, 0.34)',
+                      transition: 'transform 260ms ease, box-shadow 260ms ease',
                     }}
                   >
-                    Core Skills
-                  </Typography>
-                  <Divider flexItem sx={{ borderColor: 'rgba(var(--dark-cyan-rgb), 0.18)' }} />
-                  
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, justifyContent: 'center' }}>
-                    {skills.map((skill) => (
-                      <Chip
-                        key={skill}
-                        label={skill}
-                        {...sharedChipProps}
-                        sx={{
-                          ...sharedChipSx,
-                          color: '#1f2937',
-                          borderColor: 'rgba(31,41,55,0.22)',
-                        }}
-                      />
-                    ))}
+                    <Avatar
+                      alt={name || 'Profile'}
+                      src={avatarSrc ?? undefined}
+                      sx={{
+                        width: { xs: 'calc(100% - 32px)', sm: 'calc(100% - 36px)', md: desktopAvatarSize },
+                        height: { xs: 'calc(100% - 32px)', sm: 'calc(100% - 36px)', md: desktopAvatarSize },
+                        border: {
+                          xs: '3px solid rgba(255, 255, 255, 0.88)',
+                          md: '4px solid rgba(255, 255, 255, 0.82)',
+                        },
+                        boxShadow: '0 24px 46px rgba(15, 23, 42, 0.24)',
+                      }}
+                    />
                   </Box>
-                </Stack>
-              )}
+                  {primaryRole ? (
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight: 1000,
+                        color: '#0f172a',
+                        letterSpacing: 0.6,
+                        textShadow: '3px 1px 1px rgba(169, 220, 174, 0.88)',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {primaryRole}
+                    </Typography>
+                  ) : null}
+                  {affiliations.length > 0 ? (
+                    <Stack
+                      direction="row"
+                      spacing={1.1}
+                      flexWrap="wrap"
+                      rowGap={1}
+                      justifyContent="center"
+                    >
+                      {affiliations.map((affiliation) => {
+                        const googleSearchHref = affiliation?.name
+                          ? `https://www.google.com/search?q=${encodeURIComponent(affiliation.name)}`
+                          : undefined;
 
-              {contactChannels.length > 0 && (
-                <Stack spacing={0.8} alignItems="center" sx={{ width: '100%' }}>
-                  <Typography
-                    variant="overline"
-                    sx={{
-                      letterSpacing: 3,
-                      color: '#1f2937',
-                      fontWeight: 700,
-                      textAlign: 'center',
-                      fontSize: { xs: '0.9rem', md: '1rem' },
-                    }}
-                  >
-                    Quick Links
-                  </Typography>
-                  <Stack
-                    direction="row"
-                    spacing={0.6}
-                    flexWrap="wrap"
-                    justifyContent="center"
-                    rowGap={0.5}
-                  >
-                    {contactChannels.map((channel) => {
-                      const iconKey = channel.label ? channel.label.toLowerCase() : '';
-                      const key = channel.label ?? channel.href;
-
-                      return (
-                        <Tooltip key={key} title={channel.label ?? ''} placement="top" arrow>
-                          <MuiLink
-                            href={channel.href}
-                            target={channel.href?.startsWith('http') ? '_blank' : undefined}
-                            rel={channel.href?.startsWith('http') ? 'noreferrer' : undefined}
-                            aria-label={channel.label}
+                        const avatarNode = (
+                          <Avatar
+                            alt={affiliation.name}
+                            src={affiliation.src ?? undefined}
                             sx={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: 40,
-                              height: 40,
-                              borderRadius: '50%',
-                              background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.14) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
-                              color: '#1f2937',
-                              border: '1px solid rgba(var(--dark-cyan-rgb), 0.22)',
-                              transition: 'transform 200ms ease, box-shadow 200ms ease',
-                              boxShadow: '0 10px 22px rgba(85, 134, 140, 0.16)',
-                              '&:hover': {
-                                transform: 'translateY(-3px) scale(1.05)',
-                                boxShadow: '0 16px 28px rgba(85, 134, 140, 0.22)',
-                              },
+                              width: 42,
+                              height: 42,
+                              boxShadow: '0 10px 18px rgba(15, 23, 42, 0.18)',
+                              border: '2px solid rgba(255, 255, 255, 0.8)',
+                            }}
+                          />
+                        );
+
+                        return (
+                          <Tooltip key={affiliation.name} title={affiliation.name ?? ''} placement="top" arrow>
+                            {googleSearchHref ? (
+                              <MuiLink
+                                href={googleSearchHref}
+                                target="_blank"
+                                rel="noreferrer"
+                                underline="none"
+                                sx={{ display: 'inline-flex' }}
+                                onClick={(event) => event.stopPropagation()}
+                                onKeyDown={(event) => event.stopPropagation()}
+                              >
+                                {avatarNode}
+                              </MuiLink>
+                            ) : (
+                              avatarNode
+                            )}
+                          </Tooltip>
+                        );
+                      })}
+                    </Stack>
+                  ) : null}
+                </Box>
+              </Box>
+
+              {hasCardSections ? (
+                <Stack
+                  spacing={{ xs: 2.4, md: 2.6 }}
+                  divider={
+                    <Divider
+                      flexItem
+                      sx={{
+                        borderColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+                        alignSelf: 'stretch',
+                        my: { xs: 1.8, md: 2 },
+                      }}
+                    />
+                  }
+                  sx={{ width: '100%', flexGrow: 1, minHeight: 0 }}
+                  alignItems="flex-start"
+                >
+                  {/* Skills / fun fact snapshot - fades between the two */}
+                  {(hasSkills || hasFunFact) ? (
+                    <SnapshotSection title={snapshotTitle}>
+                      <Box
+                        sx={{
+                          position: 'relative',
+                          width: '100%',
+                          display: 'grid',
+                          alignItems: 'start',
+                          justifyItems: 'start',
+                        }}
+                      >
+                        {hasSkills ? (
+                          <Box
+                            sx={{
+                              gridArea: '1 / 1 / 2 / 2',
+                              opacity: isFunFactActive ? 0 : 1,
+                              pointerEvents: isFunFactActive ? 'none' : 'auto',
+                              transition: 'opacity 260ms ease',
+                              width: '100%',
                             }}
                           >
-                            {channelIcons[iconKey] ?? <LinkIcon fontSize="small" />}
-                          </MuiLink>
-                        </Tooltip>
-                      );
-                    })}
-                  </Stack>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                justifyContent: 'flex-start',
+                                gap: 0.9,
+                              }}
+                            >
+                              {skills.map((skill) => (
+                                <Chip
+                                  key={skill}
+                                  label={skill}
+                                  {...sharedChipProps}
+                                  sx={{
+                                    ...sharedChipSx,
+                                    color: '#1f2937',
+                                    borderColor: 'rgba(31,41,55,0.2)',
+                                    px: 1.4,
+                                  }}
+                                />
+                              ))}
+                            </Box>
+                          </Box>
+                        ) : null}
+
+                        {hasFunFact ? (
+                          <Box
+                            sx={{
+                              gridArea: '1 / 1 / 2 / 2',
+                              opacity: isFunFactActive ? 1 : 0,
+                              pointerEvents: isFunFactActive ? 'auto' : 'none',
+                              transition: 'opacity 260ms ease',
+                              width: '100%',
+                            }}
+                          >
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: 'rgba(0, 0, 0, 0.64)',
+                                textAlign: 'left',
+                                // textShadow: '3px 1px 1px rgba(169, 220, 174, 0.88)',
+                                lineHeight: 1.6,
+                                fontSize: { xs: '0.82rem', md: '0.88rem' },
+                                maxWidth: 300,
+                                mx: 0,
+                              }}
+                            >
+                              {funFact}
+                            </Typography>
+                          </Box>
+                        ) : null}
+                      </Box>
+                    </SnapshotSection>
+                  ) : null}
+
+                  {/* Current project blurb */}
+                  {currentlyWorkingOn ? (
+                    <SnapshotSection title="Currently Working On:">
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: 'rgba(15, 23, 42, 0.78)',
+                          lineHeight: 1.5,
+                          textAlign: 'left',
+                          maxWidth: 320,
+                        }}
+                      >
+                        {currentlyWorkingOn}
+                      </Typography>
+                    </SnapshotSection>
+                  ) : null}
                 </Stack>
-              )}
+              ) : null}
             </Stack>
-          </Paper>
+          </Box>
         </Box>
       </Box>
     </Box>
