@@ -132,7 +132,7 @@ function BlogPage() {
           sx={{
             letterSpacing: 4,
             fontWeight: 700,
-            color: 'rgba(71, 85, 105, 0.8)',
+            color: '#000000',
           }}
         >
           Dispatches & Field Notes
@@ -142,7 +142,7 @@ function BlogPage() {
           sx={{
             fontWeight: 800,
             mt: 1,
-            color: '#111827',
+            color: '#000000',
           }}
         >
           Blog
@@ -153,7 +153,7 @@ function BlogPage() {
             mt: 2,
             maxWidth: 720,
             mx: 'auto',
-            color: 'rgba(71, 85, 105, 0.88)',
+            color: '#000000',
           }}
         >
           Ideas, experiments, and quick takeaways captured as sticky notes. Pop one open to
@@ -243,7 +243,7 @@ function BlogPage() {
                       sx={{
                         letterSpacing: 2.8,
                         fontWeight: 700,
-                        color: 'rgba(17, 24, 39, 0.65)',
+                        color: '#000000',
                       }}
                     >
                       {post.date ?? post.category ?? 'Field Note'}
@@ -253,7 +253,7 @@ function BlogPage() {
                       sx={{
                         fontWeight: 800,
                         lineHeight: 1.1,
-                        color: '#111827',
+                        color: '#000000',
                         maxWidth: '100%',
                       }}
                     >
@@ -265,7 +265,7 @@ function BlogPage() {
                     variant="body1"
                     sx={{
                       flexGrow: 1,
-                      color: 'rgba(17, 24, 39, 0.74)',
+                      color: '#000000',
                     }}
                   >
                     {preview}
@@ -280,7 +280,7 @@ function BlogPage() {
                           size="small"
                           sx={{
                             backgroundColor: 'rgba(17, 24, 39, 0.12)',
-                            color: '#111827',
+                            color: '#000000',
                             fontWeight: 600,
                             letterSpacing: 0.4,
                           }}
@@ -336,16 +336,16 @@ function BlogPage() {
                   sx={{
                     letterSpacing: 3,
                     fontWeight: 700,
-                    color: 'rgba(71, 85, 105, 0.8)',
+                    color: '#000000',
                   }}
                 >
                   {activePost.date ?? activePost.category ?? 'Field Note'}
                 </Typography>
-                <Typography variant={isSmall ? 'h5' : 'h4'} sx={{ fontWeight: 800, color: '#0f172a' }}>
+                <Typography variant={isSmall ? 'h5' : 'h4'} sx={{ fontWeight: 800, color: '#000000' }}>
                   {activePost.title}
                 </Typography>
                 {activePost.subtitle ? (
-                  <Typography variant="subtitle1" sx={{ color: 'rgba(71, 85, 105, 0.9)' }}>
+                  <Typography variant="subtitle1" sx={{ color: '#000000' }}>
                     {activePost.subtitle}
                   </Typography>
                 ) : null}
@@ -358,7 +358,7 @@ function BlogPage() {
                         size="small"
                         sx={{
                           backgroundColor: 'rgba(15, 23, 42, 0.1)',
-                          color: '#0f172a',
+                          color: '#000000',
                           fontWeight: 600,
                           letterSpacing: 0.4,
                         }}
@@ -372,7 +372,7 @@ function BlogPage() {
                 onClick={handleClose}
                 sx={{
                   backgroundColor: 'rgba(15, 23, 42, 0.06)',
-                  color: '#0f172a',
+                  color: '#000000',
                   '&:hover': {
                     backgroundColor: 'rgba(15, 23, 42, 0.12)',
                   },
@@ -390,7 +390,7 @@ function BlogPage() {
                 {(Array.isArray(activePost.content) ? activePost.content : [activePost.content])
                   .filter(Boolean)
                   .map((paragraph, index) => (
-                    <Typography key={index} variant="body1" sx={{ color: 'rgba(15, 23, 42, 0.84)', lineHeight: 1.8 }}>
+                    <Typography key={index} variant="body1" sx={{ color: '#000000', lineHeight: 1.8 }}>
                       {paragraph}
                     </Typography>
                   ))}
@@ -405,10 +405,10 @@ function BlogPage() {
                       backgroundColor: 'rgba(15, 23, 42, 0.04)',
                     }}
                   >
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#0f172a', mb: 1 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#000000', mb: 1 }}>
                       Next Up
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'rgba(15, 23, 42, 0.72)' }}>
+                    <Typography variant="body2" sx={{ color: '#000000' }}>
                       {activePost.callToAction}
                     </Typography>
                   </Box>
@@ -416,7 +416,7 @@ function BlogPage() {
 
                 {activePost.links && activePost.links.length > 0 ? (
                   <Stack spacing={1.2}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#0f172a' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#000000' }}>
                       Further Reading
                     </Typography>
                     <Stack spacing={0.8}>

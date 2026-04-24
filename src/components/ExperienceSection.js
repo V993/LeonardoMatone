@@ -33,8 +33,11 @@ function ExperienceSection({ navOffset = false }) {
   const overview = experienceCopy ?? {};
   const statsCopy = overview.stats ?? {};
   const activeDescription = statsCopy.active?.description ?? '';
+  const activeCount = statsCopy.active?.count ?? 0;
   const yearsDescription = statsCopy.years?.description ?? '';
+  const yearsCount = statsCopy.years?.count ?? null;
   const teamsDescription = statsCopy.teams?.description ?? '';
+  const teamsCount = statsCopy.teams?.count ?? 0;
 
   const activeRoles = currentJobs.length;
   const archivedRoles = pastJobs.length;
@@ -138,15 +141,15 @@ function ExperienceSection({ navOffset = false }) {
         {
           key: 'active',
           label: 'Active Roles',
-          value: 2,
+          value: activeCount,
           description: activeDescription,
           icon: WorkspacePremiumRoundedIcon,
         },
-        computedYears
+        (yearsCount ?? computedYears)
           ? {
               key: 'years',
               label: 'Years',
-              value: computedYears,
+              value: yearsCount ?? computedYears,
               description: yearsDescription,
               icon: AccessTimeRoundedIcon,
             }
@@ -154,7 +157,7 @@ function ExperienceSection({ navOffset = false }) {
         {
           key: 'teams',
           label: 'Interdisciplinary Collaborations',
-          value: 2,
+          value: teamsCount,
           description: teamsDescription,
           icon: Groups2RoundedIcon,
         },
@@ -243,7 +246,7 @@ function ExperienceSection({ navOffset = false }) {
             }}
           >
             {summary ? (
-              <Typography variant="body2" sx={{ fontWeight: 350, color: 'rgba(15, 23, 42, 0.9)', lineHeight: 1.6 }}>
+              <Typography variant="body2" sx={{ fontWeight: 350, color: '#000000', lineHeight: 1.6 }}>
                 {summary}
               </Typography>
             ) : null}
@@ -262,7 +265,7 @@ function ExperienceSection({ navOffset = false }) {
                 <Typography
                   component="li"
                   variant="subtitle2"
-                  sx={{ fontWeight: 700, color: 'rgba(15, 23, 42, 0.9)', mb: 0.2 }}
+                  sx={{ fontWeight: 700, color: '#000000', mb: 0.2 }}
                 >
                   Highlights
                 </Typography>
@@ -276,7 +279,7 @@ function ExperienceSection({ navOffset = false }) {
                       paddingLeft: '1.45rem',
                       lineHeight: 1.62,
                       fontWeight: 350,
-                      color: '#0f172a',
+                      color: '#000000',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -410,7 +413,9 @@ function ExperienceSection({ navOffset = false }) {
         py: { xs: 3, md: 4 },
         scrollMarginTop: { xs: 96, md: 128 },
         background: 'none',
-        overflow: 'hidden',
+        overflowX: 'hidden',
+        overflowY: 'visible',
+        zIndex: 2,
         pl: {
           xs: 2.4,
           md: 6,
@@ -451,11 +456,12 @@ function ExperienceSection({ navOffset = false }) {
                 ) : null}
               </Stack>
 
+              {/* summary */}
               <Box
                 sx={{
                   borderRadius: 3,
                   border: '1px solid rgba(var(--experience-rgb), 0.3)',
-                  background: 'linear-gradient(165deg, rgba(var(--experience-rgb), 0.18) 0%, rgba(255,255,255,0.94) 70%)',
+                  background: 'linear-gradient(165deg, rgba(var(--experience-rgb), 0.18) 0%, rgb(255, 255, 255) 0%)',
                   p: { xs: 2.2, md: 2.6 },
                   display: 'flex',
                   flexDirection: 'column',
@@ -475,7 +481,8 @@ function ExperienceSection({ navOffset = false }) {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: 'rgba(var(--experience-rgb), 0.16)',
+                            backgroundColor: 'rgb(255, 255, 255)',
+                            border: '1px solid rgba(var(--experience-rgb), 0.18)',
                           }}
                         >
                           <Icon sx={{ color: 'rgb(var(--experience-rgb))' }} />
@@ -562,8 +569,8 @@ function ExperienceSection({ navOffset = false }) {
                   const translateX = offsetX * depth;
                   const translateY = offsetY * depth;
                   const cardBackground = isActive
-                    ? 'linear-gradient(160deg, rgba(var(--experience-rgb), 0.95) 0%, rgba(255,255,255,0.98) 72%)'
-                    : 'linear-gradient(164deg, rgba(var(--experience-rgb), 0.78) 0%, rgba(255,255,255,0.92) 85%)';
+                    ? 'linear-gradient(rgb(255, 255, 255) 30%)'
+                    : 'linear-gradient(rgba(255,255,255,0.5) 30%)';
                   const cardBorder = isActive
                     ? '1px solid rgba(var(--experience-rgb), 0.56)'
                     : '1px solid rgba(var(--experience-rgb), 0.32)';
@@ -571,7 +578,6 @@ function ExperienceSection({ navOffset = false }) {
                   //   ? '0 34px 68px -38px rgba(15,23,42,0.55), 0 22px 48px -28px rgba(15,23,42,0.35)'
                   //   : '0 28px 52px -42px rgba(15,23,42,0.35), 0 18px 34px -28px rgba(15,23,42,0.25)';
                   const cardOverlayBorder = isActive ? 'rgba(255,255,255,0.38)' : 'rgba(255,255,255,0.28)';
-                  const accentGlow = isActive ? 'rgba(var(--experience-rgb), 0.58)' : 'rgba(var(--experience-rgb), 0.36)';
                   const inactiveOpacity = isActive ? 1 : 0.92;
 
                   const handleCardClick = (event) => {
@@ -625,18 +631,6 @@ function ExperienceSection({ navOffset = false }) {
                           border: `1px solid ${cardOverlayBorder}`,
                           pointerEvents: 'none',
                         },
-                        '&::after': {
-                          content: '""',
-                          position: 'absolute',
-                          top: 16,
-                          left: 24,
-                          right: 24,
-                          height: 2,
-                          borderRadius: 999,
-                          background: `linear-gradient(90deg, transparent 0%, ${accentGlow} 18%, rgba(255,255,255,0.65) 48%, ${accentGlow} 82%, transparent 100%)`,
-                          opacity: isActive ? 1 : 0.75,
-                          pointerEvents: 'none',
-                        },
                         '&:hover': totalJobs > 1
                           ? {
                               boxShadow: '100px 0 100px -100px rgba(15,23,42,0.58)',
@@ -659,7 +653,7 @@ function ExperienceSection({ navOffset = false }) {
                     sx={{
                       borderRadius: 3,
                       border: '1px solid rgba(var(--experience-rgb), 0.32)',
-                      background: 'linear-gradient(160deg, rgba(var(--experience-rgb), 0.18) 0%, rgba(255,255,255,0.96) 76%)',
+                      background: 'linear-gradient(160deg, rgba(var(--experience-rgb), 0.18) 0%, rgba(255,255,255,1.0) 76%)',
                       p: 2.4,
                     }}
                   >

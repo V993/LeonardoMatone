@@ -22,7 +22,7 @@ import PhoneEnabledRoundedIcon from '@mui/icons-material/PhoneEnabledRounded';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import idPicture from '../assets/id-picture.jpg';
-import icelandPicture from '../assets/iceland.jpeg';
+import icelandPortrait from '../assets/iceland.jpeg';
 import hfBadge from '../assets/hf.png';
 import tulaneBadge from '../assets/tulane.png';
 import hunterBadge from '../assets/hunter.png';
@@ -31,14 +31,18 @@ import {
   contact as contactData,
 } from '../data';
 import { sharedChipProps, sharedChipSx } from '../styles/chipStyles';
+import { textOnLight, textOnDark } from '../styles/palette';
 
 const assetSources = {
   'id-picture.jpg': idPicture,
+  'iceland.jpeg': icelandPortrait,
   'hf.png': hfBadge,
   'tulane.png': tulaneBadge,
   'hunter.png': hunterBadge,
-  'iceland.jpeg': icelandPicture
 };
+
+const textPalette = textOnLight;
+const textOnDarkSurface = textOnDark;
 
 const channelIcons = {
   email: <EmailOutlinedIcon fontSize="small" />,
@@ -59,7 +63,7 @@ const desktopAvatarSize = 188;
 const snapshotHeadingSx = {
   letterSpacing: 3,
   fontWeight: 700,
-  color: '#1f2937',
+  color: textPalette.primary,
   textAlign: 'left',
   textTransform: 'uppercase',
   fontSize: { xs: '0.8rem', md: '0.86rem' },
@@ -184,7 +188,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
             justifyContent: 'center',
             backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
             border: '1px solid rgba(var(--dark-cyan-rgb), 0.24)',
-            color: '#0f172a',
+            color: textPalette.strong,
           }}
         >
           {contactDetailIcons[item?.type] ?? <LinkIcon fontSize="small" />}
@@ -193,12 +197,12 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
           {item?.label ? (
             <Typography
               variant="caption"
-              sx={{ textTransform: 'uppercase', letterSpacing: 1.2, fontWeight: 600, color: 'rgba(15, 23, 42, 0.56)' }}
+              sx={{ textTransform: 'uppercase', letterSpacing: 1.2, fontWeight: 600, color: textPalette.muted }}
             >
               {item.label}
             </Typography>
           ) : null}
-          <Typography variant="body1" sx={{ fontWeight: 700, color: '#0f172a' }}>
+          <Typography variant="body1" sx={{ fontWeight: 700, color: textPalette.strong }}>
             {item?.value ?? ''}
           </Typography>
         </Box>
@@ -259,8 +263,8 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
         startIcon={contactDetailIcons.resume}
         sx={{
           alignSelf: { xs: 'stretch', sm: 'flex-start' },
-          backgroundColor: '#1f2937',
-          color: '#f8fafc',
+          backgroundColor: textPalette.primary,
+          color: textOnDarkSurface.strong,
           fontWeight: 700,
           textTransform: 'none',
           px: { xs: 2.6, sm: 2.4 },
@@ -295,7 +299,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
           pb: { xs: 6, sm: 7 },
           scrollMarginTop: 96,
           backgroundColor: 'transparent',
-          color: '#0f172a',
+          color: textPalette.strong,
           boxSizing: 'border-box',
         }}
       >
@@ -305,7 +309,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
             <Stack spacing={primaryRole ? 0.9 : 0.6}>
               <Typography
                 variant="overline"
-                sx={{ letterSpacing: 3, color: 'rgba(15, 23, 42, 0.6)', fontWeight: 600 }}
+                sx={{ letterSpacing: 3, color: textPalette.muted, fontWeight: 600 }}
               >
                 {greeting}
               </Typography>
@@ -330,7 +334,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                 sx={{
                   width: 'clamp(78px, 20vw, 144px)',
                   height: 'clamp(78px, 20vw, 144px)',
-                  border: '3px solid rgba(15, 23, 42, 0.12)',
+                  border: '3px solid rgba(0, 0, 0, 0.12)',
                   boxShadow: '0 12px 26px rgba(15, 23, 42, 0.16)',
                   transition: 'width 220ms ease, height 220ms ease',
                 }}
@@ -359,7 +363,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                         height: 40,
                         borderRadius: '50%',
                         background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.14) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
-                        color: '#1f2937',
+                        color: textPalette.primary,
                         border: '1px solid rgba(var(--dark-cyan-rgb), 0.22)',
                         transition: 'transform 200ms ease, box-shadow 200ms ease',
                         boxShadow: '0 10px 22px rgba(85, 134, 140, 0.16)',
@@ -383,7 +387,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
               sx={{
                 fontSize: { xs: '1.08rem', sm: '1.12rem' },
                 lineHeight: 1.7,
-                color: 'rgba(15, 23, 42, 0.82)',
+                color: textPalette.primary,
               }}
             >
               {intro}
@@ -398,8 +402,8 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                   label={role}
                   size="small"
                   sx={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.08)',
-                    color: '#0f172a',
+                    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                    color: textPalette.strong,
                     fontWeight: 600,
                     letterSpacing: 0.4,
                   }}
@@ -415,14 +419,14 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                 p: { xs: 2.4, sm: 2.8 },
                 borderRadius: 3,
                 backgroundColor: 'rgba(255, 255, 255, 0.92)',
-                border: '1px solid rgba(15, 23, 42, 0.08)',
-                boxShadow: '0 12px 32px rgba(15, 23, 42, 0.12)',
+                border: '1px solid rgba(0, 0, 0, 0.08)',
+                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.12)',
               }}
             >
               <Stack spacing={1.4}>
                 <Typography
                   variant="overline"
-                  sx={{ letterSpacing: 3, fontWeight: 600, color: 'rgba(15, 23, 42, 0.7)' }}
+                  sx={{ letterSpacing: 3, fontWeight: 600, color: textPalette.muted }}
                 >
                   Me in 10 seconds
                 </Typography>
@@ -434,7 +438,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                       sx={{
                         fontSize: { xs: '1.05rem', sm: '1.1rem' },
                         lineHeight: 1.7,
-                        color: 'rgba(15, 23, 42, 0.82)',
+                        color: textPalette.primary,
                       }}
                     >
                       {paragraph}
@@ -452,7 +456,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                 p: { xs: 2.2, sm: 2.6 },
                 borderRadius: 3,
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                border: '1px solid rgba(15, 23, 42, 0.08)',
+                border: '1px solid rgba(0, 0, 0, 0.08)',
               }}
             >
               <Stack spacing={1.0}>
@@ -461,7 +465,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                   sx={{
                     letterSpacing: 3,
                     fontWeight: 700,
-                    color: '#1f2937',
+                    color: textPalette.primary,
                     textAlign: 'left',
                   }}
                 >
@@ -475,7 +479,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                       {...sharedChipProps}
                       sx={{
                         ...sharedChipSx,
-                        color: '#1f2937',
+                        color: textPalette.primary,
                         borderColor: 'rgba(31,41,55,0.22)',
                       }}
                     />
@@ -492,7 +496,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                 p: { xs: 2.2, sm: 2.6 },
                 borderRadius: 3,
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                border: '1px solid rgba(15, 23, 42, 0.08)',
+                border: '1px solid rgba(0, 0, 0, 0.08)',
               }}
             >
               <Stack spacing={1.2}>
@@ -528,15 +532,15 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                     letterSpacing: 0.6,
                     borderRadius: 2.1,
                     borderColor: 'rgba(15, 23, 42, 0.32)',
-                    color: '#0f172a',
+                    color: textPalette.strong,
                   px: { xs: 2.6, sm: 2.2 },
                   py: { xs: 0.88, sm: 0.72 },
                   minWidth: { xs: '100%', sm: 200 },
                   maxWidth: { xs: '100%', sm: 200 },
                   fontSize: { sm: '0.95rem' },
                     '&:hover': {
-                      borderColor: '#0f172a',
-                      backgroundColor: 'rgba(15, 23, 42, 0.08)',
+                      borderColor: textPalette.strong,
+                      backgroundColor: 'rgba(0, 0, 0, 0.08)',
                     },
                   }}
                 >
@@ -565,7 +569,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
         paddingLeft: { lg: 20 },
         scrollMarginTop: { xs: 96, md: 128 },
         backgroundColor: 'transparent',
-        color: '#0f172a',
+        color: textPalette.strong,
         boxSizing: 'border-box',
         display: 'flex',
         alignItems: 'center',
@@ -603,7 +607,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
           <Stack spacing={1.6}>
             <Typography
               variant="overline"
-              sx={{ letterSpacing: 3, color: 'rgba(15, 23, 42, 0.7)', fontWeight: 600 }}
+              sx={{ letterSpacing: 3, color: textPalette.muted, fontWeight: 600 }}
             >
               {greeting}
             </Typography>
@@ -657,7 +661,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                           height: 40,
                           borderRadius: '50%',
                           background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.14) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
-                          color: '#1f2937',
+                          color: textPalette.primary,
                           border: '1px solid rgba(var(--dark-cyan-rgb), 0.22)',
                           transition: 'transform 200ms ease, box-shadow 200ms ease',
                           boxShadow: '0 10px 22px rgba(85, 134, 140, 0.16)',
@@ -708,7 +712,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                 maxWidth: 720,
                 fontSize: { xs: '1.06rem', md: '1.12rem' },
                 lineHeight: 1.7,
-                color: 'rgba(15, 23, 42, 0.82)',
+                color: textPalette.primary,
               }}
             >
               {intro}
@@ -724,8 +728,8 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                   label={role}
                   size="small"
                   sx={{
-                    backgroundColor: 'rgba(15, 23, 42, 0.08)',
-                    color: '#0f172a',
+                    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                    color: textPalette.strong,
                     fontWeight: 600,
                     letterSpacing: 0.4,
                   }}
@@ -737,7 +741,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
             <Stack spacing={1.4}>
               <Typography
                 variant="overline"
-                sx={{ letterSpacing: 3, fontWeight: 600, color: 'rgba(15, 23, 42, 0.7)' }}
+                sx={{ letterSpacing: 3, fontWeight: 600, color: textPalette.muted }}
               >
                 Me in 10 seconds:
               </Typography>
@@ -749,7 +753,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                     sx={{
                       fontSize: { xs: '1.08rem', md: '1.14rem' },
                       lineHeight: 1.8,
-                      color: 'rgba(15, 23, 42, 0.84)',
+                      color: textPalette.primary,
                     }}
                   >
                     {paragraph}
@@ -766,7 +770,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                 p: { xs: 1.9, md: 2.3 },
                 borderRadius: 2.6,
                 backgroundColor: 'rgba(255, 255, 255, 0.82)',
-                border: '1px solid rgba(15, 23, 42, 0.12)',
+                border: '1px solid rgba(0, 0, 0, 0.12)',
               }}
             >
               <Stack spacing={1.6}>
@@ -815,15 +819,15 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                     letterSpacing: 0.6,
                     borderRadius: 2.1,
                     borderColor: 'rgba(15, 23, 42, 0.32)',
-                    color: '#0f172a',
+                    color: textPalette.strong,
                     px: { xs: 2.6, sm: 2.2 },
                     py: { xs: 0.88, sm: 0.72 },
                     minWidth: { xs: '100%', sm: 200 },
                     maxWidth: { xs: '100%', sm: 200 },
                     fontSize: { sm: '0.95rem' },
                     '&:hover': {
-                      borderColor: '#0f172a',
-                      backgroundColor: 'rgba(15, 23, 42, 0.08)',
+                      borderColor: textPalette.strong,
+                      backgroundColor: 'rgba(0, 0, 0, 0.08)',
                     },
                   }}
                 >
@@ -865,7 +869,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
             sx={{
               borderRadius: { xs: 3, md: 4 },
               border: '1px solid rgba(var(--dark-cyan-rgb), 0.24)',
-              background: 'linear-gradient(180deg, rgba(163, 194, 180, 0.92) 0%, rgba(255, 255, 255, 0.96) 100%)',
+              background: 'linear-gradient(180deg, rgb(190, 236, 163) 0%, rgba(255, 255, 255, 0.96) 100%)',
               boxShadow: '0 24px 64px rgba(85, 134, 140, 0.28)',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
@@ -971,7 +975,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                       variant="h6"
                       sx={{
                         fontWeight: 1000,
-                        color: '#0f172a',
+                        color: textPalette.strong,
                         letterSpacing: 0.6,
                         textShadow: '3px 1px 1px rgba(169, 220, 174, 0.88)',
                         textAlign: 'center',
@@ -1084,7 +1088,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                                   {...sharedChipProps}
                                   sx={{
                                     ...sharedChipSx,
-                                    color: '#1f2937',
+                                    color: textPalette.primary,
                                     borderColor: 'rgba(31,41,55,0.2)',
                                     px: 1.4,
                                   }}
@@ -1107,7 +1111,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                             <Typography
                               variant="body2"
                               sx={{
-                                color: 'rgba(0, 0, 0, 0.64)',
+                                color: textPalette.primary,
                                 textAlign: 'left',
                                 // textShadow: '3px 1px 1px rgba(169, 220, 174, 0.88)',
                                 lineHeight: 1.6,
@@ -1130,7 +1134,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                       <Typography
                         variant="body2"
                         sx={{
-                          color: 'rgba(15, 23, 42, 0.78)',
+                          color: textPalette.primary,
                           lineHeight: 1.5,
                           textAlign: 'left',
                           maxWidth: 320,

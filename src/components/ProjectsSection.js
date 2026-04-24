@@ -18,7 +18,7 @@ import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import CallSplitRoundedIcon from '@mui/icons-material/CallSplitRounded';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import CloseIcon from '@mui/icons-material/Close';
-import SectionCard from './SectionCard';
+import NorthEastRoundedIcon from '@mui/icons-material/NorthEastRounded';
 import {
   contact as contactData,
   theme as themeData,
@@ -94,7 +94,6 @@ function ProjectsSection({ navOffset = false }) {
   const copy = projectsCopy ?? {};
   const statsCopy = copy.stats ?? {};
   const emptyCopy = copy.emptyState ?? {};
-  const summaryHeading = copy.summaryLabel ?? '';
   const profileLinkTemplate = copy.profileLinkLabel ?? 'github.com/%username%';
   const updatedLabel = copy.updatedLabel ?? '';
   const readmeCopy = copy.readme ?? {};
@@ -427,136 +426,78 @@ function ProjectsSection({ navOffset = false }) {
           },
         }}
       >
-        <Grid container spacing={{ xs: 3, md: 4 }} alignItems="stretch">
+        <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
           <Grid item xs={12} md={githubUsername ? 7 : 12}>
-            <Box
-              sx={{
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: githubUsername ? 'center' : 'flex-start',
-                gap: 1.5,
-              }}
+            <Stack
+              spacing={1.5}
+              alignItems="flex-start"
+              textAlign="left"
             >
-              <Stack
-                spacing={1.5}
-                alignItems={{ xs: 'flex-start', md: 'flex-start' }}
-                textAlign={{ xs: 'left', md: 'left' }}
-              >
-                <Typography variant="overline" sx={{ letterSpacing: 3, color: 'text.secondary' }}>
-                  {copy.eyebrow ?? ''}
-                </Typography>
-                <Typography variant="h2" fontWeight={700}>
-                  {copy.title ?? ''}
-                </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 660 }}>
-                  {copy.description ?? ''}
-                </Typography>
-              </Stack>
-            </Box>
+              <Typography variant="overline" sx={{ letterSpacing: 3, color: 'text.secondary' }}>
+                {copy.eyebrow ?? ''}
+              </Typography>
+              <Typography variant="h2" fontWeight={700}>
+                {copy.title ?? ''}
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                {copy.description ?? ''}
+              </Typography>
+            </Stack>
           </Grid>
 
+          {/* Github badge */}
           {githubUsername && (
             <Grid item xs={12} md={5}>
-              <Stack
-                spacing={2.4}
+              <MuiLink
+                href={githubSummary?.profileUrl ?? githubChannel?.href ?? `https://github.com/${githubUsername}`}
+                target="_blank"
+                rel="noreferrer"
+                underline="none"
                 sx={{
-                  height: '100%',
-                  p: { xs: 2.2, sm: 2.6, md: 2.8 },
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  px: 2.5,
+                  py: 4,
                   borderRadius: 3.5,
                   border: '1px solid rgba(var(--dark-cyan-rgb), 0.18)',
-                  background: 'linear-gradient(135deg, rgba(var(--projects-rgb), 0.12) 0%, rgba(255,255,255,0.94) 100%)',
-                  boxShadow: '0 20px 44px rgba(85, 134, 140, 0.18)',
+                  background: 'linear-gradient(135deg, rgba(var(--projects-rgb), 0.1) 0%, rgba(255,255,255,1.0) 0%)',
+                  transition: 'box-shadow 180ms ease, border-color 180ms ease',
+                  '&:hover': {
+                    boxShadow: '0 4px 20px rgba(85, 134, 140, 0.18)',
+                    borderColor: 'rgba(var(--dark-cyan-rgb), 0.36)',
+                  },
                 }}
               >
-                {isLoadingGithub && copy.syncingText && (
-                  <Typography variant="body2" color="text.secondary">
-                    {copy.syncingText}
-                  </Typography>
-                )}
-
-                {!isLoadingGithub && githubError && copy.errorText && (
-                  <Typography variant="body2" color="error">
-                    {copy.errorText}
-                  </Typography>
-                )}
-
-                {!isLoadingGithub && !githubError && githubSummary && (
-                  <Stack spacing={2.4} sx={{ flexGrow: 1 }}>
-                    {summaryHeading ? (
-                      <Typography variant="subtitle2" color="text.secondary" sx={{ letterSpacing: 0.8 }}>
-                        {summaryHeading}
-                      </Typography>
-                    ) : null}
-                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={2.25} alignItems="center">
-                  <Avatar
-                    alt={githubSummary.name || githubSummary.login || githubUsername}
-                    src={githubSummary.avatarUrl ?? undefined}
-                    sx={{ width: 68, height: 68, border: `2px solid ${themeColor}` }}
-                  />
-                      <Stack spacing={0.75} sx={{ textAlign: { xs: 'left', md: 'left' } }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                          {githubSummary.name ?? githubSummary.login ?? githubUsername}
-                        </Typography>
-                        {githubSummary.bio && (
-                          <Typography variant="body2" color="text.secondary">
-                            {githubSummary.bio}
-                          </Typography>
-                        )}
-                        <MuiLink
-                          href={githubSummary.profileUrl ?? githubChannel?.href ?? `https://github.com/${githubUsername}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          sx={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 0.75,
-                            fontWeight: 600,
-                            color: themeColor,
-                          }}
-                        >
-                          <GitHubIcon fontSize="small" />
-                          {formattedProfileLabel}
-                        </MuiLink>
-                      </Stack>
-                    </Stack>
-
-                    <Stack
-                      direction={{ xs: 'column', sm: 'row' }}
-                      spacing={{ xs: 1.5, sm: 2 }}
-                      sx={{
-                        justifyContent: 'flex-start',
-                        textAlign: { xs: 'left', sm: 'left' },
-                        flexWrap: { sm: 'wrap' },
-                        rowGap: { sm: 1.5 },
-                      }}
-                    >
-                      <StatPill
-                        icon={<StarBorderRoundedIcon fontSize="small" />}
-                        label={statsCopy.stars ?? ''}
-                        value={githubSummary.totalStars ?? '—'}
-                      />
-                      <StatPill
-                        icon={<CallSplitRoundedIcon fontSize="small" />}
-                        label={statsCopy.repos ?? ''}
-                        value={githubSummary.publicRepos ?? '—'}
-                      />
-                      <StatPill
-                        icon={<CallSplitRoundedIcon fontSize="small" />}
-                        label={statsCopy.forks ?? ''}
-                        value={githubSummary.totalForks ?? '—'}
-                      />
-                      <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <StatPill
-                          icon={<VisibilityOutlinedIcon fontSize="small" />}
-                          label={statsCopy.followers ?? ''}
-                          value={githubSummary.followers ?? '—'}
-                        />
-                      </Box>
-                    </Stack>
+                <Avatar
+                  alt={githubSummary?.name || githubUsername}
+                  src={githubSummary?.avatarUrl ?? undefined}
+                  sx={{ width: 64, height: 64, flexShrink: 0, border: `2px solid ${themeColor}` }}
+                />
+                <Box sx={{ minWidth: 0, flex: 1 }}>
+                  <Stack direction="row" alignItems="center" spacing={0.75} sx={{ mb: 0.4 }}>
+                    <GitHubIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600, letterSpacing: 0.3 }}>
+                      {formattedProfileLabel}
+                    </Typography>
                   </Stack>
-                )}
-              </Stack>
+                  <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.2, color: 'text.primary' }} noWrap>
+                    {githubSummary?.name ?? githubUsername}
+                  </Typography>
+                  {githubSummary?.bio && (
+                    <Typography variant="body2" color="text.secondary" noWrap sx={{ display: 'block', mt: 0.4 }}>
+                      {githubSummary.bio}
+                    </Typography>
+                  )}
+                  {githubSummary && (
+                    <Typography variant="body2" color="text.disabled" sx={{ mt: 0.6, display: 'block' }}>
+                      {githubSummary.publicRepos ?? '—'} {statsCopy.repos ?? 'repos'}
+                      {' · '}
+                      {githubSummary.followers ?? '—'} {statsCopy.followers ?? 'followers'}
+                    </Typography>
+                  )}
+                </Box>
+              </MuiLink>
             </Grid>
           )}
         </Grid>
@@ -564,47 +505,67 @@ function ProjectsSection({ navOffset = false }) {
         <Grid container spacing={{ xs: 3, md: 4 }}>
           {showcaseRepoData.length > 0 ? (
             showcaseRepoData.map((repo) => (
-              <Grid key={repo.id} item xs={12} sm={6} lg={4} xl={4}>
-                <SectionCard
-                  variant="project"
-                  eyebrow={getRepoTag(repo)}
-                  title={repo.name?.replace(/-/g, ' ') || repo.name}
-                  timeframe={formatUpdatedDate(repo.pushed_at) || undefined}
-                  bullets={null}
+              <Grid key={repo.id} item xs={12} sm={6} lg={4}>
+                <Box
                   onClick={() => handleCardClick(repo)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleCardClick(repo); } }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={repo.name}
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderRadius: 3,
+                    boxSizing: 'border-box',
+                    border: '1px solid rgba(var(--projects-rgb), 0.18)',
+                    background: '#ffffff',
+                    cursor: 'pointer',
+                    p: { xs: 2.2, md: 2.6 },
+                    transition: 'transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease',
+                    outline: 'none',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      boxShadow: '0 12px 32px rgba(var(--projects-rgb), 0.15)',
+                      borderColor: 'rgba(var(--projects-rgb), 0.38)',
+                    },
+                    '&:focus-visible': {
+                      outline: '2px solid rgb(var(--projects-rgb))',
+                      outlineOffset: 2,
+                    },
+                  }}
                 >
-                  <Stack spacing={2} sx={{ height: '100%' }}>
-                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
-                      {repo.description || copy.repoDescriptionFallback || ''}
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.8 }}>
+                    <Typography variant="caption" sx={{ fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgb(var(--projects-rgb))' }}>
+                      {getRepoTag(repo) || ' '}
                     </Typography>
-
-                    <Box
-                      sx={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                        gap: 1,
-                        mt: 0.5,
-                      }}
-                    >
-                      <StatPill icon={<StarBorderRoundedIcon fontSize="small" />} label={statsCopy.stars ?? ''} value={repo.stargazers_count ?? 0} />
-                      <StatPill icon={<CallSplitRoundedIcon fontSize="small" />} label={statsCopy.forks ?? ''} value={repo.forks_count ?? 0} />
-                      <StatPill icon={<VisibilityOutlinedIcon fontSize="small" />} label={statsCopy.watchers ?? ''} value={repo.watchers_count ?? 0} />
-                    </Box>
-
-                    {Array.isArray(repo.topics) && repo.topics.length > 0 && (
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, pt: 0.5 }}>
-                        {repo.topics.slice(0, 6).map((topic) => (
-                          <Chip
-                            key={topic}
-                            label={topic}
-                            {...sharedChipProps}
-                            sx={{ ...sharedChipSx }}
-                          />
-                        ))}
-                      </Box>
-                    )}
+                    <NorthEastRoundedIcon sx={{ fontSize: 15, color: 'text.disabled' }} />
                   </Stack>
-                </SectionCard>
+
+                  <Typography variant="h5" sx={{ fontWeight: 800, lineHeight: 1.2, letterSpacing: -0.3, mb: 1 }}>
+                    {repo.name?.replace(/-/g, ' ') || repo.name}
+                  </Typography>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.65, mb: 2, display: '-webkit-box', WebkitLineClamp: 7, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {repo.description || copy.repoDescriptionFallback || ''}
+                  </Typography>
+
+                  <Box sx={{ flexGrow: 1 }} />
+
+                  {Array.isArray(repo.topics) && repo.topics.length > 0 && (
+                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.6, mt: 0.5 }}>
+                      {repo.topics.slice(0, 4).map((topic) => (
+                        <Chip key={topic} label={topic} {...sharedChipProps} sx={{ ...sharedChipSx }} />
+                      ))}
+                    </Box>
+                  )}
+
+                  {formatUpdatedDate(repo.pushed_at) && (
+                    <Typography variant="caption" color="text.disabled" sx={{ mt: 1.5, display: 'block' }}>
+                      {formatUpdatedDate(repo.pushed_at)}
+                    </Typography>
+                  )}
+                </Box>
               </Grid>
             ))
           ) : (

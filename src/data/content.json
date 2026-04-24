@@ -42,7 +42,7 @@
     "greeting": "Hello, I'm",
     "highlightColor": "#b7ff9d",
     "tenSeconds": [
-      "I am a current PhD candidate focusing in computational social choice at Tulane University. I also work full-time as an AI Innovation Fellow at Tulane, bringing applied machine learning solutions to researchers across the university through a variety of interdisciplinary projects. My background is in software development, where I have years of experience shipping reliable Python and AWS services."
+      "I am a current PhD student focusing in computational social choice at Tulane University. I also work full-time as an AI Innovation Fellow at Tulane, bringing applied machine learning solutions to researchers across the university through a variety of interdisciplinary projects. My background is in software development, where I have years of experience shipping reliable Python and AWS services."
     ],
   "skills": [
     "Python",
@@ -59,7 +59,7 @@
     "Senior Software Developer",
     "Research Assistant"
   ],
-  "currentlyWorkingOn": "Juggling a few projects through the Innovation Institute at Tulane, and wrapping up my coursework (t-minus 2 courses to go).",
+  "currentlyWorkingOn": "XC-hole prediction in Density Functional Theory (DFT), modeling Preeclampsia in rats, and assorted projects in computational social choice.",
   "funFact": "I have been working for two years to perfect my chicken and andouille gumbo recipe; still learning, still cooking, still a northerner without a gumbo spoon.",
   "affiliations": [
     {
@@ -80,7 +80,7 @@
       "items": [
         {
           "label": "Office",
-          "value": "TBD",
+          "value": "Paul Hall 309",
           "type": "location",
           "href": "https://maps.google.com/?q=Tulane+University",
           "category": "campus"
@@ -125,8 +125,8 @@
     "headline": "Applied ML and Engineering Solutions",
     "summary": [
       "Leonardo Matone is a PhD student and AI Innovation Fellow in the Computer Science department of Tulane University, currently working under Dr. Nicholas Mattei.",
-      "He works full time at Tulane in applied machine learning, contributing to interdisciplinary research and innovation initiatives. His interests include natural language processing, public policy data science, and political science.",
-      "Outside of applied ML, Leonardo researches computational social choice, focusing on novel probabilistic social choice functions, and he earned dual bachelor's degrees in Computer Science and Political Science from Hunter College as a Thomas Hunter Scholar."
+      "His primary area of research is computational social choice, focusing on novel probabilistic social choice functions. Leonardo also works full time at Tulane as an applied machine learning engineer contributing to interdisciplinary research outside of computer science. These projects range from Density Functional Theory (DFT) to material property prediction in chemistry, commonly requiring domain-specific machine learning approaches and techniques.",
+      "Prior to beginning his PhD journey, Leonardo worked as a senior software developer at Healthfirst for 3 years. He designed and implemented backend solutions using the AWS ecosystem for numerous user-facing applications serving 30k+ users. Before that, he earned dual bachelor's degrees in Computer Science and Political Science from Hunter College as a Thomas Hunter Scholar."
     ],
     "highlights": [
       "Supports applied machine learning research at Tulane.",
@@ -166,8 +166,8 @@
         ],
         "bullets": [
           "Designs/implements custom models/modules for niche tasks using PyTorch",
-          "Utilizes Slurm to manage and optimize neural network training on LSU\u2019s HPC clusters",
-          "Contributes to data science research on voting rules, publishing to peer-reviewed journals"
+          "Utilizes Slurm to manage and optimize network training on LSU\u2019s HPC clusters",
+          "Contributes to research on voting rules, publishing to peer-reviewed journals"
         ]
       },
       {
@@ -201,18 +201,20 @@
     "highlightsLabel": "Recent Highlights",
     "snapshotLabel": "Me in 10 seconds",
     "technicalHighlights": [
-      "Leads end-to-end ML experiments from data prep to deployment.",
+      "Leads ML experiments from data prep to analysis.",
       "Scales research prototypes into real contributions.",
       "Built and maintained backend infrastructure."
     ],
     "stats": {
       "active": {
-        "description": "In addition to my part-time PhD workload"
+        "count": 2,
+        "description": "PhD Research + Innovation Fellowship"
       },
       "years": {
-        "description": "Building ML + data platforms end-to-end"
+        "description": "Applied ML + data platforms end-to-end"
       },
       "teams": {
+        "count": 5,
         "description": "Applied ML projects in non-CS fields"
       }
     }
@@ -255,7 +257,7 @@
     },
     {
       "institution": "Hillcrest High School",
-      "degree": "High School Diploma, Humanities",
+      "degree": "High School Diploma",
       "timeframe": "2014 - 2018",
       "location": "Queens, NY",
       "details": "",
@@ -269,7 +271,7 @@
   "about": {
     "eyebrow": "Introduction",
     "title": "About Me",
-    "description": "Researcher in applied machine learning blending production experience with academic innovation.",
+    "description": "Researcher in compuational social choice blending production experience with academic innovation.",
     "biographyLabel": "Biography",
     "stats": [
       {
@@ -293,7 +295,7 @@
   "projectsCopy": {
     "eyebrow": "Craft & Code",
     "title": "Projects",
-    "description": "A selection of personal builds. These projects are demonstrative of some of my main areas of interest: politics, and fun bash scripting. Explore the repos for deep dives into each project.",
+    "description": "A selection of publicly available personal builds. These projects are fun snippets of my interests, but slightly outdated. Ask about my Tulane research projects!",
     "summaryLabel": "GitHub Overview",
     "syncingText": "Syncing GitHub activity\u2026",
     "errorText": "GitHub summary is unavailable right now. Please check back soon.",

@@ -1,15 +1,15 @@
 // src/styles/palette.js
 export const textOnLight = {
-  strong: '#0b1220',
-  primary: '#132235',
-  secondary: '#22324a',
-  muted: '#324159',
-  subtle: '#4a5972',
+  strong: '#000000',
+  primary: '#000000',
+  secondary: '#000000',
+  muted: '#000000',
+  subtle: '#000000',
 };
 
 export const textOnDark = {
-  strong: '#f8fafc',
-  muted: 'rgba(241, 245, 249, 0.82)',
+  strong: '#FFFFFF',
+  muted: '#FFFFFF',
 };
 
 export const surfaceColors = {

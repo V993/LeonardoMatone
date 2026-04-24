@@ -9,19 +9,20 @@ const theme = createTheme({
     /* Align primary/secondary with provided palette */
     primary: {
       main: '#55868c', // dark-cyan
-      contrastText: '#0b1b1d',
+      contrastText: '#FFFFFF',
     },
     secondary: {
       main: '#ffc857', // sunglow
-      contrastText: '#2a1b00',
+      contrastText: '#000000',
     },
     background: {
-      default: '#f7f8fa',
+      default: '#f4f6fb',
       paper: '#ffffff',
     },
     text: {
-      primary: '#1f2937',
-      secondary: '#475569',
+      primary: '#000000',
+      secondary: '#000000',
+      disabled: '#000000',
     },
     /* Provide a simple section mapping for reference */
     sections: {

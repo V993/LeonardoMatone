@@ -55,17 +55,19 @@ const DegreePanel = ({ timeframe, degrees }) => (
     sx={{
       borderRadius: 3,
       border: '1px solid rgba(var(--education-rgb), 0.14)',
-      backgroundColor: 'rgba(255,255,255,0.82)',
+      backgroundColor: 'rgba(255,255,255,1.0)',
       p: { xs: 1.6, md: 1.9 },
       backdropFilter: 'blur(4px)',
+      width: '75%',
+      justifySelf: 'right'
     }}
   >
     <Stack spacing={0.6}>
-      <Typography variant="overline" sx={{ letterSpacing: 3, fontWeight: 600, color: 'rgba(30,64,175,0.72)' }}>
+      <Typography variant="overline" sx={{ letterSpacing: 3, fontWeight: 600, color: '#000000' }}>
         Academic Track
       </Typography>
       {timeframe ? (
-        <Typography variant="body2" color="rgba(15, 23, 42, 0.72)">
+        <Typography variant="body2" sx={{ color: '#000000' }}>
           {timeframe}
         </Typography>
       ) : null}
@@ -124,13 +126,14 @@ const InstitutionPanel = ({ item, degrees }) => {
 
   return (
     <Stack
-      spacing={1.8}
+      spacing={1}
       sx={{
         borderRadius: 3,
         border: '1px solid rgba(var(--experience-rgb), 0.16)',
-        backgroundColor: 'rgba(255,255,255,0.74)',
-        p: { xs: 1.6, md: 1.9 },
+        backgroundColor: 'rgba(255, 255, 255, 1.0)',
+        p: { xs: 2.4, md: 2.8 },
         backdropFilter: 'blur(4px)',
+        width: '90%',
       }}
     >
       <Stack direction="row" spacing={1.3} alignItems="center">
@@ -141,7 +144,7 @@ const InstitutionPanel = ({ item, degrees }) => {
             width: 40,
             height: 40,
             bgcolor: 'rgba(var(--education-rgb), 0.2)',
-            color: '#1f2937',
+            color: '#000000',
             fontWeight: 700,
           }}
         >
@@ -160,7 +163,7 @@ const InstitutionPanel = ({ item, degrees }) => {
       </Stack>
 
       {hasNote ? (
-        <Typography variant="body1" sx={{ color: 'rgba(15, 23, 42, 0.82)', lineHeight: 1.7 }}>
+        <Typography variant="body1" sx={{ color: '#000000', lineHeight: 1.7 }}>
           {personalNote}
         </Typography>
       ) : null}
@@ -169,7 +172,7 @@ const InstitutionPanel = ({ item, degrees }) => {
         <Stack
           component="ul"
           spacing={0.55}
-          sx={{ listStyle: 'disc', pl: 2.1, color: 'rgba(15, 23, 42, 0.82)', m: 0 }}
+          sx={{ listStyle: 'disc', pl: 2.1, color: '#000000', m: 0 }}
         >
           {combinedHighlights.map((highlight, idx) => (
             <Typography key={idx} component="li" variant="body2">
@@ -187,7 +190,7 @@ const InstitutionPanel = ({ item, degrees }) => {
               href={link.href}
               target="_blank"
               rel="noreferrer"
-              sx={{ fontWeight: 600, color: 'rgba(37, 99, 235, 0.9)' }}
+              sx={{ fontWeight: 600, color: '#000000' }}
             >
               {link.label}
             </MuiLink>
@@ -220,7 +223,7 @@ const MobileEducationCard = ({ item, timeframe, degrees }) => {
             width: 44,
             height: 44,
             bgcolor: 'rgba(var(--education-rgb), 0.2)',
-            color: '#1f2937',
+            color: '#000000',
             fontWeight: 700,
           }}
         >
@@ -231,7 +234,7 @@ const MobileEducationCard = ({ item, timeframe, degrees }) => {
             {item.institution}
           </Typography>
           {timeframe ? (
-            <Typography variant="body2" color="rgba(15, 23, 42, 0.72)">
+            <Typography variant="body2" sx={{ color: '#000000' }}>
               {timeframe}
             </Typography>
           ) : null}
@@ -277,7 +280,7 @@ const MobileEducationCard = ({ item, timeframe, degrees }) => {
       {combinedHighlights.length > 0 ? (
         <Stack spacing={0.6}>
           {combinedHighlights.map((highlight, idx) => (
-            <Typography key={idx} variant="body2" sx={{ color: 'rgba(15, 23, 42, 0.8)' }}>
+            <Typography key={idx} variant="body2" sx={{ color: '#000000' }}>
               • {highlight}
             </Typography>
           ))}
@@ -299,11 +302,13 @@ function EducationSection({ navOffset = false }) {
         position: 'relative',
         width: '100%',
         minHeight: 'auto',
-        paddingBottom: '5vh',
+        pt: { xs: 1, md: 1 },
+        pb: { xs: 5, md: 7 },
         pr: { xs: 2.4, md: 6, lg: 8 },
         scrollMarginTop: { xs: 96, md: 128 },
         background: 'none',
-        overflow: 'hidden',
+        overflowX: 'hidden',
+        overflowY: 'visible',
         pl: {
           xs: 2.4,
           md: 6,
@@ -320,19 +325,36 @@ function EducationSection({ navOffset = false }) {
         width: '100%',
       }}
     >
-        <Stack spacing={1.2} sx={{ mb: { xs: 3, md: 4 } }}>
+        {/* Education box, removed as it looks weird */}
+        {/* <Box
+          sx={{
+            mb: { xs: 3, md: 4 },
+            display: 'inline-flex',
+            flexDirection: 'column',
+            gap: 1.2,
+            px: 2.8,
+            py: 2,
+            borderRadius: 3,
+            // background: 'linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.62) 100%)',
+            // border: '1px solid rgba(255,255,255,0.6)',
+            // boxShadow: '0 8px 32px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.9)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            width: '100%',
+          }}
+        >
           <Typography
             variant="overline"
-            sx={{ letterSpacing: 3, fontWeight: 700, color: 'rgba(148, 163, 184, 0.85)' }}
+            sx={{ letterSpacing: 3, fontWeight: 700, color: '#ffffff' }}
           >
             Academic Journey
           </Typography>
-          <Typography variant="h2" fontWeight={700} sx={{ color: '#fffaf0' }}>
+          <Typography variant="h2" fontWeight={700} sx={{ color: '#ffffff' }}>
             Education
           </Typography>
-        </Stack>
+        </Box> */}
         <Stack
-          spacing={{ xs: 2.6, md: 3.4 }}
+          spacing={{ xs: 4, md: 6 }}
           sx={(theme) => ({
            	position: 'relative',
            	mt: { xs: 3, md: 4 },
@@ -340,8 +362,8 @@ function EducationSection({ navOffset = false }) {
               '&::before': {
                 content: '""',
                 position: 'absolute',
-                top: 12,
-                bottom: 12,
+                top: -12,
+                bottom: -25,
                 left: '50%',
                 width: 4,
                 transform: 'translateX(-2px)',
@@ -352,7 +374,7 @@ function EducationSection({ navOffset = false }) {
               '&::after': {
                 content: '""',
                 position: 'absolute',
-                bottom: -12,
+                bottom: -30,
                 left: '50%',
                 width: 28,
                 height: 24,
@@ -443,7 +465,7 @@ function EducationSection({ navOffset = false }) {
                 />
               </Box>
 
-                  <Box sx={{ order: { xs: 2, md: 3 }, position: 'relative', zIndex: 2 }}>
+                  <Box sx={{ order: { xs: 2, md: 3 }, position: 'relative', zIndex: 2}}>
                     <InstitutionPanel item={item} degrees={entries} />
                   </Box>
                 </Box>

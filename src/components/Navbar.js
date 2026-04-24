@@ -1,9 +1,10 @@
 // src/components/Navbar.js
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Avatar,
   Box,
-  Button,
+  Chip,
+  Divider,
   Drawer,
   Link as MuiLink,
   Stack,
@@ -13,194 +14,84 @@ import {
   useTheme,
   IconButton,
 } from '@mui/material';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkIcon from '@mui/icons-material/Link';
 import CloseIcon from '@mui/icons-material/Close';
-import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  navigation,
-  welcome as welcomeData,
-  contact as contactData,
-  theme as themeData,
-} from '../data';
+import { welcome as welcomeData } from '../data';
 import idPicture from '../assets/id-picture.jpg';
 import icelandPicture from '../assets/iceland.jpeg';
 import hfBadge from '../assets/hf.png';
 import tulaneBadge from '../assets/tulane.png';
 import hunterBadge from '../assets/hunter.png';
-import { scrollElementIntoView, scrollToTop } from '../utils/scroll';
+import { sharedChipProps, sharedChipSx } from '../styles/chipStyles';
 
 const assetSources = {
   'id-picture.jpg': idPicture,
+  'iceland.jpeg': icelandPicture,
   'hf.png': hfBadge,
   'tulane.png': tulaneBadge,
   'hunter.png': hunterBadge,
-  'iceland.jpeg': icelandPicture
 };
 
-const channelIcons = {
-  email: <EmailOutlinedIcon fontSize="small" />,
-  linkedin: <LinkedInIcon fontSize="small" />,
-  github: <GitHubIcon fontSize="small" />,
+const desktopAvatarFrameSize = 212;
+const desktopAvatarSize = 188;
+
+const snapshotHeadingSx = {
+  letterSpacing: 3,
+  fontWeight: 700,
+  color: '#000000',
+  textAlign: 'left',
+  textTransform: 'uppercase',
+  fontSize: { xs: '0.8rem', md: '0.86rem' },
 };
 
-const SECTION_ORDER = ['about', 'education', 'experience', 'projects'];
+function SnapshotSection({ title, children }) {
+  return (
+    <Stack spacing={{ xs: 1, md: 1.1 }} sx={{ width: '100%' }} alignItems="flex-start">
+      <Typography variant="overline" sx={{ ...snapshotHeadingSx, width: '100%' }}>
+        {title}
+      </Typography>
+      {children}
+    </Stack>
+  );
+}
 
-function Navbar({ heroCollapsed, activeSection, isMobileNavOpen = false, onMobileNavClose }) {
-  const location = useLocation();
-  const navigate = useNavigate();
+function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
   const theme = useTheme();
   const isCompact = useMediaQuery(theme.breakpoints.down('lg'));
   const showLeftSidebar = heroCollapsed && !isCompact;
   const shouldShowMobileNav = isCompact && isMobileNavOpen;
 
-  const navLinks = useMemo(() => {
-    const sorted = (navigation ?? [])
-      .filter((item) => item.label?.toLowerCase() !== 'welcome')
-      .map((item) => {
-        if (item.type === 'hash') {
-          const rawPath = item.path ?? '';
-          const hash = rawPath.startsWith('#') ? rawPath : `#${rawPath}`;
-          const sectionId = hash.replace('#', '');
-          return {
-            ...item,
-            sectionId,
-            hash,
-          };
-        }
-
-        return {
-          ...item,
-          to: item.path ?? '/',
-        };
-      });
-
-    return sorted.sort((a, b) => {
-      const aIndex = a.sectionId ? SECTION_ORDER.indexOf(a.sectionId) : SECTION_ORDER.length;
-      const bIndex = b.sectionId ? SECTION_ORDER.indexOf(b.sectionId) : SECTION_ORDER.length;
-      return aIndex - bIndex;
-    });
-  }, []);
-
-  const primaryNavItems = useMemo(
-    () => navLinks.filter((item) => item.sectionId),
-    [navLinks]
+  // Welcome data
+  const name = welcomeData?.name ?? '';
+  const roles = Array.isArray(welcomeData?.roles) ? welcomeData.roles : [];
+  const primaryRole = roles.length > 0 ? roles[0] : null;
+  const skills = Array.isArray(welcomeData?.skills) ? welcomeData.skills : [];
+  const funFact = welcomeData?.funFact ?? null;
+  const currentlyWorkingOn = welcomeData?.currentlyWorkingOn ?? null;
+  const affiliations = useMemo(
+    () =>
+      (welcomeData?.affiliations ?? []).map((a) => ({
+        ...a,
+        src: assetSources[a.badge] ?? null,
+      })),
+    []
   );
 
-  const routeNavItems = useMemo(
-    () => navLinks.filter((item) => !item.sectionId),
-    [navLinks]
-  );
+  const hasSkills = skills.length > 0;
+  const hasFunFact = Boolean(funFact);
+  const canToggleFunFact = hasSkills && hasFunFact;
+  const [showFunFact, setShowFunFact] = useState(!hasSkills && hasFunFact);
+  const isFunFactActive = canToggleFunFact ? showFunFact : hasFunFact;
+  const snapshotTitle = isFunFactActive ? 'Secret Fun Fact:' : 'Core Skills:';
+  const hasCardSections = Boolean(currentlyWorkingOn || funFact || skills.length > 0);
 
   const avatarSrc = assetSources[welcomeData?.avatar] ?? undefined;
-  const navbarBorderColor = themeData?.navbarBorderColor ?? 'rgba(var(--dark-cyan-rgb), 0.25)';
-  const desktopPanelBackground = 'linear-gradient(180deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.22) 50%, rgba(255,255,255,0.08) 80%)';
-  const desktopHeaderBackground = 'linear-gradient(180deg, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.18) 64%, rgba(255,255,255,0.06) 100%)';
+
   const handleMobileClose = () => {
     if (typeof onMobileNavClose === 'function') {
       onMobileNavClose();
     }
   };
-
-  const handleNavClick = (event, item) => {
-    if (item.sectionId) {
-      event?.preventDefault();
-
-      if (location.pathname !== '/') {
-        navigate('/', { state: { scrollToSection: item.sectionId } });
-        if (shouldShowMobileNav) {
-          handleMobileClose();
-        }
-        return;
-      }
-
-      const element = document.getElementById(item.sectionId);
-      if (!scrollElementIntoView(element)) {
-        scrollToTop();
-      }
-
-      if (shouldShowMobileNav) {
-        handleMobileClose();
-      }
-      return;
-    }
-
-    if (typeof item.to === 'string' && location.pathname !== item.to) {
-        navigate(item.to);
-        if (shouldShowMobileNav) {
-          handleMobileClose();
-        }
-    }
-  };
-
-  const isItemActive = (item) => {
-    if (item.sectionId) {
-      const targetHash = `#${item.sectionId}`;
-      return activeSection === targetHash;
-    }
-
-    if (typeof item.to === 'string') {
-      return location.pathname === item.to;
-    }
-
-    return false;
-  };
-
-  const renderNavButtons = (items) => {
-    if (!Array.isArray(items) || items.length === 0) {
-      return null;
-    }
-
-    return (
-      <Stack
-        direction={showLeftSidebar || isCompact ? 'column' : 'row'}
-        spacing={showLeftSidebar ? 1 : isCompact ? 1 : 1.1}
-        alignItems={showLeftSidebar || isCompact ? 'stretch' : 'center'}
-        justifyContent="flex-start"
-        flexWrap={showLeftSidebar ? 'nowrap' : isCompact ? 'nowrap' : 'wrap'}
-        rowGap={showLeftSidebar || isCompact ? 0 : 1}
-      >
-        {items.map((item) => {
-          const isActive = isItemActive(item);
-
-          return (
-              <Button
-                key={item.label}
-                onClick={(event) => handleNavClick(event, item)}
-                sx={{
-                  borderRadius: 2.4,
-                  px: showLeftSidebar ? 1.8 : 2.1,
-                  py: 0.6,
-                  fontWeight: 700,
-                  letterSpacing: 1,
-                  textTransform: 'uppercase',
-                  width: showLeftSidebar || isCompact ? '100%' : 'auto',
-                  justifyContent: 'center',
-                  color: isActive ? '#f8fafc' : '#0f172a',
-                  backgroundColor: isActive ? 'rgba(79, 111, 119, 0.92)' : 'rgba(255,255,255,0.9)',
-                  border: '1px solid rgba(15, 23, 42, 0.14)',
-                  boxShadow: isActive ? '0 12px 26px rgba(15,23,42,0.28)' : '0 4px 14px rgba(15,23,42,0.12)',
-                  transform: isActive ? 'translateY(-1px)' : 'none',
-                  transition: 'transform 200ms ease, box-shadow 200ms ease, background-color 200ms ease, color 200ms ease',
-                  '&:hover': {
-                    backgroundColor: isActive ? 'rgba(84, 130, 236, 0.86)' : 'rgba(255,255,255,1)',
-                    boxShadow: '0 16px 32px rgba(15,23,42,0.24)',
-                    transform: 'translateY(-2px)',
-                  },
-                }}
-              >
-                {item.label}
-              </Button>
-          );
-        })}
-      </Stack>
-    );
-  };
-
-  const contactChannels = contactData?.channels ?? [];
-  const showAvatar = !isCompact && Boolean(avatarSrc);
 
   const navCard = (
     <Box
@@ -209,8 +100,8 @@ function Navbar({ heroCollapsed, activeSection, isMobileNavOpen = false, onMobil
       sx={{
         position: 'relative',
         borderRadius: { xs: 3, md: 4 },
-        border: `1px solid ${navbarBorderColor}`,
-        background: showLeftSidebar || !isCompact ? desktopPanelBackground : 'rgba(255, 255, 255, 0.94)',
+        border: '1px solid rgba(var(--dark-cyan-rgb), 0.24)',
+        background: 'linear-gradient(180deg, rgb(190, 236, 163) 20%, rgba(255,255,255,0.96) 100%)',
         boxShadow: '0 24px 64px rgba(85, 134, 140, 0.28)',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
@@ -225,182 +116,279 @@ function Navbar({ heroCollapsed, activeSection, isMobileNavOpen = false, onMobil
       {shouldShowMobileNav && (
         <IconButton
           onClick={handleMobileClose}
-          sx={{
-            position: 'absolute',
-            top: 12,
-            right: 12,
-            color: '#1f2937',
-            zIndex: 5,
-          }}
+          sx={{ position: 'absolute', top: 12, right: 12, color: '#000000', zIndex: 5 }}
           aria-label="Close navigation"
         >
           <CloseIcon />
         </IconButton>
       )}
-      <Box
-        sx={{
-          position: 'relative',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: isCompact ? 1.2 : 1.6,
-          pt: showLeftSidebar ? { md: 2.6 } : { xs: 2.4, md: 2.8 },
-          pb: { xs: 1.6, md: 2 },
-          px: showLeftSidebar ? { md: 2.2 } : { xs: 2.1, md: 2.6 },
-          background: showLeftSidebar || !isCompact ? desktopHeaderBackground : 'transparent',
-          borderBottom: '1px solid rgba(var(--dark-cyan-rgb), 0.14)',
-        }}
-      >
-        <Typography
-          variant="h2"
+
+      {/* Scrollable body */}
+      <Box sx={{ flexGrow: 1, minHeight: 0, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+
+        {/* Snapshot card content — matches WelcomeSection snapshot column exactly */}
+        <Box
+          onClick={canToggleFunFact ? () => setShowFunFact((p) => !p) : undefined}
+          role={canToggleFunFact ? 'button' : undefined}
+          tabIndex={canToggleFunFact ? 0 : undefined}
+          onKeyDown={
+            canToggleFunFact
+              ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setShowFunFact((p) => !p);
+                  }
+                }
+              : undefined
+          }
+          aria-pressed={canToggleFunFact ? isFunFactActive : undefined}
           sx={{
-            fontWeight: 800,
-            textTransform: 'none',
-            fontSize: isCompact ? '2.3rem' : { xs: '2.8rem', md: '3.2rem' },
-            lineHeight: 1.05,
-            color: '#1f2937',
-            textAlign: 'center',
+            px: { xs: 2.4, sm: 2.8, md: 3.2 },
+            pt: { xs: 2.6, sm: 3, md: 3.6 },
+            pb: 2.4,
+            cursor: canToggleFunFact ? 'pointer' : 'default',
+            outline: 'none',
+            '&:focus-visible': {
+              outline: '3px solid rgba(var(--dark-cyan-rgb), 0.38)',
+              outlineOffset: 6,
+            },
           }}
         >
-          {welcomeData?.name ?? ''}
-        </Typography>
-
-        {welcomeData?.roles && welcomeData.roles.length > 0 && (
-          <Typography
-            variant="subtitle2"
-            sx={{
-              fontWeight: 600,
-              color: '#1f2937',
-              textAlign: 'center',
-              fontSize: isCompact ? '1.05rem' : undefined,
-            }}
+          <Stack
+            spacing={{ xs: 2.4, md: 2.6 }}
+            divider={
+              hasCardSections ? (
+                <Divider
+                  flexItem
+                  sx={{
+                    borderColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+                    alignSelf: 'stretch',
+                    my: { xs: 1.8, md: 2 },
+                  }}
+                />
+              ) : null
+            }
+            sx={{ width: '100%' }}
           >
-            {welcomeData.roles[0]}
-          </Typography>
-        )}
+            {/* Avatar block */}
+            <Box sx={{ width: '100%' }}>
+              <Box
+                sx={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: { xs: 1.8, md: 2.4 },
+                  textAlign: 'center',
+                }}
+              >
+                {(name || primaryRole) ? (
+                  <Box sx={{ width: '100%', textAlign: 'left' }}>
+                    {primaryRole ? (
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          fontWeight: 700,
+                          color: '#000000',
+                          letterSpacing: 1.2,
+                          opacity: 0.55,
+                          textTransform: 'uppercase',
+                          display: 'block',
+                          mb: 0.4,
+                        }}
+                      >
+                        {primaryRole}
+                      </Typography>
+                    ) : null}
+                    {name ? (
+                      <Typography
+                        component="p"
+                        sx={{
+                          fontWeight: 900,
+                          fontSize: { xs: '1.7rem', md: '1.85rem' },
+                          color: '#000000',
+                          letterSpacing: 0,
+                          lineHeight: 1.1,
+                          textShadow: '3px 1px 1px rgba(169, 220, 174, 0.88)',
+                        }}
+                      >
+                        {name}
+                      </Typography>
+                    ) : null}
+                  </Box>
+                ) : null}
 
-        {showAvatar && (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: { md: 148 },
-              height: { md: 148 },
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.35) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
-              border: '2px solid rgba(255, 255, 255, 0.65)',
-              boxShadow: '0 24px 36px rgba(85, 134, 140, 0.28)',
-            }}
-          >
-            <Avatar
-              alt={welcomeData?.name ?? 'Profile'}
-              src={avatarSrc}
-              sx={{
-                width: { md: 132 },
-                height: { md: 132 },
-                border: '3px solid rgba(255, 255, 255, 0.8)',
-              }}
-            />
-          </Box>
-        )}
+                <Box
+                  className="avatar-ring"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: { xs: 'min(212px, 56vw)', sm: 'min(220px, 46vw)', md: desktopAvatarFrameSize },
+                    height: { xs: 'min(212px, 56vw)', sm: 'min(220px, 46vw)', md: desktopAvatarFrameSize },
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.38) 0%, rgba(var(--dark-cyan-rgb), 0.16) 100%)',
+                    border: '2px solid rgba(255, 255, 255, 0.65)',
+                    boxShadow: '0 28px 44px rgba(85, 134, 140, 0.34)',
+                    transition: 'transform 260ms ease, box-shadow 260ms ease',
+                  }}
+                >
+                  <Avatar
+                    alt={name || 'Profile'}
+                    src={avatarSrc}
+                    sx={{
+                      width: { xs: 'calc(100% - 32px)', sm: 'calc(100% - 36px)', md: desktopAvatarSize },
+                      height: { xs: 'calc(100% - 32px)', sm: 'calc(100% - 36px)', md: desktopAvatarSize },
+                      border: { xs: '3px solid rgba(255, 255, 255, 0.88)', md: '4px solid rgba(255, 255, 255, 0.82)' },
+                      boxShadow: '0 24px 46px rgba(15, 23, 42, 0.24)',
+                    }}
+                  />
+                </Box>
 
-        {contactChannels.length > 0 && (
-          <Stack spacing={0.4} alignItems="center" sx={{ width: '100%' }}>
-            <Stack
-              direction="row"
-              spacing={0.6}
-              flexWrap="wrap"
-              justifyContent="center"
-              rowGap={0.5}
-            >
-              {contactChannels.map((channel) => {
-                const iconKey = channel.label ? channel.label.toLowerCase() : '';
-                const key = channel.label ?? channel.href;
+                {affiliations.length > 0 ? (
+                  <Stack direction="row" spacing={1.1} flexWrap="wrap" rowGap={1} justifyContent="center">
+                    {affiliations.map((affiliation) => {
+                      const googleSearchHref = affiliation?.name
+                        ? `https://www.google.com/search?q=${encodeURIComponent(affiliation.name)}`
+                        : undefined;
 
-                return (
-                  <Tooltip key={key} title={channel.label ?? ''} placement="top" arrow>
-                    <MuiLink
-                      href={channel.href}
-                      target={channel.href?.startsWith('http') ? '_blank' : undefined}
-                      rel={channel.href?.startsWith('http') ? 'noreferrer' : undefined}
-                      aria-label={channel.label}
-                      onClick={() => {
-                        handleMobileClose();
-                      }}
+                      const avatarNode = (
+                        <Avatar
+                          alt={affiliation.name}
+                          src={affiliation.src ?? undefined}
+                          sx={{
+                            width: 42,
+                            height: 42,
+                            boxShadow: '0 10px 18px rgba(15, 23, 42, 0.18)',
+                            border: '2px solid rgba(255, 255, 255, 0.8)',
+                          }}
+                        />
+                      );
+
+                      return (
+                        <Tooltip key={affiliation.name} title={affiliation.name ?? ''} placement="top" arrow>
+                          {googleSearchHref ? (
+                            <MuiLink
+                              href={googleSearchHref}
+                              target="_blank"
+                              rel="noreferrer"
+                              underline="none"
+                              sx={{ display: 'inline-flex' }}
+                              onClick={(e) => e.stopPropagation()}
+                              onKeyDown={(e) => e.stopPropagation()}
+                            >
+                              {avatarNode}
+                            </MuiLink>
+                          ) : (
+                            avatarNode
+                          )}
+                        </Tooltip>
+                      );
+                    })}
+                  </Stack>
+                ) : null}
+              </Box>
+            </Box>
+
+            {/* Skills / fun fact + currently working on */}
+            {hasCardSections ? (
+              <Stack
+                spacing={{ xs: 1.2, md: 1.4 }}
+                divider={
+                  <Divider
+                    flexItem
+                    sx={{
+                      borderColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+                      alignSelf: 'stretch',
+                      my: { xs: 1.8, md: 2 },
+                    }}
+                  />
+                }
+                sx={{ width: '100%' }}
+                alignItems="flex-start"
+              >
+                {(hasSkills || hasFunFact) ? (
+                  <SnapshotSection title={snapshotTitle}>
+                    <Box
                       sx={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 40,
-                        height: 40,
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, rgba(var(--dark-cyan-rgb), 0.14) 0%, rgba(var(--dark-cyan-rgb), 0.18) 100%)',
-                        color: '#1f2937',
-                        border: '1px solid rgba(var(--dark-cyan-rgb), 0.22)',
-                        transition: 'transform 200ms ease, box-shadow 200ms ease',
-                        boxShadow: '0 10px 22px rgba(85, 134, 140, 0.16)',
-                        '&:hover': {
-                          transform: 'translateY(-3px) scale(1.05)',
-                          boxShadow: '0 16px 28px rgba(85, 134, 140, 0.22)',
-                        },
+                        position: 'relative',
+                        width: '100%',
+                        display: 'grid',
+                        alignItems: 'start',
+                        justifyItems: 'start',
                       }}
                     >
-                      {channelIcons[iconKey] ?? <LinkIcon fontSize="small" />}
-                    </MuiLink>
-                  </Tooltip>
-                );
-              })}
-            </Stack>
-          </Stack>
-        )}
-      </Box>
+                      {hasSkills ? (
+                        <Box
+                          sx={{
+                            gridArea: '1 / 1 / 2 / 2',
+                            opacity: isFunFactActive ? 0 : 1,
+                            pointerEvents: isFunFactActive ? 'none' : 'auto',
+                            transition: 'opacity 260ms ease',
+                            width: '100%',
+                          }}
+                        >
+                          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', gap: 0.9 }}>
+                            {skills.map((skill) => (
+                              <Chip
+                                key={skill}
+                                label={skill}
+                                {...sharedChipProps}
+                                sx={{
+                                  ...sharedChipSx,
+                                  color: '#000000',
+                                  borderColor: 'rgba(31,41,55,0.2)',
+                                  px: 1.4,
+                                }}
+                              />
+                            ))}
+                          </Box>
+                        </Box>
+                      ) : null}
 
-      <Stack
-        spacing={showLeftSidebar ? 1.6 : 1.4}
-        sx={{
-          flexGrow: 1,
-          minHeight: 0,
-          px: showLeftSidebar ? { md: 2.3 } : { xs: 1.8, md: 2.8 },
-          py: { xs: 1.8, md: 2.4 },
-          overflowY: 'auto',
-        }}
-      >
-        {primaryNavItems.length > 0 && (
-          <Stack spacing={1.4}>
-            <Typography
-              variant="overline"
-              sx={{
-                letterSpacing: 3,
-                fontWeight: 700,
-                fontSize: { xs: '0.9rem', md: '1rem' },
-                color: '#1f2937',
-                textAlign: showLeftSidebar || isCompact ? 'center' : 'left',
-              }}
-            >
-              Sections
-            </Typography>
-            {renderNavButtons(primaryNavItems)}
+                      {hasFunFact ? (
+                        <Box
+                          sx={{
+                            gridArea: '1 / 1 / 2 / 2',
+                            opacity: isFunFactActive ? 1 : 0,
+                            pointerEvents: isFunFactActive ? 'auto' : 'none',
+                            transition: 'opacity 260ms ease',
+                            width: '100%',
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: '#000000',
+                              lineHeight: 1.6,
+                              fontSize: { xs: '0.82rem', md: '0.88rem' },
+                              maxWidth: 300,
+                            }}
+                          >
+                            {funFact}
+                          </Typography>
+                        </Box>
+                      ) : null}
+                    </Box>
+                  </SnapshotSection>
+                ) : null}
+
+                {currentlyWorkingOn ? (
+                  <SnapshotSection title="Currently Working On:">
+                    <Typography
+                      variant="body2"
+                      sx={{ color: '#000000', lineHeight: 1.5, textAlign: 'left', maxWidth: 320 }}
+                    >
+                      {currentlyWorkingOn}
+                    </Typography>
+                  </SnapshotSection>
+                ) : null}
+              </Stack>
+            ) : null}
           </Stack>
-        )}
-        {routeNavItems.length > 0 && (
-          <Stack spacing={1.4}>
-            <Typography
-              variant="overline"
-              sx={{
-                letterSpacing: 3,
-                fontWeight: 700,
-                fontSize: { xs: '0.9rem', md: '1rem' },
-                color: '#1f2937',
-                textAlign: showLeftSidebar || isCompact ? 'center' : 'left',
-              }}
-            >
-              Pages
-            </Typography>
-            {renderNavButtons(routeNavItems)}
-          </Stack>
-        )}
-      </Stack>
+        </Box>
+
+      </Box>
     </Box>
   );
 
@@ -439,15 +427,7 @@ function Navbar({ heroCollapsed, activeSection, isMobileNavOpen = false, onMobil
           },
         }}
       >
-        <Box
-          sx={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'stretch',
-            justifyContent: 'center',
-            p: 1.5,
-          }}
-        >
+        <Box sx={{ flex: 1, display: 'flex', alignItems: 'stretch', justifyContent: 'center', p: 1.5 }}>
           {navPanel}
         </Box>
       </Drawer>
@@ -463,7 +443,6 @@ function Navbar({ heroCollapsed, activeSection, isMobileNavOpen = false, onMobil
           position: 'fixed',
           top: '50%',
           left: 0,
-          // width: '23vw',
           maxWidth: { md: 'clamp(240px, 24vw, 320px)', lg: 'clamp(260px, 22vw, 360px)' },
           height: '100vh',
           zIndex: (muiTheme) => muiTheme.zIndex.appBar + 25,

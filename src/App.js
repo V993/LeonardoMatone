@@ -260,7 +260,6 @@ function AppContent() {
 
       <Navbar
         heroCollapsed={heroCollapsed}
-        activeSection={activeSection}
         isMobileNavOpen={mobileNavOpen}
         onMobileNavClose={() => setMobileNavOpen(false)}
       />
