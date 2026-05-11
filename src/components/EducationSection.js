@@ -236,9 +236,9 @@ const DetailPanel = ({ item, degrees }) => {
       />
 
       <Stack
-        spacing={{ xs: 2.4, md: 3 }}
+        spacing={{ xs: 1.8, md: 2.2 }}
         sx={{
-          p: { xs: 2.8, md: 3.6 },
+          p: { xs: 2, md: 2.4 },
           flexGrow: 1,
           minHeight: 0,
         }}
@@ -313,13 +313,15 @@ const DetailPanel = ({ item, degrees }) => {
               key={`${d.title}-${i}`}
               sx={{
                 borderRadius: 2.5,
-                p: { xs: 2.4, md: 2.8 },
+                px: { xs: 1.4, md: 1.6 },
+                pt: { xs: 1.2, md: 1.4 },
+                pb: { xs: 0.6, md: 0.8 },
                 backgroundColor: 'rgba(var(--education-rgb), 0.06)',
                 border: '1px solid rgba(var(--education-rgb), 0.16)',
                 flexGrow: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 1.6,
+                gap: 0.9,
               }}
             >
               <Stack direction="row" spacing={1.4} alignItems="center">
@@ -564,7 +566,7 @@ function EducationSection({ navOffset = false }) {
                 gap: 2,
               }}
             >
-              <Stack spacing={0.4} sx={{ mb: { xs: 3, md: 5 } }}>
+              <Stack spacing={0.4} sx={{ mb: { xs: 2, md: 3 } }}>
                 <Typography
                   variant="overline"
                   sx={{ letterSpacing: 3, color: 'text.secondary' }}
