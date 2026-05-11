@@ -223,11 +223,12 @@
     {
       "institution": "Tulane University",
       "degree": "MS/PhD in Computer Science",
-      "timeframe": "2024 - Present",
+      "timeframe": "2023 - Present",
       "location": "New Orleans, LA",
-      "details": "Graduate research in applied machine learning and computational social choice.",
+      "details": "Pursuing a PhD post-MS. I work full time, and study as a student part time. My personal research is in social choice, but by quantity I contribute to research in various scientific fields.",
       "highlights": [
-        "AI Innovation Fellow collaborating with interdisciplinary teams",
+        "AI Innovation Fellowship: collaborates with interdisciplinary teams in ML",
+        "Research in computational social choice under Dr. Mattei",
         "Graduate coursework covering advanced ML/AI"
       ],
       "links": [],
@@ -237,19 +238,15 @@
       "institution": "Hunter College",
       "timeframe": "2018 - 2022",
       "location": "New York, NY",
-      "details": "Dual-degree Thomas Hunter Scholar exploring the intersection of computer science, policy, and civic technology.",
+      "details": "Explored the intersection of computer science and public policy as a double major. Worked part time as an Undergraduate Teaching Assistant. Also worked at Chipotle, where I learned to cook!",
       "degrees": [
         {
-          "title": "B.A. Computer Science",
+          "title": "B.A. Computer Science + B.A. Political Science",
           "highlights": [
             "Magna cum laude",
             "Thomas Hunter Scholar",
             "Minor in Mathematics"
           ],
-          "links": []
-        },
-        {
-          "title": "B.A. Political Science",
           "links": []
         }
       ],
@@ -295,7 +292,7 @@
   "projectsCopy": {
     "eyebrow": "Craft & Code",
     "title": "Projects",
-    "description": "A selection of publicly available personal builds. These projects are fun snippets of my interests, but slightly outdated. Ask about my Tulane research projects!",
+    "description": "A selection of publicly available personal builds. I predominantly code in python, but I dabble in some (simple) frontend, and I have much love for C++. Much of my work is private to Tulane, ask me about my interdisciplinary projects!",
     "summaryLabel": "GitHub Overview",
     "syncingText": "Syncing GitHub activity\u2026",
     "errorText": "GitHub summary is unavailable right now. Please check back soon.",
@@ -314,7 +311,7 @@
       "error": "Unable to display GitHub projects right now.",
       "default": "Repositories will appear here once available."
     },
-    "updatedLabel": "Updated",
+    "createdLabel": "Created",
     "modalLinkLabel": "View on GitHub",
     "readme": {
       "loading": "Loading README\u2026",
@@ -325,15 +322,27 @@
   "projectShowcase": [
     {
       "repo": "Representative-Polarity-US-House",
-      "tag": "python"
+      "tag": "python",
+      "image": "nom.png",
+      "usePages": true
     },
     {
-      "repo": "LegislativeDataAnalytics",
-      "tag": "python"
+      "repo": "fairymandering",
+      "tag": "python",
+      "image": "gerry.png",
+      "usePages": false
+    },
+    {
+      "repo": "riddle",
+      "tag": "html",
+      "image": "gollum.png",
+      "usePages": true
     },
     {
       "repo": "ASCII-Image-Conversion",
-      "tag": "python"
+      "tag": "python",
+      "image": "ascii.png",
+      "usePages": true
     }
   ],
   "contact": {

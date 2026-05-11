@@ -43,11 +43,11 @@ const overlayDataUri =
 </svg>`)}")`;
 
 const baseGradientLayers = [
-  "radial-gradient(circle at 20% 12%, rgba(var(--about-rgb), 0.45), transparent 10%)",
-  "radial-gradient(circle at 76% 30%, rgba(var(--education-rgb), 1.0), transparent 10%)",
-  "radial-gradient(circle at 26% 62%, rgba(var(--experience-rgb), 0.42), transparent 10%)",
-  "radial-gradient(circle at 72% 82%, rgba(var(--projects-rgb), 0.34), transparent 10%)",
-  "linear-gradient(180deg, #ffffff 0%, #f2e6d6 8%, #cfa577 24%, rgba(var(--about-rgb), 0.95) 36%, rgba(var(--education-rgb), 0.98) 50%, rgba(120, 180, 255, 0.85) 62%, rgba(var(--experience-rgb), 0.9) 74%, rgba(255, 170, 220, 0.88) 86%, rgba(var(--projects-rgb), 0.88) 96%, rgba(247, 248, 250, 1) 100%)"
+  "radial-gradient(circle at 20% 12%, rgba(255, 200, 170, 0.35), transparent 10%)",
+  "radial-gradient(circle at 76% 30%, rgba(180, 225, 230, 0.6), transparent 10%)",
+  "radial-gradient(circle at 26% 62%, rgba(var(--experience-rgb), 0.26), transparent 10%)",
+  "radial-gradient(circle at 72% 82%, rgba(var(--projects-rgb), 0.22), transparent 10%)",
+  "linear-gradient(180deg, #ffffff 0%, #fff6ec 8%, #ffe1c8 24%, rgba(255, 190, 160, 0.55) 36%, rgba(170, 220, 230, 0.6) 50%, rgba(200, 225, 250, 0.7) 62%, rgba(var(--experience-rgb), 0.55) 74%, rgba(255, 215, 235, 0.7) 86%, rgba(var(--projects-rgb), 0.55) 96%, rgba(252, 253, 255, 1) 100%)"
 ];
 
 const baseGradientRepeat = [

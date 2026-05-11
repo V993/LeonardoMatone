@@ -30,6 +30,17 @@ import { sharedChipSx, sharedChipProps } from '../styles/chipStyles';
 
 marked.setOptions({ gfm: true, breaks: true });
 
+const assetContext = require.context('../assets', false, /\.(png|jpe?g|gif|svg|webp)$/);
+const resolveAsset = (filename) => {
+  if (!filename) return '';
+  const name = filename.replace(/^.*[\\/]/, '');
+  try {
+    return assetContext(`./${name}`);
+  } catch (e) {
+    return '';
+  }
+};
+
 const StatPill = ({ icon, label, value }) => {
   const displayValue = typeof value === 'number' ? new Intl.NumberFormat('en-US').format(value) : value;
 
@@ -95,15 +106,15 @@ function ProjectsSection({ navOffset = false }) {
   const statsCopy = copy.stats ?? {};
   const emptyCopy = copy.emptyState ?? {};
   const profileLinkTemplate = copy.profileLinkLabel ?? 'github.com/%username%';
-  const updatedLabel = copy.updatedLabel ?? '';
+  const createdLabel = copy.createdLabel ?? '';
   const readmeCopy = copy.readme ?? {};
   const defaultRepoTag = copy.defaultTag ?? '';
-  const formatUpdatedDate = (value) => {
+  const formatCreatedDate = (value) => {
     if (!value) {
       return '';
     }
     const formatted = new Date(value).toLocaleDateString();
-    return updatedLabel ? `${updatedLabel} ${formatted}` : formatted;
+    return createdLabel ? `${createdLabel} ${formatted}` : formatted;
   };
 
   const showcaseConfig = React.useMemo(() => {
@@ -113,7 +124,12 @@ function ProjectsSection({ navOffset = false }) {
 
     return source
       .filter((item) => typeof item?.repo === 'string')
-      .map((item) => ({ repo: item.repo, tag: item.tag ?? '' }));
+      .map((item) => ({
+        repo: item.repo,
+        tag: item.tag ?? '',
+        image: item.image ?? '',
+        usePages: item.usePages ?? false,
+      }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectShowcaseData]);
 
@@ -132,6 +148,40 @@ function ProjectsSection({ navOffset = false }) {
       return acc;
     }, {});
   }, [showcaseConfig]);
+
+  const repoImageMap = React.useMemo(() => {
+    return showcaseConfig.reduce((acc, item) => {
+      if (item.repo) {
+        acc[item.repo.toLowerCase()] = resolveAsset(item.image);
+      }
+      return acc;
+    }, {});
+  }, [showcaseConfig]);
+
+  const repoUsePagesMap = React.useMemo(() => {
+    return showcaseConfig.reduce((acc, item) => {
+      if (item.repo) {
+        acc[item.repo.toLowerCase()] = Boolean(item.usePages);
+      }
+      return acc;
+    }, {});
+  }, [showcaseConfig]);
+
+  const getRepoImage = (repo) => {
+    const nameKey = repo?.name?.toLowerCase();
+    return (nameKey && repoImageMap[nameKey]) || '';
+  };
+
+  const getRepoLink = (repo) => {
+    if (!repo) return '';
+    const nameKey = repo.name?.toLowerCase();
+    const usePages = nameKey ? repoUsePagesMap[nameKey] : false;
+    if (usePages) {
+      const owner = repo.owner?.login ?? githubUsername;
+      return `https://${owner}.github.io/${repo.name}`;
+    }
+    return repo.html_url ?? `https://github.com/${githubUsername}/${repo.name}`;
+  };
 
   const githubChannel = (contactData?.channels ?? []).find(
     (channel) => channel.label?.toLowerCase() === 'github'
@@ -192,11 +242,11 @@ function ProjectsSection({ navOffset = false }) {
   const selectedRepoTopics = selectedRepo?.topics ?? [];
 
   const handleCardClick = (repo) => {
-    setSelectedRepo(repo);
-    setReadmeError(false);
-    const key = repo.full_name ?? `${githubUsername}/${repo.name}`;
-    const hasCachedReadme = Boolean(readmeCache[key]);
-    setReadmeLoading(!hasCachedReadme);
+    const url = getRepoLink(repo);
+    if (!url) return;
+    if (typeof window !== 'undefined') {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const handleDialogClose = () => {
@@ -521,7 +571,7 @@ function ProjectsSection({ navOffset = false }) {
                     border: '1px solid rgba(var(--projects-rgb), 0.18)',
                     background: '#ffffff',
                     cursor: 'pointer',
-                    p: { xs: 2.2, md: 2.6 },
+                    overflow: 'hidden',
                     transition: 'transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease',
                     outline: 'none',
                     '&:hover': {
@@ -535,7 +585,21 @@ function ProjectsSection({ navOffset = false }) {
                     },
                   }}
                 >
-                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.8 }}>
+                  <Box
+                    aria-hidden="true"
+                    sx={{
+                      width: '100%',
+                      aspectRatio: '16 / 9',
+                      backgroundColor: 'rgba(var(--projects-rgb), 0.08)',
+                      backgroundImage: getRepoImage(repo) ? `url(${getRepoImage(repo)})` : 'none',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      borderBottom: '1px solid rgba(var(--projects-rgb), 0.12)',
+                    }}
+                  />
+
+                  <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, p: { xs: 2.2, md: 2.6 } }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.4 }}>
                     <Typography variant="caption" sx={{ fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', color: 'rgb(var(--projects-rgb))' }}>
                       {getRepoTag(repo) || ' '}
                     </Typography>
@@ -560,11 +624,12 @@ function ProjectsSection({ navOffset = false }) {
                     </Box>
                   )}
 
-                  {formatUpdatedDate(repo.pushed_at) && (
+                  {formatCreatedDate(repo.created_at) && (
                     <Typography variant="caption" color="text.disabled" sx={{ mt: 1.5, display: 'block' }}>
-                      {formatUpdatedDate(repo.pushed_at)}
+                      {formatCreatedDate(repo.created_at)}
                     </Typography>
                   )}
+                  </Box>
                 </Box>
               </Grid>
             ))
@@ -639,9 +704,9 @@ function ProjectsSection({ navOffset = false }) {
                     <Typography variant="overline" sx={{ letterSpacing: 2, color: accentColor }}>
                       {getRepoTag(selectedRepo)}
                     </Typography>
-                    {formatUpdatedDate(selectedRepo.pushed_at) && (
+                    {formatCreatedDate(selectedRepo.created_at) && (
                       <Typography variant="caption" color="text.secondary">
-                        {formatUpdatedDate(selectedRepo.pushed_at)}
+                        {formatCreatedDate(selectedRepo.created_at)}
                       </Typography>
                     )}
                   </Stack>
