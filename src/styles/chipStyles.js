@@ -7,14 +7,17 @@ export const sharedChipSx = {
   letterSpacing: 0.25,
   fontSize: '0.78rem',
   textTransform: 'none',
-  backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
-  border: '1px solid rgba(var(--dark-cyan-rgb), 0.18)',
-  color: '#000000',
+  backgroundColor: 'var(--chip-bg)',
+  border: '1px solid var(--chip-border)',
+  color: 'var(--chip-text)',
   boxShadow: '0 6px 14px rgba(85, 134, 140, 0.14)',
-  transition: 'background-color 200ms ease, box-shadow 200ms ease, transform 200ms ease',
+  transition: 'background-color 200ms ease, box-shadow 200ms ease, transform 200ms ease, color 200ms ease',
+  '& .MuiChip-label': {
+    color: 'var(--chip-text)',
+  },
   '&:hover': {
-    backgroundColor: 'rgba(var(--dark-cyan-rgb), 0.18)',
-    boxShadow: '0 10px 20px rgba(85, 134, 140, 0.18)',
+    backgroundColor: 'var(--chip-bg-hover)',
+    boxShadow: '0 10px 20px rgba(85, 134, 140, 0.22)',
     transform: 'translateY(-1px)',
   },
 };

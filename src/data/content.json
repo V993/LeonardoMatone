@@ -232,7 +232,8 @@
         "Graduate coursework covering advanced ML/AI"
       ],
       "links": [],
-      "badge": "tulane.png"
+      "badge": "tulane.png",
+      "color": "green"
     },
     {
       "institution": "Hunter College",
@@ -250,7 +251,8 @@
           "links": []
         }
       ],
-      "badge": "hunter.png"
+      "badge": "hunter.png",
+      "color": "purple"
     },
     {
       "institution": "Hillcrest High School",
@@ -262,7 +264,8 @@
         "Model United Nations Undersecretary General",
         "Writer for the Hillcrest Highlighter"
       ],
-      "links": []
+      "links": [],
+      "color": "purple"
     }
   ],
   "about": {

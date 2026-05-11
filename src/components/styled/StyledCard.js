@@ -6,10 +6,11 @@ const StyledCard = styled(Card)(({ theme }) => ({
   position: 'relative',
   borderRadius: 18,
   padding: theme.spacing(3),
-  background: 'linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.94))',
+  background: 'linear-gradient(180deg, var(--surface-base), var(--surface-raised))',
   border: '1px solid rgba(var(--dark-cyan-rgb), 0.18)',
   boxShadow: '0 10px 24px rgba(85, 134, 140, 0.12)',
-  transition: 'transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease',
+  color: 'var(--text-primary)',
+  transition: 'transform 180ms ease, box-shadow 200ms ease, border-color 200ms ease, background 240ms ease',
   display: 'flex',
   flexDirection: 'column',
   height: '100%',
@@ -29,7 +30,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   '&[data-variant="project"]': {
     padding: theme.spacing(3),
     background:
-      'linear-gradient(155deg, rgba(var(--education-rgb), 0.15) 0%, rgba(var(--education-rgb), 0.08) 46%, rgba(255, 255, 255, 0.96) 100%)',
+      'linear-gradient(155deg, rgba(var(--education-rgb), 0.15) 0%, rgba(var(--education-rgb), 0.08) 46%, var(--surface-base) 100%)',
     border: '1px solid rgba(var(--education-rgb), 0.30)',
     overflow: 'hidden',
   },

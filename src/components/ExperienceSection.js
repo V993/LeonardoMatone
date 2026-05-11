@@ -246,7 +246,7 @@ function ExperienceSection({ navOffset = false }) {
             }}
           >
             {summary ? (
-              <Typography variant="body2" sx={{ fontWeight: 350, color: '#000000', lineHeight: 1.6 }}>
+              <Typography variant="body2" sx={{ fontWeight: 350, color: 'var(--text-primary)', lineHeight: 1.6 }}>
                 {summary}
               </Typography>
             ) : null}
@@ -265,7 +265,7 @@ function ExperienceSection({ navOffset = false }) {
                 <Typography
                   component="li"
                   variant="subtitle2"
-                  sx={{ fontWeight: 700, color: '#000000', mb: 0.2 }}
+                  sx={{ fontWeight: 700, color: 'var(--text-primary)', mb: 0.2 }}
                 >
                   Highlights
                 </Typography>
@@ -276,20 +276,19 @@ function ExperienceSection({ navOffset = false }) {
                     variant="body2"
                     sx={{
                       position: 'relative',
-                      paddingLeft: '1.45rem',
+                      paddingLeft: '1.1rem',
                       lineHeight: 1.62,
                       fontWeight: 350,
-                      color: '#000000',
+                      color: 'var(--text-primary)',
                       '&::before': {
                         content: '""',
                         position: 'absolute',
-                        left: 0,
-                        top: '0.55rem',
-                        width: 8,
-                        height: 8,
+                        left: 2,
+                        top: '0.7rem',
+                        width: 4,
+                        height: 4,
                         borderRadius: '50%',
-                        background: 'rgba(var(--experience-rgb), 0.75)',
-                        boxShadow: '0 0 12px rgba(var(--experience-rgb), 0.38)',
+                        background: 'rgba(var(--experience-rgb), 0.95)',
                       },
                     }}
                   >
@@ -342,12 +341,12 @@ function ExperienceSection({ navOffset = false }) {
                 spacing={1}
                 alignItems="center"
                 sx={{
-                  border: '1px solid #0f172a',
+                  border: '1px solid var(--text-strong)',
                   borderRadius: 999,
                   px: 1.2,
                   py: 0.35,
-                  backgroundColor: '#fff',
-                  boxShadow: '0 14px 24px -20px rgba(15,23,42,0.35)',
+                  backgroundColor: 'var(--surface-solid)',
+                  boxShadow: '0 14px 24px -20px rgba(var(--shadow-rgb), 0.45)',
                 }}
               >
                 <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
@@ -361,8 +360,8 @@ function ExperienceSection({ navOffset = false }) {
                   }}
                   aria-label="Show previous role"
                   sx={{
-                    border: '1px solid #0f172a',
-                    bgcolor: '#fff',
+                    border: '1px solid var(--text-strong)',
+                    bgcolor: 'var(--surface-solid)',
                   }}
                 >
                   <ArrowBackIosNewRoundedIcon fontSize="small" />
@@ -375,8 +374,8 @@ function ExperienceSection({ navOffset = false }) {
                   }}
                   aria-label="Show next role"
                   sx={{
-                    border: '1px solid #0f172a',
-                    bgcolor: '#fff',
+                    border: '1px solid var(--text-strong)',
+                    bgcolor: 'var(--surface-solid)',
                   }}
                 >
                   <ArrowForwardIosRoundedIcon fontSize="small" />
@@ -461,7 +460,7 @@ function ExperienceSection({ navOffset = false }) {
                 sx={{
                   borderRadius: 3,
                   border: '1px solid rgba(var(--experience-rgb), 0.3)',
-                  background: 'linear-gradient(165deg, rgba(var(--experience-rgb), 0.18) 0%, rgb(255, 255, 255) 0%)',
+                  background: 'linear-gradient(165deg, rgba(var(--experience-rgb), 0.18) 0%, var(--surface-solid) 0%)',
                   p: { xs: 2.2, md: 2.6 },
                   display: 'flex',
                   flexDirection: 'column',
@@ -481,7 +480,7 @@ function ExperienceSection({ navOffset = false }) {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            backgroundColor: 'rgb(255, 255, 255)',
+                            backgroundColor: 'var(--surface-solid)',
                             border: '1px solid rgba(var(--experience-rgb), 0.18)',
                           }}
                         >
@@ -542,7 +541,7 @@ function ExperienceSection({ navOffset = false }) {
             }}
           >
             {totalJobs === 0 ? (
-              <Box sx={{ border: '1px solid #0f172a', borderRadius: 2, p: 2 }}>
+              <Box sx={{ border: '1px solid var(--text-strong)', borderRadius: 2, p: 2 }}>
                 <Typography variant="body2">Experience data unavailable.</Typography>
               </Box>
             ) : isMdUp ? (
@@ -569,15 +568,15 @@ function ExperienceSection({ navOffset = false }) {
                   const translateX = offsetX * depth;
                   const translateY = offsetY * depth;
                   const cardBackground = isActive
-                    ? 'linear-gradient(rgb(255, 255, 255) 30%)'
-                    : 'linear-gradient(rgba(255,255,255,0.5) 30%)';
+                    ? 'linear-gradient(var(--surface-solid) 30%)'
+                    : 'linear-gradient(var(--surface-overlay) 30%)';
                   const cardBorder = isActive
                     ? '1px solid rgba(var(--experience-rgb), 0.56)'
                     : '1px solid rgba(var(--experience-rgb), 0.32)';
                   // const cardShadow = isActive
                   //   ? '0 34px 68px -38px rgba(15,23,42,0.55), 0 22px 48px -28px rgba(15,23,42,0.35)'
                   //   : '0 28px 52px -42px rgba(15,23,42,0.35), 0 18px 34px -28px rgba(15,23,42,0.25)';
-                  const cardOverlayBorder = isActive ? 'rgba(255,255,255,0.38)' : 'rgba(255,255,255,0.28)';
+                  const cardOverlayBorder = isActive ? 'rgba(var(--border-rgb),0.38)' : 'rgba(var(--border-rgb),0.28)';
                   const inactiveOpacity = isActive ? 1 : 0.92;
 
                   const handleCardClick = (event) => {
@@ -633,7 +632,7 @@ function ExperienceSection({ navOffset = false }) {
                         },
                         '&:hover': totalJobs > 1
                           ? {
-                              boxShadow: '100px 0 100px -100px rgba(15,23,42,0.58)',
+                              boxShadow: '100px 0 100px -100px rgba(var(--shadow-rgb), 0.58)',
                               opacity: 1,
                             }
                           : undefined,
@@ -653,7 +652,7 @@ function ExperienceSection({ navOffset = false }) {
                     sx={{
                       borderRadius: 3,
                       border: '1px solid rgba(var(--experience-rgb), 0.32)',
-                      background: 'linear-gradient(160deg, rgba(var(--experience-rgb), 0.18) 0%, rgba(255,255,255,1.0) 76%)',
+                      background: 'linear-gradient(160deg, rgba(var(--experience-rgb), 0.18) 0%, var(--surface-base) 76%)',
                       p: 2.4,
                     }}
                   >

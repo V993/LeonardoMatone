@@ -1,29 +1,35 @@
 // src/styles/palette.js
+//
+// Semantic palette tokens. These resolve at runtime to CSS variables defined in
+// src/index.css, which flip between light/dark via the [data-theme] attribute
+// on <html>. Using `var(--token)` everywhere lets a single attribute swap re-
+// theme the entire site without re-rendering components.
+
 export const textOnLight = {
-  strong: '#000000',
-  primary: '#000000',
-  secondary: '#000000',
-  muted: '#000000',
-  subtle: '#000000',
+  strong: 'var(--text-strong)',
+  primary: 'var(--text-primary)',
+  secondary: 'var(--text-secondary)',
+  muted: 'var(--text-muted)',
+  subtle: 'var(--text-subtle)',
 };
 
 export const textOnDark = {
-  strong: '#FFFFFF',
-  muted: '#FFFFFF',
+  strong: 'var(--text-on-accent)',
+  muted: 'var(--text-on-accent)',
 };
 
 export const surfaceColors = {
-  base: 'rgba(255, 255, 255, 0.96)',
-  raised: 'rgba(255, 255, 255, 0.92)',
-  overlay: 'rgba(255, 255, 255, 0.85)',
-  subtle: 'rgba(255, 255, 255, 0.78)',
-  border: 'rgba(19, 35, 53, 0.16)',
-  borderStrong: 'rgba(19, 35, 53, 0.28)',
-  shadowSoft: '0 18px 32px rgba(12, 21, 32, 0.16)',
-  shadowStrong: '0 32px 64px rgba(12, 21, 32, 0.22)',
+  base: 'var(--surface-base)',
+  raised: 'var(--surface-raised)',
+  overlay: 'var(--surface-overlay)',
+  subtle: 'var(--surface-subtle)',
+  border: 'var(--border-default)',
+  borderStrong: 'var(--border-strong)',
+  shadowSoft: 'var(--shadow-soft)',
+  shadowStrong: 'var(--shadow-strong)',
 };
 
 export const overlayColors = {
-  dark: 'rgba(15, 23, 42, 0.84)',
-  darkSoft: 'rgba(15, 23, 42, 0.64)',
+  dark: 'rgba(0, 0, 0, 0.84)',
+  darkSoft: 'rgba(0, 0, 0, 0.64)',
 };

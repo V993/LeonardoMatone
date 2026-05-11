@@ -38,7 +38,7 @@ const desktopAvatarSize = 188;
 const snapshotHeadingSx = {
   letterSpacing: 3,
   fontWeight: 700,
-  color: '#000000',
+  color: 'var(--text-primary)',
   textAlign: 'left',
   textTransform: 'uppercase',
   fontSize: { xs: '0.8rem', md: '0.86rem' },
@@ -100,9 +100,9 @@ function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
       sx={{
         position: 'relative',
         borderRadius: { xs: 3, md: 4 },
-        border: '1px solid rgba(var(--dark-cyan-rgb), 0.24)',
-        background: 'linear-gradient(180deg, rgb(190, 236, 163) 20%, rgba(255,255,255,0.96) 100%)',
-        boxShadow: '0 24px 64px rgba(85, 134, 140, 0.28)',
+        border: 'none',
+        background: 'linear-gradient(180deg, rgba(var(--welcome-rgb), 0.55) 20%, var(--surface-base) 100%)',
+        boxShadow: '0 24px 64px rgba(var(--shadow-rgb), 0.28)',
         backdropFilter: 'blur(14px)',
         WebkitBackdropFilter: 'blur(14px)',
         overflow: 'hidden',
@@ -116,7 +116,7 @@ function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
       {shouldShowMobileNav && (
         <IconButton
           onClick={handleMobileClose}
-          sx={{ position: 'absolute', top: 12, right: 12, color: '#000000', zIndex: 5 }}
+          sx={{ position: 'absolute', top: 12, right: 12, color: 'var(--text-primary)', zIndex: 5 }}
           aria-label="Close navigation"
         >
           <CloseIcon />
@@ -161,7 +161,7 @@ function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
                 <Divider
                   flexItem
                   sx={{
-                    borderColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+                    borderColor: 'var(--card-divider)',
                     alignSelf: 'stretch',
                     my: { xs: 1.8, md: 2 },
                   }}
@@ -189,7 +189,7 @@ function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
                         variant="caption"
                         sx={{
                           fontWeight: 700,
-                          color: '#000000',
+                          color: 'var(--text-primary)',
                           letterSpacing: 1.2,
                           opacity: 0.55,
                           textTransform: 'uppercase',
@@ -206,10 +206,9 @@ function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
                         sx={{
                           fontWeight: 900,
                           fontSize: { xs: '1.7rem', md: '1.85rem' },
-                          color: '#000000',
+                          color: 'var(--text-primary)',
                           letterSpacing: 0,
                           lineHeight: 1.1,
-                          textShadow: '3px 1px 1px rgba(169, 220, 174, 0.88)',
                         }}
                       >
                         {name}
@@ -298,7 +297,7 @@ function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
                   <Divider
                     flexItem
                     sx={{
-                      borderColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+                      borderColor: 'var(--card-divider)',
                       alignSelf: 'stretch',
                       my: { xs: 1.8, md: 2 },
                     }}
@@ -336,8 +335,6 @@ function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
                                 {...sharedChipProps}
                                 sx={{
                                   ...sharedChipSx,
-                                  color: '#000000',
-                                  borderColor: 'rgba(31,41,55,0.2)',
                                   px: 1.4,
                                 }}
                               />
@@ -359,7 +356,7 @@ function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
                           <Typography
                             variant="body2"
                             sx={{
-                              color: '#000000',
+                              color: 'var(--text-primary)',
                               lineHeight: 1.6,
                               fontSize: { xs: '0.82rem', md: '0.88rem' },
                               maxWidth: 300,
@@ -377,7 +374,7 @@ function Navbar({ heroCollapsed, isMobileNavOpen = false, onMobileNavClose }) {
                   <SnapshotSection title="Currently Working On:">
                     <Typography
                       variant="body2"
-                      sx={{ color: '#000000', lineHeight: 1.5, textAlign: 'left', maxWidth: 320 }}
+                      sx={{ color: 'var(--text-primary)', lineHeight: 1.5, textAlign: 'left', maxWidth: 320 }}
                     >
                       {currentlyWorkingOn}
                     </Typography>

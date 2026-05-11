@@ -1,6 +1,6 @@
 /* src/index.css */
 :root {
-  /* Base palette (HEX) */
+  /* Base palette (HEX) — unchanged across themes */
   --light-green: #b7ff9d;
   --raw-umber: #a1683a;
   --dark-cyan: #55868c;
@@ -20,10 +20,143 @@
   --education-rgb: var(--dark-cyan-rgb);
   --experience-rgb: var(--sunglow-rgb);
   --projects-rgb: var(--mauve-rgb);
+
+  /* -------- Semantic tokens (LIGHT default) -------- */
+
+  /* Text */
+  --text-strong: #000000;
+  --text-primary: #000000;
+  --text-secondary: rgba(15, 23, 42, 0.72);
+  --text-muted: rgba(15, 23, 42, 0.6);
+  --text-subtle: rgba(15, 23, 42, 0.5);
+  --text-disabled: rgba(15, 23, 42, 0.38);
+  --text-on-accent: #ffffff;
+  --text-rgb: 15, 23, 42;
+
+  /* Surfaces (containers / cards) */
+  --surface-base: rgba(255, 255, 255, 0.96);
+  --surface-raised: rgba(255, 255, 255, 0.92);
+  --surface-overlay: rgba(255, 255, 255, 0.85);
+  --surface-subtle: rgba(255, 255, 255, 0.78);
+  --surface-solid: #ffffff;
+  --surface-soft: rgba(241, 245, 249, 0.45);
+  --surface-tint: rgba(243, 244, 246, 0.6);
+  --surface-rgb: 255, 255, 255;
+
+  /* Borders / dividers */
+  --border-soft: rgba(15, 23, 42, 0.08);
+  --border-default: rgba(15, 23, 42, 0.16);
+  --border-strong: rgba(15, 23, 42, 0.28);
+  --border-rgb: 15, 23, 42;
+
+  /* Shadows */
+  --shadow-rgb: 15, 23, 42;
+  --shadow-soft: 0 18px 32px rgba(12, 21, 32, 0.16);
+  --shadow-strong: 0 32px 64px rgba(12, 21, 32, 0.22);
+
+  /* Backplate behind the gradient layers */
+  --page-backplate: #e6ddd1;
+
+  /* Chip / pill tokens. In light mode these resolve to the original
+     translucent-cyan look; in dark mode they flip to a light cream surface
+     with dark text so chips read as solid badges against the dark bg. */
+  --chip-bg: rgba(var(--dark-cyan-rgb), 0.12);
+  --chip-bg-hover: rgba(var(--dark-cyan-rgb), 0.22);
+  --chip-border: rgba(var(--dark-cyan-rgb), 0.28);
+  --chip-text: #000000;
+
+  /* Divider on top of welcome/nav surface cards */
+  --card-divider: rgba(var(--dark-cyan-rgb), 0.12);
+
+  /* Gradient stops (light) — derived from the original App.js gradient */
+  --bg-radial-1: rgba(255, 200, 170, 0.35);
+  --bg-radial-2: rgba(180, 225, 230, 0.60);
+  --bg-linear-0: #ffffff;
+  --bg-linear-1: #fff6ec;
+  --bg-linear-2: #ffe1c8;
+  --bg-linear-3: rgba(255, 190, 160, 0.55);
+  --bg-linear-4: rgba(170, 220, 230, 0.60);
+  --bg-linear-5: rgba(200, 225, 250, 0.70);
+  --bg-linear-7: rgba(255, 215, 235, 0.70);
+  --bg-linear-9: rgba(252, 253, 255, 1);
+
+  /* SVG overlay (vines/leaves/bits) */
+  --overlay-bit-fill: rgba(0, 0, 0, 0.6);
+  --overlay-vine-stroke: rgba(34, 139, 34, 0.55);
+  --overlay-leaf-fill: rgba(46, 139, 87, 0.38);
+  --overlay-text-opacity: 0.18;
+}
+
+/* -------- DARK overrides -------- */
+:root[data-theme='dark'] {
+  /* Text — inverted but with the same contrast hierarchy */
+  --text-strong: #ffffff;
+  --text-primary: #f1f5f9;
+  --text-secondary: rgba(241, 245, 249, 0.78);
+  --text-muted: rgba(226, 232, 240, 0.66);
+  --text-subtle: rgba(203, 213, 225, 0.55);
+  --text-disabled: rgba(203, 213, 225, 0.4);
+  --text-on-accent: #0b0f17;
+  --text-rgb: 241, 245, 249;
+
+  /* Surfaces — near-black with subtle elevation */
+  --surface-base: rgba(22, 27, 36, 0.92);
+  --surface-raised: rgba(28, 34, 44, 0.94);
+  --surface-overlay: rgba(20, 25, 33, 0.88);
+  --surface-subtle: rgba(28, 34, 44, 0.78);
+  --surface-solid: #161b24;
+  --surface-soft: rgba(30, 36, 47, 0.55);
+  --surface-tint: rgba(34, 41, 54, 0.65);
+  --surface-rgb: 22, 27, 36;
+
+  /* Borders */
+  --border-soft: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.16);
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --border-rgb: 255, 255, 255;
+
+  /* Shadows */
+  --shadow-rgb: 0, 0, 0;
+  --shadow-soft: 0 18px 32px rgba(0, 0, 0, 0.55);
+  --shadow-strong: 0 32px 64px rgba(0, 0, 0, 0.7);
+
+  --page-backplate: #07090d;
+
+  /* Chips: warm off-white surface with dark text — readable on dark bg */
+  --chip-bg: rgba(245, 240, 230, 0.92);
+  --chip-bg-hover: rgba(255, 250, 240, 1);
+  --chip-border: rgba(245, 240, 230, 0.4);
+  --chip-text: #0b0f17;
+
+  --card-divider: rgba(255, 255, 255, 0.7);
+
+  /* Gradient stops (dark) — same SHAPE as light, but deep/inky.
+     Top stops carry purple/violet, bottom stops carry warm red. */
+  --bg-radial-1: rgba(150, 95, 220, 0.55);
+  --bg-radial-2: rgba(70, 140, 165, 0.55);
+  --bg-linear-0: #1a0f2e;
+  --bg-linear-1: #241338;
+  --bg-linear-2: #2a1640;
+  --bg-linear-3: rgba(95, 45, 150, 0.75);
+  --bg-linear-4: rgba(40, 80, 110, 0.75);
+  --bg-linear-5: rgba(80, 50, 110, 0.75);
+  --bg-linear-7: rgba(150, 60, 50, 0.75);
+  --bg-linear-9: rgba(40, 12, 14, 1);
+
+  --overlay-bit-fill: rgba(180, 200, 220, 0.45);
+  --overlay-vine-stroke: rgba(120, 200, 140, 0.45);
+  --overlay-leaf-fill: rgba(90, 180, 130, 0.32);
+  --overlay-text-opacity: 0.12;
+}
+
+html,
+body {
+  background-color: var(--page-backplate);
 }
 
 body {
   font-family: 'Roboto', sans-serif;
+  color: var(--text-primary);
 }
 
 a {

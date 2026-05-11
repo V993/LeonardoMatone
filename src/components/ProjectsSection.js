@@ -511,7 +511,7 @@ function ProjectsSection({ navOffset = false }) {
                   py: 4,
                   borderRadius: 3.5,
                   border: '1px solid rgba(var(--dark-cyan-rgb), 0.18)',
-                  background: 'linear-gradient(135deg, rgba(var(--projects-rgb), 0.1) 0%, rgba(255,255,255,1.0) 0%)',
+                  background: 'linear-gradient(135deg, rgba(var(--projects-rgb), 0.1) 0%, var(--surface-solid) 0%)',
                   transition: 'box-shadow 180ms ease, border-color 180ms ease',
                   '&:hover': {
                     boxShadow: '0 4px 20px rgba(85, 134, 140, 0.18)',
@@ -569,7 +569,7 @@ function ProjectsSection({ navOffset = false }) {
                     borderRadius: 3,
                     boxSizing: 'border-box',
                     border: '1px solid rgba(var(--projects-rgb), 0.18)',
-                    background: '#ffffff',
+                    background: 'var(--surface-solid)',
                     cursor: 'pointer',
                     overflow: 'hidden',
                     transition: 'transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease',
@@ -665,7 +665,7 @@ function ProjectsSection({ navOffset = false }) {
           maxWidth="lg"
           BackdropProps={{
             sx: {
-              backgroundColor: 'rgba(17, 24, 39, 0.55)',
+              backgroundColor: 'rgba(0, 0, 0, 0.55)',
               backdropFilter: 'blur(2px)',
             },
           }}
@@ -675,9 +675,9 @@ function ProjectsSection({ navOffset = false }) {
               height: { xs: '92vh', md: '88vh' },
               borderRadius: 5,
               overflow: 'hidden',
-              boxShadow: '0 32px 72px rgba(17, 24, 39, 0.45)',
-              border: '1px solid rgba(17, 24, 39, 0.16)',
-              background: 'linear-gradient(180deg, #ffffff 0%, #f9fbfc 100%)',
+              boxShadow: '0 32px 72px rgba(var(--shadow-rgb), 0.45)',
+              border: '1px solid var(--border-default)',
+              background: 'linear-gradient(180deg, var(--surface-solid) 0%, var(--surface-soft) 100%)',
             },
           }}
         >
@@ -691,8 +691,8 @@ function ProjectsSection({ navOffset = false }) {
                   px: { xs: 2.5, md: 4 },
                   py: { xs: 2, md: 3 },
                   gap: 2,
-                  backgroundColor: 'rgba(17, 24, 39, 0.06)',
-                  borderBottom: '1px solid rgba(17, 24, 39, 0.12)',
+                  backgroundColor: 'rgba(var(--text-rgb), 0.06)',
+                  borderBottom: '1px solid var(--border-soft)',
                 }}
               >
                 <Stack spacing={1.25} sx={{ pr: 2, maxWidth: 'calc(100% - 48px)' }}>

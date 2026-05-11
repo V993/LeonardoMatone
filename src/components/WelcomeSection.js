@@ -234,8 +234,8 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
           transition: 'transform 200ms ease, background-color 200ms ease, box-shadow 200ms ease',
           '&:hover': {
             transform: 'translateY(-1px)',
-            backgroundColor: 'rgba(15, 23, 42, 0.05)',
-            boxShadow: '0 10px 20px rgba(15, 23, 42, 0.14)',
+            backgroundColor: 'rgba(var(--text-rgb), 0.07)',
+            boxShadow: '0 10px 20px rgba(var(--shadow-rgb), 0.18)',
           },
         }}
       >
@@ -402,7 +402,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                   label={role}
                   size="small"
                   sx={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                    backgroundColor: 'rgba(var(--text-rgb), 0.10)',
                     color: textPalette.strong,
                     fontWeight: 600,
                     letterSpacing: 0.4,
@@ -418,9 +418,9 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
               sx={{
                 p: { xs: 2.4, sm: 2.8 },
                 borderRadius: 3,
-                backgroundColor: 'rgba(255, 255, 255, 0.92)',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
-                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.12)',
+                backgroundColor: 'var(--surface-raised)',
+                border: '1px solid var(--border-soft)',
+                boxShadow: '0 12px 32px rgba(var(--shadow-rgb), 0.12)',
               }}
             >
               <Stack spacing={1.4}>
@@ -455,8 +455,8 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
               sx={{
                 p: { xs: 2.2, sm: 2.6 },
                 borderRadius: 3,
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
+                backgroundColor: 'var(--surface-raised)',
+                border: '1px solid var(--border-soft)',
               }}
             >
               <Stack spacing={1.0}>
@@ -479,8 +479,6 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                       {...sharedChipProps}
                       sx={{
                         ...sharedChipSx,
-                        color: textPalette.primary,
-                        borderColor: 'rgba(31,41,55,0.22)',
                       }}
                     />
                   ))}
@@ -495,8 +493,8 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
               sx={{
                 p: { xs: 2.2, sm: 2.6 },
                 borderRadius: 3,
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
+                backgroundColor: 'var(--surface-raised)',
+                border: '1px solid var(--border-soft)',
               }}
             >
               <Stack spacing={1.2}>
@@ -531,7 +529,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                     fontWeight: 700,
                     letterSpacing: 0.6,
                     borderRadius: 2.1,
-                    borderColor: 'rgba(15, 23, 42, 0.32)',
+                    borderColor: 'var(--border-strong)',
                     color: textPalette.strong,
                   px: { xs: 2.6, sm: 2.2 },
                   py: { xs: 0.88, sm: 0.72 },
@@ -540,7 +538,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                   fontSize: { sm: '0.95rem' },
                     '&:hover': {
                       borderColor: textPalette.strong,
-                      backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                      backgroundColor: 'rgba(var(--text-rgb), 0.10)',
                     },
                   }}
                 >
@@ -728,7 +726,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                   label={role}
                   size="small"
                   sx={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                    backgroundColor: 'rgba(var(--text-rgb), 0.10)',
                     color: textPalette.strong,
                     fontWeight: 600,
                     letterSpacing: 0.4,
@@ -769,8 +767,8 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
               sx={{
                 p: { xs: 1.9, md: 2.3 },
                 borderRadius: 2.6,
-                backgroundColor: 'rgba(255, 255, 255, 0.82)',
-                border: '1px solid rgba(0, 0, 0, 0.12)',
+                backgroundColor: 'var(--surface-overlay)',
+                border: '1px solid var(--border-default)',
               }}
             >
               <Stack spacing={1.6}>
@@ -818,7 +816,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                     fontWeight: 700,
                     letterSpacing: 0.6,
                     borderRadius: 2.1,
-                    borderColor: 'rgba(15, 23, 42, 0.32)',
+                    borderColor: 'var(--border-strong)',
                     color: textPalette.strong,
                     px: { xs: 2.6, sm: 2.2 },
                     py: { xs: 0.88, sm: 0.72 },
@@ -827,7 +825,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                     fontSize: { sm: '0.95rem' },
                     '&:hover': {
                       borderColor: textPalette.strong,
-                      backgroundColor: 'rgba(0, 0, 0, 0.08)',
+                      backgroundColor: 'rgba(var(--text-rgb), 0.10)',
                     },
                   }}
                 >
@@ -868,9 +866,9 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
             aria-label={canToggleFunFact ? 'Toggle fun fact view' : undefined}
             sx={{
               borderRadius: { xs: 3, md: 4 },
-              border: '1px solid rgba(var(--dark-cyan-rgb), 0.24)',
-              background: 'linear-gradient(180deg, rgb(190, 236, 163) 0%, rgba(255, 255, 255, 0.96) 100%)',
-              boxShadow: '0 24px 64px rgba(85, 134, 140, 0.28)',
+              border: 'none',
+              background: 'linear-gradient(180deg, rgba(var(--welcome-rgb), 0.55) 0%, var(--surface-base) 100%)',
+              boxShadow: '0 24px 64px rgba(var(--shadow-rgb), 0.28)',
               backdropFilter: 'blur(14px)',
               WebkitBackdropFilter: 'blur(14px)',
               overflow: 'hidden',
@@ -919,7 +917,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                   <Divider
                     flexItem
                     sx={{
-                      borderColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+                      borderColor: 'var(--card-divider)',
                       alignSelf: 'stretch',
                       my: { xs: 1.8, md: 2 },
                     }}
@@ -977,7 +975,6 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                         fontWeight: 1000,
                         color: textPalette.strong,
                         letterSpacing: 0.6,
-                        textShadow: '3px 1px 1px rgba(169, 220, 174, 0.88)',
                         textAlign: 'center',
                       }}
                     >
@@ -1042,7 +1039,7 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                     <Divider
                       flexItem
                       sx={{
-                        borderColor: 'rgba(var(--dark-cyan-rgb), 0.12)',
+                        borderColor: 'var(--card-divider)',
                         alignSelf: 'stretch',
                         my: { xs: 1.8, md: 2 },
                       }}
@@ -1088,8 +1085,6 @@ function WelcomeSection({ navOffset = false, heroCollapsed = false, activeSectio
                                   {...sharedChipProps}
                                   sx={{
                                     ...sharedChipSx,
-                                    color: textPalette.primary,
-                                    borderColor: 'rgba(31,41,55,0.2)',
                                     px: 1.4,
                                   }}
                                 />

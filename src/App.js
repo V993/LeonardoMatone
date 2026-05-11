@@ -1,6 +1,9 @@
 // src/App.js
 import React, { useEffect, useMemo, useState } from 'react';
-import { CssBaseline, Box, IconButton } from '@mui/material';
+import { CssBaseline, Box, IconButton, Tooltip } from '@mui/material';
+import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import { useThemeMode } from './theme/ThemeModeContext';
 import Navbar from './components/Navbar';
 import WelcomeSection from './components/WelcomeSection';
 import ExperienceSection from './components/ExperienceSection';
@@ -15,18 +18,23 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useTheme, useMediaQuery } from '@mui/material';
 
 // Background:
-const overlayDataUri =
+//
+// The SVG overlay uses theme-aware colors injected at render time, since CSS
+// variables can't be referenced from inside a data: URL. The gradient stops
+// below read CSS variables from index.css that flip with [data-theme].
+const buildOverlayDataUri = ({ bitFill, vineStroke, leafFill, textOpacity }) =>
   `url("data:image/svg+xml,${encodeURIComponent(`
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'>
   <defs>
     <style>
       text {
-        opacity:.18;
+        opacity:${textOpacity};
         font-family: ui-monospace, Menlo, Consolas, monospace;
         font-weight: 200;
+        fill: ${bitFill};
       }
-      .vine { fill:none; stroke:rgba(34,139,34,.55); stroke-width:1.2 }
-      .leaf { fill:rgba(46,139,87,.38) }
+      .vine { fill:none; stroke:${vineStroke}; stroke-width:1.2 }
+      .leaf { fill:${leafFill} }
     </style>
     <pattern id='bits' width='10' height='10' patternUnits='userSpaceOnUse'>
       <text x='0' y='6' font-size='8'>0100110010011010</text>
@@ -42,12 +50,29 @@ const overlayDataUri =
   <ellipse class='leaf' cx='34' cy='20' rx='6' ry='3' transform='rotate(-30 34 20)'/>
 </svg>`)}")`;
 
+const OVERLAY_PALETTES = {
+  light: {
+    bitFill: 'rgba(0, 0, 0, 0.6)',
+    vineStroke: 'rgba(34,139,34,.55)',
+    leafFill: 'rgba(46,139,87,.38)',
+    textOpacity: 0.18,
+  },
+  dark: {
+    bitFill: 'rgba(180, 200, 220, 0.45)',
+    vineStroke: 'rgba(120, 200, 140, 0.45)',
+    leafFill: 'rgba(90, 180, 130, 0.32)',
+    textOpacity: 0.12,
+  },
+};
+
+// Same gradient shape as before — stops resolve from CSS variables so they
+// flip with the [data-theme] attribute on <html>.
 const baseGradientLayers = [
-  "radial-gradient(circle at 20% 12%, rgba(255, 200, 170, 0.35), transparent 10%)",
-  "radial-gradient(circle at 76% 30%, rgba(180, 225, 230, 0.6), transparent 10%)",
+  "radial-gradient(circle at 20% 12%, var(--bg-radial-1), transparent 10%)",
+  "radial-gradient(circle at 76% 30%, var(--bg-radial-2), transparent 10%)",
   "radial-gradient(circle at 26% 62%, rgba(var(--experience-rgb), 0.26), transparent 10%)",
   "radial-gradient(circle at 72% 82%, rgba(var(--projects-rgb), 0.22), transparent 10%)",
-  "linear-gradient(180deg, #ffffff 0%, #fff6ec 8%, #ffe1c8 24%, rgba(255, 190, 160, 0.55) 36%, rgba(170, 220, 230, 0.6) 50%, rgba(200, 225, 250, 0.7) 62%, rgba(var(--experience-rgb), 0.55) 74%, rgba(255, 215, 235, 0.7) 86%, rgba(var(--projects-rgb), 0.55) 96%, rgba(252, 253, 255, 1) 100%)"
+  "linear-gradient(180deg, var(--bg-linear-0) 0%, var(--bg-linear-1) 8%, var(--bg-linear-2) 24%, var(--bg-linear-3) 36%, var(--bg-linear-4) 50%, var(--bg-linear-5) 62%, rgba(var(--experience-rgb), 0.55) 74%, var(--bg-linear-7) 86%, rgba(var(--projects-rgb), 0.55) 96%, var(--bg-linear-9) 100%)"
 ];
 
 const baseGradientRepeat = [
@@ -74,7 +99,7 @@ const baseGradientPosition = [
   'center'
 ];
 
-const overlayGradientLayers = [overlayDataUri, ...baseGradientLayers];
+const buildOverlayGradientLayers = (overlayUri) => [overlayUri, ...baseGradientLayers];
 const overlayGradientRepeat = ['repeat-y', ...baseGradientRepeat];
 const overlayGradientSize = ['var(--overlay-width) var(--overlay-tile)', ...baseGradientSize];
 const overlayGradientPosition = ['left top', ...baseGradientPosition];
@@ -118,6 +143,15 @@ function AppContent() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const theme = useTheme();
   const isCompact = useMediaQuery(theme.breakpoints.down('lg'));
+  const { mode, toggleMode } = useThemeMode();
+  const overlayDataUri = useMemo(
+    () => buildOverlayDataUri(OVERLAY_PALETTES[mode] ?? OVERLAY_PALETTES.light),
+    [mode]
+  );
+  const overlayGradientLayers = useMemo(
+    () => buildOverlayGradientLayers(overlayDataUri),
+    [overlayDataUri]
+  );
   const navOffset = useMemo(() => (pathname === '/' ? heroCollapsed : true), 
   [heroCollapsed, pathname]);
 
@@ -248,15 +282,40 @@ function AppContent() {
             top: { xs: 12, sm: 16 },
             left: { xs: 12, sm: 16 },
             zIndex: 30,
-            bgcolor: 'rgba(255,255,255,0.92)',
-            boxShadow: '0 6px 16px rgba(15, 23, 42, 0.2)',
-            border: '1px solid rgba(15,23,42,0.12)',
+            bgcolor: 'var(--surface-raised)',
+            color: 'var(--text-primary)',
+            boxShadow: '0 6px 16px rgba(var(--shadow-rgb), 0.2)',
+            border: '1px solid var(--border-default)',
           }}
           aria-label="Open navigation"
         >
           <MenuIcon />
         </IconButton>
       ) : null}
+
+      <Tooltip title={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'} placement="left" arrow>
+        <IconButton
+          onClick={toggleMode}
+          aria-label={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          sx={{
+            position: 'fixed',
+            top: { xs: 12, sm: 16 },
+            right: { xs: 12, sm: 16 },
+            zIndex: 31,
+            bgcolor: 'var(--surface-raised)',
+            color: 'var(--text-primary)',
+            boxShadow: '0 6px 16px rgba(var(--shadow-rgb), 0.2)',
+            border: '1px solid var(--border-default)',
+            transition: 'background-color 200ms ease, color 200ms ease, transform 200ms ease',
+            '&:hover': {
+              transform: 'translateY(-1px)',
+              bgcolor: 'var(--surface-base)',
+            },
+          }}
+        >
+          {mode === 'dark' ? <LightModeRoundedIcon /> : <DarkModeRoundedIcon />}
+        </IconButton>
+      </Tooltip>
 
       <Navbar
         heroCollapsed={heroCollapsed}
@@ -274,7 +333,7 @@ function AppContent() {
           overflowY: { xs: 'visible', lg: 'auto' },
           overflowX: 'visible',
           scrollBehavior: 'smooth',
-          backgroundColor: '#e6ddd1',
+          backgroundColor: 'var(--page-backplate)',
           pt: 0,
           // Full-width container; sections handle their own left offset when navbar is visible
           pr: 0,

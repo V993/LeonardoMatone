@@ -24,6 +24,28 @@ const badgeMap = {
   'Hunter College': hunterBadge,
 };
 
+// Maps the `color` field from content.json to an RGB triple usable inside
+// rgba(). Unknown names fall back to the section's default education-rgb so
+// nothing renders without an accent.
+const COLOR_NAME_TO_RGB = {
+  green: '34, 139, 34',
+  lightgreen: 'var(--light-green-rgb)',
+  purple: '128, 90, 213',
+  mauve: 'var(--mauve-rgb)',
+  blue: '59, 130, 246',
+  cyan: 'var(--dark-cyan-rgb)',
+  yellow: 'var(--sunglow-rgb)',
+  orange: '249, 115, 22',
+  red: '239, 68, 68',
+  brown: 'var(--raw-umber-rgb)',
+};
+
+const resolveAccentRgb = (color) => {
+  if (typeof color !== 'string' || !color) return 'var(--education-rgb)';
+  const key = color.trim().toLowerCase();
+  return COLOR_NAME_TO_RGB[key] ?? 'var(--education-rgb)';
+};
+
 const formatEntries = (item) => {
   if (Array.isArray(item.degrees) && item.degrees.length > 0) {
     return item.degrees.map((d) => ({
@@ -70,16 +92,16 @@ const ChapterTab = ({ item, index, total, active, current, onSelect }) => {
         py: { xs: 1.5, md: 1.8 },
         borderRadius: 2,
         transition: 'background-color 220ms ease, transform 220ms ease',
-        backgroundColor: active ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.7)',
+        backgroundColor: active ? 'var(--surface-base)' : 'var(--surface-subtle)',
         border: active
           ? '1px solid rgba(var(--education-rgb), 0.45)'
-          : '1px solid rgba(0,0,0,0.12)',
+          : '1px solid var(--border-default)',
         backdropFilter: 'blur(8px)',
         boxShadow: active
-          ? '0 12px 28px rgba(15,23,42,0.18)'
-          : '0 4px 14px rgba(15,23,42,0.10)',
+          ? '0 12px 28px rgba(var(--shadow-rgb), 0.22)'
+          : '0 4px 14px rgba(var(--shadow-rgb), 0.14)',
         '&:hover': {
-          backgroundColor: active ? 'rgba(255,255,255,0.96)' : 'rgba(255,255,255,0.85)',
+          backgroundColor: active ? 'var(--surface-base)' : 'var(--surface-overlay)',
         },
         '&:focus-visible': {
           boxShadow: '0 0 0 2px rgba(var(--education-rgb), 0.6)',
@@ -96,11 +118,11 @@ const ChapterTab = ({ item, index, total, active, current, onSelect }) => {
           width: 12,
           height: 12,
           borderRadius: '50%',
-          backgroundColor: active ? 'rgba(var(--education-rgb), 1)' : 'rgba(255,255,255,0.85)',
-          border: active ? '2px solid #fff' : '2px solid rgba(var(--education-rgb), 0.45)',
+          backgroundColor: active ? 'rgba(var(--education-rgb), 1)' : 'var(--surface-overlay)',
+          border: active ? '2px solid var(--surface-solid)' : '2px solid rgba(var(--education-rgb), 0.45)',
           boxShadow: active
-            ? '0 0 0 4px rgba(var(--education-rgb), 0.25), 0 0 14px rgba(255,255,255,0.6)'
-            : '0 0 8px rgba(255,255,255,0.35)',
+            ? '0 0 0 4px rgba(var(--education-rgb), 0.25), 0 0 14px rgba(var(--surface-rgb),0.45)'
+            : '0 0 8px rgba(var(--surface-rgb),0.25)',
           transition: 'all 220ms ease',
           zIndex: 2,
         }}
@@ -114,7 +136,7 @@ const ChapterTab = ({ item, index, total, active, current, onSelect }) => {
             top: 0,
             height: '50%',
             width: 2,
-            backgroundColor: 'rgba(255,255,255,0.55)',
+            backgroundColor: 'var(--border-default)',
             zIndex: 1,
           }}
         />
@@ -127,7 +149,7 @@ const ChapterTab = ({ item, index, total, active, current, onSelect }) => {
             top: '50%',
             height: '50%',
             width: 2,
-            backgroundColor: 'rgba(255,255,255,0.55)',
+            backgroundColor: 'var(--border-default)',
             zIndex: 1,
           }}
         />
@@ -141,7 +163,7 @@ const ChapterTab = ({ item, index, total, active, current, onSelect }) => {
             width: 38,
             height: 38,
             bgcolor: 'rgba(var(--education-rgb), 0.22)',
-            color: '#000',
+            color: 'var(--text-primary)',
             fontWeight: 700,
             fontSize: '1rem',
           }}
@@ -154,7 +176,7 @@ const ChapterTab = ({ item, index, total, active, current, onSelect }) => {
             sx={{
               fontWeight: 700,
               lineHeight: 1.2,
-              color: '#000',
+              color: 'var(--text-primary)',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -165,7 +187,7 @@ const ChapterTab = ({ item, index, total, active, current, onSelect }) => {
           <Typography
             variant="caption"
             sx={{
-              color: active ? 'rgba(0,0,0,0.65)' : 'rgba(0,0,0,0.6)',
+              color: active ? 'var(--text-secondary)' : 'var(--text-muted)',
               letterSpacing: 0.4,
               fontWeight: 500,
             }}
@@ -180,15 +202,16 @@ const ChapterTab = ({ item, index, total, active, current, onSelect }) => {
 
 const DetailPanel = ({ item, degrees }) => {
   const badgeSrc = badgeMap[item.institution];
+  const accentRgb = resolveAccentRgb(item.color);
   return (
     <Box
       key={item.institution}
       sx={{
         position: 'relative',
         borderRadius: 4,
-        backgroundColor: '#fff',
+        backgroundColor: 'var(--surface-solid)',
         border: '1px solid rgba(var(--education-rgb), 0.22)',
-        boxShadow: '0 24px 60px rgba(15,23,42,0.16)',
+        boxShadow: '0 24px 60px rgba(var(--shadow-rgb), 0.22)',
         overflow: 'hidden',
         width: '100%',
         height: '100%',
@@ -207,18 +230,20 @@ const DetailPanel = ({ item, degrees }) => {
           height: 6,
           width: '100%',
           background:
-            'linear-gradient(90deg, rgba(var(--education-rgb), 0.95) 0%, rgba(var(--education-rgb), 0.4) 100%)',
+            `linear-gradient(90deg, rgba(${accentRgb}, 0.95) 0%, rgba(${accentRgb}, 0.4) 100%)`,
           flexShrink: 0,
         }}
       />
 
       <Stack
-        spacing={1.6}
+        spacing={{ xs: 2.4, md: 3 }}
         sx={{
-          p: { xs: 2, md: 2.4 },
+          p: { xs: 2.8, md: 3.6 },
+          flexGrow: 1,
+          minHeight: 0,
         }}
       >
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={2.4} alignItems="center">
           <Avatar
             alt={item.institution}
             src={badgeSrc}
@@ -226,7 +251,7 @@ const DetailPanel = ({ item, degrees }) => {
               width: 64,
               height: 64,
               bgcolor: 'rgba(var(--education-rgb), 0.22)',
-              color: '#000',
+              color: 'var(--text-primary)',
               fontWeight: 700,
               fontSize: '1.4rem',
               border: '2px solid rgba(var(--education-rgb), 0.4)',
@@ -234,8 +259,8 @@ const DetailPanel = ({ item, degrees }) => {
           >
             {!badgeSrc && item.institution ? item.institution[0] : null}
           </Avatar>
-          <Stack spacing={0.3} sx={{ minWidth: 0 }}>
-            <Typography variant="h5" sx={{ fontWeight: 800, color: '#000', lineHeight: 1.15 }}>
+          <Stack spacing={0.8} sx={{ minWidth: 0 }}>
+            <Typography variant="h5" sx={{ fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.15, fontSize: { xs: '1.55rem', md: '1.7rem' } }}>
               {item.institution}
             </Typography>
             <Stack direction="row" spacing={1.2} alignItems="center" flexWrap="wrap">
@@ -243,20 +268,21 @@ const DetailPanel = ({ item, degrees }) => {
                 <Typography
                   variant="caption"
                   sx={{
-                    color: '#000',
+                    color: 'var(--text-primary)',
                     fontWeight: 700,
                     letterSpacing: 0.6,
-                    px: 1,
-                    py: 0.2,
+                    px: 1.2,
+                    py: 0.4,
                     borderRadius: 1,
                     backgroundColor: 'rgba(var(--education-rgb), 0.18)',
+                    fontSize: '0.82rem',
                   }}
                 >
                   {item.timeframe}
                 </Typography>
               )}
               {item.location && (
-                <Typography variant="caption" sx={{ color: 'rgba(0,0,0,0.6)' }}>
+                <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>
                   · {item.location}
                 </Typography>
               )}
@@ -268,37 +294,43 @@ const DetailPanel = ({ item, degrees }) => {
           <Typography
             variant="body2"
             sx={{
-              color: '#000',
+              color: 'var(--text-primary)',
               lineHeight: 1.65,
               fontStyle: 'italic',
               borderLeft: '3px solid rgba(var(--education-rgb), 0.55)',
-              pl: 1.5,
+              pl: 2,
+              py: 0.4,
+              fontSize: '0.95rem',
             }}
           >
             {item.details}
           </Typography>
         )}
 
-        <Stack spacing={1.6}>
+        <Stack spacing={2} sx={{ flexGrow: 1, minHeight: 0 }}>
           {degrees.map((d, i) => (
             <Box
               key={`${d.title}-${i}`}
               sx={{
                 borderRadius: 2.5,
-                p: { xs: 1.6, md: 2 },
+                p: { xs: 2.4, md: 2.8 },
                 backgroundColor: 'rgba(var(--education-rgb), 0.06)',
                 border: '1px solid rgba(var(--education-rgb), 0.16)',
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1.6,
               }}
             >
-              <Stack direction="row" spacing={1.2} alignItems="center" sx={{ mb: 1 }}>
-                <SchoolIcon sx={{ fontSize: 18, color: 'rgba(0,0,0,0.65)' }} />
-                <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#000' }}>
+              <Stack direction="row" spacing={1.4} alignItems="center">
+                <SchoolIcon sx={{ fontSize: 20, color: 'var(--text-secondary)' }} />
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                   {d.title || 'Program'}
                 </Typography>
               </Stack>
 
               {d.focusAreas.length > 0 && (
-                <Stack direction="row" spacing={0.6} flexWrap="wrap" rowGap={0.6} sx={{ mb: d.highlights.length ? 1.2 : 0 }}>
+                <Stack direction="row" spacing={0.8} flexWrap="wrap" rowGap={0.8}>
                   {d.focusAreas.map((f) => (
                     <Chip
                       key={f}
@@ -319,10 +351,11 @@ const DetailPanel = ({ item, degrees }) => {
                     pl: 2.5,
                     m: 0,
                     '& li': {
-                      color: '#000',
-                      fontSize: '0.875rem',
-                      lineHeight: 1.55,
-                      mb: 0.6,
+                      color: 'var(--text-primary)',
+                      fontSize: '0.9rem',
+                      lineHeight: 1.65,
+                      mb: 1,
+                      pl: 0.6,
                       '&::marker': { color: 'rgba(var(--education-rgb), 0.95)' },
                     },
                     '& li:last-child': { mb: 0 },
@@ -343,17 +376,25 @@ const DetailPanel = ({ item, degrees }) => {
 
 const MobileAccordionCard = ({ item, degrees, expanded, onToggle, current }) => {
   const badgeSrc = badgeMap[item.institution];
+  const accentRgb = resolveAccentRgb(item.color);
   return (
     <Box
       sx={{
         borderRadius: 3,
         overflow: 'hidden',
         border: '1px solid rgba(var(--education-rgb), 0.22)',
-        backgroundColor: 'rgba(255,255,255,0.96)',
-        boxShadow: expanded ? '0 16px 40px rgba(15,23,42,0.16)' : '0 6px 18px rgba(15,23,42,0.08)',
+        backgroundColor: 'var(--surface-base)',
+        boxShadow: expanded ? '0 16px 40px rgba(var(--shadow-rgb), 0.22)' : '0 6px 18px rgba(var(--shadow-rgb), 0.12)',
         transition: 'box-shadow 220ms ease',
       }}
     >
+      <Box
+        sx={{
+          height: 4,
+          width: '100%',
+          background: `linear-gradient(90deg, rgba(${accentRgb}, 0.95) 0%, rgba(${accentRgb}, 0.4) 100%)`,
+        }}
+      />
       <Box
         role="button"
         tabIndex={0}
@@ -374,17 +415,17 @@ const MobileAccordionCard = ({ item, degrees, expanded, onToggle, current }) => 
               width: 44,
               height: 44,
               bgcolor: 'rgba(var(--education-rgb), 0.22)',
-              color: '#000',
+              color: 'var(--text-primary)',
               fontWeight: 700,
             }}
           >
             {!badgeSrc && item.institution ? item.institution[0] : null}
           </Avatar>
           <Stack spacing={0.1} sx={{ minWidth: 0, flex: 1 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: '#000', lineHeight: 1.2 }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.2 }}>
               {item.institution}
             </Typography>
-            <Typography variant="caption" sx={{ color: 'rgba(0,0,0,0.65)', fontWeight: 600 }}>
+            <Typography variant="caption" sx={{ color: 'var(--text-secondary)', fontWeight: 600 }}>
               {item.timeframe}
               {item.location ? ` · ${item.location}` : ''}
             </Typography>
@@ -392,7 +433,7 @@ const MobileAccordionCard = ({ item, degrees, expanded, onToggle, current }) => 
           <Box
             sx={{
               fontSize: 22,
-              color: 'rgba(0,0,0,0.55)',
+              color: 'var(--text-subtle)',
               transform: expanded ? 'rotate(45deg)' : 'rotate(0deg)',
               transition: 'transform 220ms ease',
               lineHeight: 1,
@@ -409,7 +450,7 @@ const MobileAccordionCard = ({ item, degrees, expanded, onToggle, current }) => 
             <Typography
               variant="body2"
               sx={{
-                color: '#000',
+                color: 'var(--text-primary)',
                 lineHeight: 1.6,
                 fontStyle: 'italic',
                 mb: 1.4,
@@ -431,7 +472,7 @@ const MobileAccordionCard = ({ item, degrees, expanded, onToggle, current }) => 
                   border: '1px solid rgba(var(--education-rgb), 0.16)',
                 }}
               >
-                <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#000', mb: 0.8 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'var(--text-primary)', mb: 0.8 }}>
                   {d.title || 'Program'}
                 </Typography>
                 {d.focusAreas.length > 0 && (
@@ -447,7 +488,7 @@ const MobileAccordionCard = ({ item, degrees, expanded, onToggle, current }) => 
                       <Typography
                         key={idx}
                         variant="body2"
-                        sx={{ color: '#000', lineHeight: 1.5, '&::before': { content: '"• "', color: 'rgba(var(--education-rgb), 1)', fontWeight: 700 } }}
+                        sx={{ color: 'var(--text-primary)', lineHeight: 1.5, '&::before': { content: '"• "', color: 'rgba(var(--education-rgb), 1)', fontWeight: 700 } }}
                       >
                         {h}
                       </Typography>
@@ -533,7 +574,7 @@ function EducationSection({ navOffset = false }) {
                 <Typography
                   variant="h2"
                   fontWeight={700}
-                  sx={{ color: '#000', lineHeight: 1.05 }}
+                  sx={{ color: 'var(--text-primary)', lineHeight: 1.05 }}
                 >
                   Education
                 </Typography>
