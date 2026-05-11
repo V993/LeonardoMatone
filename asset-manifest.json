@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/LeonardoMatone/static/css/main.60c747d6.css",
-    "main.js": "/LeonardoMatone/static/js/main.b2ee7690.js",
+    "main.css": "/LeonardoMatone/static/css/main.71254caf.css",
+    "main.js": "/LeonardoMatone/static/js/main.1bef4263.js",
     "static/media/ascii.png": "/LeonardoMatone/static/media/ascii.8de72ca20fcfcb3caa7e.png",
     "static/media/id-picture.jpg": "/LeonardoMatone/static/media/id-picture.5f4271e54e1fbf061d21.jpg",
     "static/media/gerry.png": "/LeonardoMatone/static/media/gerry.bf87f77c396e50dd84b3.png",
@@ -11,11 +11,11 @@
     "static/media/tulane.png": "/LeonardoMatone/static/media/tulane.192cf8770d4b2a64d057.png",
     "static/media/nom.png": "/LeonardoMatone/static/media/nom.8eed7803688b44df9457.png",
     "index.html": "/LeonardoMatone/index.html",
-    "main.60c747d6.css.map": "/LeonardoMatone/static/css/main.60c747d6.css.map",
-    "main.b2ee7690.js.map": "/LeonardoMatone/static/js/main.b2ee7690.js.map"
+    "main.71254caf.css.map": "/LeonardoMatone/static/css/main.71254caf.css.map",
+    "main.1bef4263.js.map": "/LeonardoMatone/static/js/main.1bef4263.js.map"
   },
   "entrypoints": [
-    "static/css/main.60c747d6.css",
-    "static/js/main.b2ee7690.js"
+    "static/css/main.71254caf.css",
+    "static/js/main.1bef4263.js"
   ]
 }
